@@ -1,7 +1,7 @@
 ---
-title: "\\Large \\textbf{Exposure to Russian foreign influence campaign on Twitter in the 2016 US Election and its relationship to attitudes and voting behavior}\\vspace{2mm}"
+title: "\\Large \\textbf{Exposure to the Russian foreign influence campaign on Twitter in the 2016 US Election and its relationship to attitudes and voting behavior}\\vspace{2mm}"
 subtitle: "\\Large Supplementary Information"
-date: "`r format(Sys.time(), '%B %d, %Y')`"
+# date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:
   bookdown::pdf_book:
     citation_package: natbib
@@ -610,7 +610,7 @@ FigureB3B <- ggplot(subset(G1, outcome == "Polarization" & treatment == "Treatme
         axis.text.y = element_text(family = "", colour = "black", face = "bold", size = 8, hjust = 1, lineheight = 0.9))
 ```
 
-```{r Figure-B3, fig.height=5, fig.cap="Two One-Sided Test (TOST) 95\\% Intervals for the relationship between exposure to tweets from Russian foreign influence accounts and issue positions and polarization. Each point ($\\bullet$) represents the estimated relationships in standardized units; each horizontal line (\\textbf{---}) represents a 95\\% TOST interval: the range of the size of a relationship that cannot be rejected by a Two One-Sided Test. The vertical lines (in red) represent what the literature generally considers minimal relationships: the solid line, that defined by @Hartman2018 ($|\\epsilon| < 0.36$); the dashed line, that defined by @Ho2007 and @Imbens2015 ($|\\epsilon| < 0.25$); and the dotted line, that defined by @Cohen1969 ($|\\epsilon| < 0.2$). $n = 1,496$ survey respondents."}
+```{r Figure-B3, fig.height=5, fig.cap="Two One-Sided Test (TOST) 95\\% Intervals for the relationship between exposure to tweets from Russian foreign influence accounts and issue positions and polarization. Each point ($\\bullet$) represents the estimated relationships in standardized units; each horizontal line (\\textbf{---}) represents a 95\\% TOST interval: the range of the size of a relationship that cannot be rejected by a Two One-Sided Test. The vertical lines (in red) represent what the literature generally considers minimal relationships: the solid line, that defined by @Hartman2018 ($|\\epsilon| < 0.36$); the dashed line, that defined by @Ho2007 and @Imbens2015 ($|\\epsilon| < 0.25$); and the dotted line, that defined by @Cohen1969 ($|\\epsilon| < 0.2$). $n = 1,496$ survey respondents"}
 ggdraw() +
   draw_plot(FigureB3A, x = 0, y = 0.5, width = 1, height = 0.47) +
   draw_plot(FigureB3B, x = 0, y = 0, width = 1, height = 0.47) +
@@ -666,7 +666,7 @@ saveRDS(wb, "../figures_source/Source Data.rds")
 openxlsx::saveWorkbook(wb, "../figures_source/Source Data.xlsx", overwrite = TRUE)
 ```
 
-```{r Figure-C4, fig.height=3, fig.cap="Relationship between party ID and exposure to posts from Russia Internet Research Agency (IRA) accounts"}
+```{r Figure-C4, fig.height=3, fig.cap="Relationship between party ID and exposure to posts from Russian Internet Research Agency (IRA) accounts"}
 ggplot(subset(G3C, model %in% c("Linear", "Quadratic")), aes(x = pid7, y = coef)) +
   my.theme(base_size = 7,
            borderless = 2, remove.ticks.y = TRUE, remove.ticks.x = FALSE,
@@ -905,7 +905,7 @@ FigureC5B <- ggplot(subset(G3B, model == "Poisson"),
   theme(plot.margin = unit(c(1, 2, 1, -2), "mm"))
 ```
 
-```{r Figure-C5, out.width="100%", out.height="60%", fig.align="center", fig.cap="Partisanship and exposure to posts from Russian Internet Research Agency accounts during the 2016 US election campaign (quasi-poisson regression). Error bars represent 95\\% confidence intervals around the point estimate of the regression coefficient. $n = 1,496$ survey respondents."}
+```{r Figure-C5, out.width="100%", out.height="60%", fig.align="center", fig.cap="Partisanship and exposure to posts from Russian Internet Research Agency accounts during the 2016 US election campaign (quasi-poisson regression). Error bars represent 95\\% confidence intervals around the point estimate of the regression coefficient. $n = 1,496$ survey respondents"}
 cowplot::ggdraw() +
   cowplot::draw_plot(FigureC5A, x = 0.02, y = 0.01, width = 0.48, height = 0.95) +
   cowplot::draw_plot(FigureC5B, x = 0.52, y = 0.01, width = 0.48, height = 0.95) +
@@ -1323,7 +1323,7 @@ saveRDS(wb, "../figures_source/Source Data.rds")
 openxlsx::saveWorkbook(wb, "../figures_source/Source Data.xlsx", overwrite = TRUE)
 ```
 
-```{r Figure-E7, fig.height=3, fig.cap="Regression results of the relationship between following a Russian Internet Research Agency (IRA) account and voting behavior. Error bars represent 95\\% confidence intervals around point estimates of the regression coefficients. $n = 1,496$ survey respondents."}
+```{r Figure-E7, fig.height=3, fig.cap="Regression results of the relationship between following a Russian Internet Research Agency (IRA) account and voting behavior. Error bars represent 95\\% confidence intervals around point estimates of the regression coefficients. $n = 1,496$ survey respondents"}
 ggplot(subset(G5, treatment == "Treatment"),
        aes(x = coef, y = variable)) +
   my.theme(base_size = 8,
@@ -1546,7 +1546,7 @@ saveRDS(wb, "../figures_source/Source Data.rds")
 openxlsx::saveWorkbook(wb, "../figures_source/Source Data.xlsx", overwrite = TRUE)
 ```
 
-```{r Figure-E8, fig.height=3, fig.cap="Regression results of exposure to Russian Internet Research Agency accounts and changes in issue-based and ideological positioning with alternative race break-down. Error bars represent 95\\% confidence intervals around point estimates of the regression coefficients. $n = 1,496$ survey respondents."}
+```{r Figure-E8, fig.height=3, fig.cap="Regression results of exposure to Russian Internet Research Agency accounts and changes in issue-based and ideological positioning with alternative race break-down. Error bars represent 95\\% confidence intervals around point estimates of the regression coefficients. $n = 1,496$ survey respondents"}
 count <- 0
 ggplot(subset(G5_black, treatment == "Treatment" & iv %in% c("log(Exposure + 1)", "Exposure (binary)")),
        aes(x = coef, y = variable)) +
@@ -1644,7 +1644,7 @@ saveRDS(wb, "../figures_source/Source Data.rds")
 openxlsx::saveWorkbook(wb, "../figures_source/Source Data.xlsx", overwrite = TRUE)
 ```
 
-```{r Figure-E9, fig.height=3, fig.cap="Regression results of exposure to Russian Internet Research Agency accounts and changes in issue-based and ideological positioning with alternative measure of overall potential exposures on Twitter. Error bars represent 95\\% confidence intervals around point estimates of the regression coefficients. $n = 1,496$ survey respondents."}
+```{r Figure-E9, fig.height=3, fig.cap="Regression results of exposure to Russian Internet Research Agency accounts and changes in issue-based and ideological positioning with alternative measure of overall potential exposures on Twitter. Error bars represent 95\\% confidence intervals around point estimates of the regression coefficients. $n = 1,496$ survey respondents"}
 count <- 0
 ggplot(subset(G5_total_tweets, treatment == "Treatment" & iv %in% c("log(Exposure + 1)", "Exposure (binary)")),
        aes(x = coef, y = variable)) +
@@ -2674,7 +2674,7 @@ FigureF10B <- ggplot(subset(G4_black, outcome == "Polarization" & treatment == "
         axis.title.y = element_text(family = "", colour = "black", face = "bold", size = 10))
 ```
 
-```{r Figure-F10, fig.height=5, fig.cap="Regression results of exposure to Russian Internet Research Agency accounts and changes in issue-based and ideological positioning with alternative race break-down. Error bars represent 95\\% confidence intervals around point estimates of the regression coefficients. $n = 1,496$ survey respondents."}
+```{r Figure-F10, fig.height=5, fig.cap="Regression results of exposure to Russian Internet Research Agency accounts and changes in issue-based and ideological positioning with alternative race break-down. Error bars represent 95\\% confidence intervals around point estimates of the regression coefficients. $n = 1,496$ survey respondents"}
 count <- 0
 FigureF10 <- ggdraw() +
            draw_plot(FigureF10A, x = 0, y = 0.5, width = 1, height = 0.47)
@@ -2866,7 +2866,7 @@ FigureF11B <- ggplot(subset(G4_total_tweets, outcome == "Polarization" & treatme
         axis.title.y = element_text(family = "", colour = "black", face = "bold", size = 10))
 ```
 
-```{r Figure-F11, fig.height=5, fig.cap="Regression results of exposure to Russian Internet Research Agency accounts and changes in issue-based and ideological positioning with alternative measure of overall potential exposures on Twitter. Error bars represent 95\\% confidence intervals around point estimates of the regression coefficients. $n = 1,496$ survey respondents."}
+```{r Figure-F11, fig.height=5, fig.cap="Regression results of exposure to Russian Internet Research Agency accounts and changes in issue-based and ideological positioning with alternative measure of overall potential exposures on Twitter. Error bars represent 95\\% confidence intervals around point estimates of the regression coefficients. $n = 1,496$ survey respondents"}
 count <- 0
 FigureF11 <- ggdraw() +
            draw_plot(FigureF11A, x = 0, y = 0.5, width = 1, height = 0.47)
@@ -3064,7 +3064,7 @@ FigureG12B <- ggplot(subset(G4, outcome == "Polarization" & treatment == "Treatm
         axis.text.y = element_text(family = "", colour = "black", face = "bold", size = 8, hjust = 1, lineheight = 0.9))
 ```
 
-```{r Figure-G12, fig.height=5, fig.cap="Regression results of exposure to Russian Internet Research Agency accounts and changes in issue-based and ideological positionin. Point estimates from OLS models with 95\\% CIs adjusted for multiple comparisons using Bonferroni correction. $n = 1,496$ survey respondents."}
+```{r Figure-G12, fig.height=5, fig.cap="Regression results of exposure to Russian Internet Research Agency accounts and changes in issue-based and ideological positionin. Point estimates from OLS models with 95\\% CIs adjusted for multiple comparisons using Bonferroni correction. $n = 1,496$ survey respondents"}
 # Count is needed to specify the x-axis labels
 # using the hack break_fun()
 # Thus we graph the top panel first, reset the count to 0 and then add on
@@ -3174,7 +3174,7 @@ saveRDS(wb, "../figures_source/Source Data.rds")
 openxlsx::saveWorkbook(wb, "../figures_source/Source Data.xlsx", overwrite = TRUE)
 ```
 
-```{r Figure-G13,  fig.height=3, fig.cap="Regression results of the relationship between exposure to posts from Russian Internet Research Agency accounts and voting behavior. Point estimates from OLS models with 95\\% CIs adjusted for multiple comparisons using Bonferroni correction. $n = 1,496$ survey respondents."}
+```{r Figure-G13,  fig.height=3, fig.cap="Regression results of the relationship between exposure to posts from Russian Internet Research Agency accounts and voting behavior. Point estimates from OLS models with 95\\% CIs adjusted for multiple comparisons using Bonferroni correction. $n = 1,496$ survey respondents"}
 ggplot(subset(G5, treatment == "Treatment" & iv %in% c("log(Exposure + 1)", "Exposure (binary)")),
        aes(x = coef, y = variable)) +
   my.theme(base_size = 8,
