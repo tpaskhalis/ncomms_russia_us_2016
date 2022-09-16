@@ -3,10 +3,11 @@
 
 #===============================================================================
 # 
-#  Tom Paskhalis, 2022-09-15
-#  Gregory Eady, 2022-09-15
+#  Tom Paskhalis, 2022-09-16
+#  Gregory Eady, 2022-09-16
 #
 #  Minor edits: JZ 2021-01-24 in response to the R&R
+#
 #  Script for writing up the results (figures) for publication
 # 
 #  DATA IN: descriptive and inferential results of analysis (./results/)
@@ -138,7 +139,7 @@ Figure1C <- ggplot(filter(G1C, country != "Other"),
   my.theme(base_size = 7,
            borderless = 2, remove.ticks.y = TRUE, remove.ticks.x = TRUE,
            grid.x_colour = "grey85", grid.y_colour = "grey85") +
-  labs(x = "% of disinformation accounts", y = "% of exposures") +
+  labs(x = "% of foreign influence accounts", y = "% of exposures") +
   coord_cartesian(xlim = c(0.00001, 1), ylim = c(0, 1), expand = TRUE) +
   scale_x_continuous(breaks = c(0.0001, 0.001, 0.01, 0.1, 1),
                      labels = c(".01%", ".1%", "1%", "10%", "100%"),
@@ -171,10 +172,10 @@ dev.off()
 G_day <- readr::read_csv("./results/04_aggregate_news_media_politicians_trolls/G_day.csv")
 G_week <- readr::read_csv("./results/04_aggregate_news_media_politicians_trolls/G_week.csv")
 
-G_day$type[G_day$type == "IRA accounts"] <- "Russian disinformation"
-G_week$type[G_week$type == "IRA accounts"] <- "Russian disinformation"
-G_day$type <- factor(G_day$type, levels = c("News media", "Politicians", "Russian disinformation"))
-G_week$type <- factor(G_week$type, levels = c("News media", "Politicians", "Russian disinformation"))
+G_day$type[G_day$type == "IRA accounts"] <- "Russian foreign influence"
+G_week$type[G_week$type == "IRA accounts"] <- "Russian foreign influence"
+G_day$type <- factor(G_day$type, levels = c("News media", "Politicians", "Russian foreign influence"))
+G_week$type <- factor(G_week$type, levels = c("News media", "Politicians", "Russian foreign influence"))
 
 wb <- readRDS("./figures_source/Source Data.rds")
 openxlsx::addWorksheet(wb, sheetName = "figure_2a", gridLines = FALSE)
@@ -217,10 +218,10 @@ Figure2A <- ggplot(filter(G_day, average == "Mean"), aes(x = date, y = value,
              label.r = unit(0, "lines"), label.size = NA, label.padding = unit(0.12, "lines")) +
   scale_color_manual(values = c("News media" = "red",
                                 "Politicians" = "#FFB335",
-                                "Russian disinformation" = "black")) +
+                                "Russian foreign influence" = "black")) +
   scale_fill_manual(values = c("News media" = "red",
                                "Politicians" = "#FFB335",
-                               "Russian disinformation" = "black")) +
+                               "Russian foreign influence" = "black")) +
   theme(legend.position = "none",
         strip.text.x = element_text(size = 7, face = "plain"),
         axis.text.x = element_text(face = "plain", size = 7, hjust = 0.09, lineheight = 0.9),
@@ -260,10 +261,10 @@ Figure2B <- ggplot(filter(G_week, average == "Median"),
              label.r = unit(0, "lines"), label.size = NA, label.padding = unit(0.12, "lines")) +
   scale_color_manual(values = c("News media" = "red",
                                 "Politicians" = "#FFB335",
-                                "Russian disinformation" = "black")) +
+                                "Russian foreign influence" = "black")) +
   scale_fill_manual(values = c("News media" = "red",
                                "Politicians" = "#FFB335",
-                               "Russian disinformation" = "black")) +
+                               "Russian foreign influence" = "black")) +
   theme(legend.position = "none",
         strip.text.x = element_text(size = 7, face = "plain"),
         axis.text.x = element_text(face = "plain", size = 7, hjust = 0.09, lineheight = 0.9),
@@ -311,7 +312,7 @@ Figure3A <- ggplot(G3A, aes(x = pid7, y = exposure)) +
   #                    labels = unique(G3A$variable)[order(G3A$variable)]) +
   scale_x_continuous(breaks = 1:7,
                    labels = c("Strong\nDemocrat", "", "", "Independent", "", "", "Strong\nRepublican")) +
-  labs(x = "", y = "Mean exposure to Russian disinformation accounts") +
+  labs(x = "", y = "Mean exposure to Russian foreign influence accounts") +
   geom_bar(stat = "identity", color = "#0D0887", fill = "#0D0887", width = 0.65) +
   geom_hline(yintercept = 0, size = 1.5, linetype = 1) +
   theme(plot.margin = unit(c(1, 3, -2, 2), "mm"))
