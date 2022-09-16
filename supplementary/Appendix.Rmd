@@ -666,7 +666,7 @@ saveRDS(wb, "../figures_source/Source Data.rds")
 openxlsx::saveWorkbook(wb, "../figures_source/Source Data.xlsx", overwrite = TRUE)
 ```
 
-```{r Figure-C4, fig.height=3, fig.cap="Relationship between party ID and exposure to posts from Russian Internet Research Agency (IRA) accounts"}
+```{r Figure-C4, fig.height=3, fig.cap="Relationship between party ID and exposure to posts from Russian Internet Research Agency (IRA) accounts. Predicted values with 95\\% prediction intervals are shown"}
 ggplot(subset(G3C, model %in% c("Linear", "Quadratic")), aes(x = pid7, y = coef)) +
   my.theme(base_size = 7,
            borderless = 2, remove.ticks.y = TRUE, remove.ticks.x = FALSE,
