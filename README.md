@@ -1,5 +1,7 @@
 # ncomms_russia_us_2016
 
+[![DOI](https://zenodo.org/badge/536623330.svg)](https://zenodo.org/badge/latestdoi/536623330)
+
 Replication materials for the paper **Exposure to Russian foreign influence campaign on Twitter in the 2016 US Election and its relationship to attitudes and voting behavior**
 
 ## Abstract
@@ -10,19 +12,12 @@ There is widespread concern that malicious foreign actors are using social media
 
 Log files are produced by running `R CMD BATCH` on scripts located in `code` folder from the root of the project directory. E.g.:
 
-```
-R CMD BATCH code/30_write_up_results.R logs/30_write_up_results.Rlog
-```
+    R CMD BATCH code/30_write_up_results.R logs/30_write_up_results.Rlog
 
----
+------------------------------------------------------------------------
 
 ## License
 
-This work is licensed under a
-[Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License][cc-by-nc-sa].
+This work is licensed under a [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-nc-sa/4.0/).
 
-[![CC BY-NC-SA 4.0][cc-by-nc-sa-image]][cc-by-nc-sa]
-
-[cc-by-nc-sa]: http://creativecommons.org/licenses/by-nc-sa/4.0/
-[cc-by-nc-sa-image]: https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png
-[cc-by-nc-sa-shield]: https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg
+[![CC BY-NC-SA 4.0](https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png)](http://creativecommons.org/licenses/by-nc-sa/4.0/)
