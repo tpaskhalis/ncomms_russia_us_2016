@@ -1,0 +1,1094 @@
+
+R version 4.1.2 (2021-11-01) -- "Bird Hippie"
+Copyright (C) 2021 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+* Project '~/Decrypted/Git/ncomms_russia_us_2016' loaded. [renv 0.15.5]
+> #!/usr/bin/env Rscript
+> # coding: utf-8
+> 
+> #===============================================================================
+> # 
+> #  Tom Paskhalis, 2022-09-15
+> #  Gregory Eady, 2022-09-15
+> #
+> #  Minor edits: JZ 2021-01-24 in response to the R&R
+> #  Script for writing up the results (figures) for publication
+> # 
+> #  DATA IN: descriptive and inferential results of analysis (./results/)
+> # 
+> #  DATA OUT: figures for publication (./figures/)
+> #
+> #===============================================================================
+> 
+> library("cowplot")
+> library("dplyr")
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+> library("ggplot2")
+> library("lmtest")
+Loading required package: zoo
+
+Attaching package: ‘zoo’
+
+The following objects are masked from ‘package:base’:
+
+    as.Date, as.Date.numeric
+
+> library("lubridate")
+
+Attaching package: ‘lubridate’
+
+The following object is masked from ‘package:cowplot’:
+
+    stamp
+
+The following objects are masked from ‘package:base’:
+
+    date, intersect, setdiff, union
+
+> library("openxlsx")
+> 
+> source("./code/helper_functions.R")
+> source("./code/ggplot_theme.R")
+
+Attaching package: ‘gridExtra’
+
+The following object is masked from ‘package:dplyr’:
+
+    combine
+
+> 
+> 
+> # FIGURE 1 (GENERAL DESCRIPTIVES) -----------------------------------------
+> 
+> G1A <- readr::read_csv("./results/02_match_respondents/G1A.csv")
+Rows: 1281 Columns: 3
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (1): country
+dbl  (1): num_exposures
+date (1): tweet_date
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+> G1B <- readr::read_csv("./results/02_match_respondents/G1B.csv")
+Rows: 6468 Columns: 38
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (1): country
+dbl (37): smapp_original_user_id, all_tweet_w1_w2, all_tweet_w2_w3, all_retw...
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+> G1C <- readr::read_csv("./results/02_match_respondents/G1C.csv")
+Rows: 22621 Columns: 9
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr (2): troll_screen_name, country
+dbl (7): troll_user_id, amount, total_amount, prop_exposure, cum_prop_exposu...
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+> 
+> wb <- openxlsx::createWorkbook()
+> openxlsx::addWorksheet(wb, sheetName = "figure_1a", gridLines = FALSE)
+> openxlsx::writeDataTable(wb, sheet = "figure_1a", x = G1A)
+> openxlsx::addWorksheet(wb, sheetName = "figure_1b", gridLines = FALSE)
+> openxlsx::writeDataTable(wb, sheet = "figure_1b", x = G1B[,c("country", "cum_prop_respondents", "cum_prop_exposure")])
+> openxlsx::addWorksheet(wb, sheetName = "figure_1c", gridLines = FALSE)
+> openxlsx::writeDataTable(wb, sheet = "figure_1c", x = G1C[,c("country", "cum_prop_trolls", "cum_prop_exposure")])
+> saveRDS(wb, "./figures_source/Source Data.rds")
+> openxlsx::saveWorkbook(wb, "./figures_source/Source Data.xlsx", overwrite = TRUE)
+> 
+> # Timelime of Exposure Plot (Panel A)
+> 
+> G1A$country <- factor(G1A$country, levels = rev(c("Russia", "Venezuela", "China", "Iran", "Other")))
+> 
+> # Line and bar colors for each country in Figure 1
+> # define color scheme for countries
+> figure_1ABC_colors = c("Russia" = "#0D0887", # 404272
++                        "Venezuela" = "#2BAEB3",
++                        "China" = "#FF6E3C",
++                        "Iran" = "#FFD74B",
++                        "Other" = "grey70")
+> 
+> # Number of respondents whose data are used in Figure 1
+> # figure1_num_respondents <- length(unique(summary_exposure_2016$smapp_original_user_id))
+> figure1_num_respondents <- 1617
+> 
+> Figure1A <- ggplot(G1A, aes(x = tweet_date, y = num_exposures/figure1_num_respondents,
++                fill = country, color = country)) +
++   my.theme(base_size = 7,
++            borderless = 2, remove.ticks.y = TRUE, remove.ticks.x = TRUE,
++            grid.x_colour = "grey85", grid.y_colour = "grey85") +
++   labs(fill = "", color = "", x = "", y = "Mean number of exposures") +
++   coord_cartesian(xlim = c(min(G1A$tweet_date)-2, max(G1A$tweet_date)+2),
++                   ylim = c(0, max(G1A$num_exposures)/figure1_num_respondents*1.13),
++                   expand = FALSE) +
++   scale_x_date(date_breaks = "months",
++                date_labels = "%b '16") +
++   scale_y_continuous(breaks = seq(0, 15, by = 5),
++                      sec.axis = sec_axis(~., name = "Total number of exposures\nacross all respondents",
++                                          breaks = seq(0, 15, by = 5),
++                                          labels = scales::comma(seq(0, 15, by = 5)*figure1_num_respondents))) + # format(seq(0, 15, by = 5)*figure1_num_respondents, big.mark = ",")
++   geom_bar(stat = "identity", size = 0.15) +
++   geom_hline(yintercept = 0, size = 0.75) +
++   geom_vline(xintercept = lubridate::ymd("2016-11-08") + 0.5, color = "black", linetype = 1, size = 0.25) +
++   geom_vline(xintercept = lubridate::ymd("2016-11-08") + 0.5, color = "white", linetype = 5, size = 0.25) +
++   geom_segment(data = data.frame(country = "Russia",
++                tweet_date = lubridate::ymd("2016-11-06"),
++                num_exposures = 14.2 * figure1_num_respondents),
++                aes(x = lubridate::ymd("2016-11-02"), xend = lubridate::ymd("2016-11-08"),
++                    y = 14.2, yend = 14.2), size = 0.25, color = "black") +
++   geom_label(data = data.frame(x = lubridate::ymd("2016-11-01"),
++                                y = 14.2, text = "Election day", country = "Russia"),
++              aes(x = x, y = y, label = text), color = "black", fill = "white",
++              nudge_x = -0.5, size = 2.5, hjust = 1,
++              label.r = unit(0, "lines"), label.size = NA, label.padding = unit(0.12, "lines")) +
++   scale_color_manual(values = figure_1ABC_colors) + #E16462
++   scale_fill_manual(values = figure_1ABC_colors) +
++   theme(axis.text.y.right = element_text(hjust = 0),
++         legend.position = c(0.031, 0.925),
++         legend.direction = "horizontal",
++         legend.background = element_rect(fill = "white"),
++         legend.key.size = unit(0.5, "lines"),
++         legend.margin = margin(4, 0, 4, 0)) +
++   guides(fill = guide_legend(reverse = TRUE, override.aes = list(alpha = 0.9)),
++          color = guide_legend(reverse = TRUE, override.aes = list(size = 1, alpha = 1)))
+Warning message:
+`panel.margin` is deprecated. Please use `panel.spacing` property instead 
+> 
+> 
+> # Cumulative Density Plot of Respondents' Exposed (Panel B)
+> 
+> G1B$country <- factor(G1B$country, levels = rev(c("Russia", "Venezuela", "China", "Iran")))
+> 
+> 
+> Figure1B <- ggplot(filter(G1B, country != "Other"),
++                    aes(x = cum_prop_respondents, y = cum_prop_exposure,
++                        size = country, color = country, alpha = country)) +
++   my.theme(base_size = 7,
++            borderless = 2, remove.ticks.y = TRUE, remove.ticks.x = TRUE,
++            grid.x_colour = "grey85", grid.y_colour = "grey85") +
++   labs(x = "% of survey respondents", y = "% of exposures") +
++   coord_cartesian(xlim = c(0.00001, 1), ylim = c(0, 1), expand = TRUE) +
++   scale_x_continuous(breaks = c(0.0001, 0.001, 0.01, 0.1, 1),
++                      labels = c(".01%", ".1%", "1%", "10%", "100%"),
++                      trans = "log10") +
++   scale_y_continuous(breaks = c(0, 0.25, 0.5, 0.75, 1),
++                      labels = c("0%", "25%", "50%", "75%", "100%")) +
++   geom_line() +
++   geom_hline(yintercept = 0, size = 0.75) +
++   geom_vline(xintercept = 0.01, size = 0.35, linetype = 3, color = "black") +
++   scale_color_manual(values = figure_1ABC_colors) +
++   scale_size_manual(values = c("Russia" = 2, "Venezuela" = 0.65,
++                                 "China" = 0.65, "Iran" = 0.65)) +
++   scale_alpha_manual(values = c("Russia" = 1, "Venezuela" = 0.9,
++                                 "China" = 0.9, "Iran" = 0.9)) +
++   theme(legend.position = "none")
+Warning message:
+`panel.margin` is deprecated. Please use `panel.spacing` property instead 
+> 
+> 
+> # Cumulative Density Plot of Trolls' Responsible (Panel C)
+> 
+> G1C$country <- factor(G1C$country, levels = rev(c("Russia", "Venezuela", "China", "Iran")))
+> 
+> Figure1C <- ggplot(filter(G1C, country != "Other"),
++                    aes(x = cum_prop_trolls, y = cum_prop_exposure,
++                    size = country, color = country, alpha = country)) +
++   my.theme(base_size = 7,
++            borderless = 2, remove.ticks.y = TRUE, remove.ticks.x = TRUE,
++            grid.x_colour = "grey85", grid.y_colour = "grey85") +
++   labs(x = "% of disinformation accounts", y = "% of exposures") +
++   coord_cartesian(xlim = c(0.00001, 1), ylim = c(0, 1), expand = TRUE) +
++   scale_x_continuous(breaks = c(0.0001, 0.001, 0.01, 0.1, 1),
++                      labels = c(".01%", ".1%", "1%", "10%", "100%"),
++                      trans = "log10") +
++   scale_y_continuous(breaks = c(0, 0.25, 0.5, 0.75, 1),
++                      labels = c("0%", "25%", "50%", "75%", "100%")) +
++   geom_line() +
++   geom_hline(yintercept = 0, size = 0.75) +
++   geom_vline(xintercept = 0.01, size = 0.35, linetype = 3, color = "black") +
++   scale_color_manual(values = figure_1ABC_colors) +
++   scale_size_manual(values = c("Russia" = 2, "Venezuela" = 0.65,
++                                 "China" = 0.65, "Iran" = 0.65)) +
++   scale_alpha_manual(values = c("Russia" = 1, "Venezuela" = 0.9,
++                                 "China" = 0.9, "Iran" = 0.9)) +
++   theme(legend.position = "none")
+Warning message:
+`panel.margin` is deprecated. Please use `panel.spacing` property instead 
+> 
+> 
+> pdf("./figures/Figure-1.pdf", 7, 4.75)
+> ggdraw() +
++   draw_plot(Figure1A, x = 0.03, y = 0.49, width = 0.98, height = 0.51) +
++   draw_plot(Figure1B, x = 0.02, y = 0,    width = 0.48, height = 0.505) +
++   draw_plot(Figure1C, x = 0.525, y = 0,    width = 0.48, height = 0.505) +
++   draw_plot_label(label = c("a", "b", "c"), size = 13,
++                   x = c(-0.005, -0.005, 0.505), y = c(0.992, 0.502, 0.502))
+Warning message:
+Duplicated override.aes is ignored. 
+> dev.off()
+null device 
+          1 
+> 
+> 
+> # FIGURE 2 (NEWS MEDIA, POLITICIAN, TROLL TIME SERIES) --------------------
+> 
+> G_day <- readr::read_csv("./results/04_aggregate_news_media_politicians_trolls/G_day.csv")
+Rows: 234 Columns: 4
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (2): type, average
+dbl  (1): value
+date (1): date
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+> G_week <- readr::read_csv("./results/04_aggregate_news_media_politicians_trolls/G_week.csv")
+Rows: 36 Columns: 4
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (2): type, average
+dbl  (1): value
+date (1): week
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+> 
+> G_day$type[G_day$type == "IRA accounts"] <- "Russian disinformation"
+> G_week$type[G_week$type == "IRA accounts"] <- "Russian disinformation"
+> G_day$type <- factor(G_day$type, levels = c("News media", "Politicians", "Russian disinformation"))
+> G_week$type <- factor(G_week$type, levels = c("News media", "Politicians", "Russian disinformation"))
+> 
+> wb <- readRDS("./figures_source/Source Data.rds")
+> openxlsx::addWorksheet(wb, sheetName = "figure_2a", gridLines = FALSE)
+> openxlsx::writeDataTable(wb, sheet = "figure_2a", x = subset(G_day, average == "Mean"))
+> openxlsx::addWorksheet(wb, sheetName = "figure_2b", gridLines = FALSE)
+> openxlsx::writeDataTable(wb, sheet = "figure_2b", x = subset(G_week, average == "Median"))
+> saveRDS(wb, "./figures_source/Source Data.rds")
+> openxlsx::saveWorkbook(wb, "./figures_source/Source Data.xlsx", overwrite = TRUE)
+> 
+> # Graph the time series of the median and mean posts over time
+> Figure2A <- ggplot(filter(G_day, average == "Mean"), aes(x = date, y = value,
++                                                      color = type, fill = type)) +
++   my.theme(base_size = 7,
++            borderless = 2, remove.ticks.y = TRUE, remove.ticks.x = FALSE,
++            grid.x_colour = "grey85", grid.y_colour = "grey55",
++            grid.y_linetype = 3) +
++   facet_wrap(~ type, ncol = 3) +
++   labs(title = "", x = "", y = "Mean number of exposures") +
++   coord_cartesian(xlim = c(min(G_day$date) - 1, max(G_day$date) + 1),
++                   ylim = c(0, 260),
++                   expand = FALSE) +
++   scale_x_date(breaks = ymd("2016-10-01", "2016-11-01"),
++                labels = c("Oct. '16", "Nov. '16")) +
++   geom_bar(stat = "identity", size = 0, width = 0.75) +
++   geom_hline(yintercept = 0, size = 1.25) +
++   geom_line(data = data.frame(date = ymd("2016-11-05", "2016-11-08"),
++                               value = c(235, 235),
++                               type = factor("News media", levels = levels(G_day$type))),
++             color = "black", size = 0.35, lineend = "round") +
++   geom_line(data = data.frame(date = ymd("2016-11-08", "2016-11-08"),
++                               value = c(235, 225),
++                               type = factor("News media", levels = levels(G_day$type))),
++             color = "black", size = 0.35, lineend = "round") +
++   geom_label(data = data.frame(date = ymd("2016-11-5"),
++                                value = 235,
++                                text = "Election day",
++                                type = factor("News media", levels = levels(G_day$type))),
++              aes(label = text), color = "black", fill = "white",
++              nudge_x = -0.5, size = 2.25, hjust = 1,
++              label.r = unit(0, "lines"), label.size = NA, label.padding = unit(0.12, "lines")) +
++   scale_color_manual(values = c("News media" = "red",
++                                 "Politicians" = "#FFB335",
++                                 "Russian disinformation" = "black")) +
++   scale_fill_manual(values = c("News media" = "red",
++                                "Politicians" = "#FFB335",
++                                "Russian disinformation" = "black")) +
++   theme(legend.position = "none",
++         strip.text.x = element_text(size = 7, face = "plain"),
++         axis.text.x = element_text(face = "plain", size = 7, hjust = 0.09, lineheight = 0.9),
++         plot.margin = unit(c(2, 2, -2, 0), "mm"))
+Warning message:
+`panel.margin` is deprecated. Please use `panel.spacing` property instead 
+> 
+> 
+> Figure2B <- ggplot(filter(G_week, average == "Median"),
++                    aes(x = week, y = value, fill = type, color = type)) +
++   my.theme(base_size = 7,
++            borderless = 2, remove.ticks.y = TRUE, remove.ticks.x = FALSE,
++            grid.x_colour = "grey85", grid.y_colour = "grey55",
++            grid.y_linetype = 3) +
++   facet_wrap(~ type, ncol = 3) +
++   labs(title = "", x = "", y = "Median number of exposures") +
++   coord_cartesian(xlim = c(min(G_week$week) - 4, max(G_week$week) + 6),
++                   ylim = c(0, 142),
++                   expand = FALSE) +
++   scale_y_continuous(breaks = seq(0, 160, by = 20)) +
++   scale_x_date(breaks = ymd("2016-10-01", "2016-11-01"),
++                labels = c("Oct. '16", "Nov. '16")) +
++   geom_bar(stat = "identity", size = 0, width = 4) +
++   geom_hline(yintercept = 0, size = 1.25) +
++   geom_line(data = data.frame(week = ymd("2016-10-29", "2016-11-02"),
++                               value = c(120, 120),
++                               type = factor("News media", levels = levels(G_week$type))),
++             color = "black", size = 0.35, lineend = "round") +
++   geom_line(data = data.frame(week = ymd("2016-11-02", "2016-11-02"),
++                               value = c(120, 112),
++                               type = factor("News media", levels = levels(G_week$type))),
++             color = "black", size = 0.35, lineend = "round") +
++   geom_label(data = data.frame(week = ymd("2016-10-29"),
++                                value = 120,
++                                text = "Week of the election",
++                                type = factor("News media", levels = levels(G_week$type))),
++              aes(label = text), color = "black", fill = "white",
++              nudge_x = -0.5, size = 2.25, hjust = 1,
++              label.r = unit(0, "lines"), label.size = NA, label.padding = unit(0.12, "lines")) +
++   scale_color_manual(values = c("News media" = "red",
++                                 "Politicians" = "#FFB335",
++                                 "Russian disinformation" = "black")) +
++   scale_fill_manual(values = c("News media" = "red",
++                                "Politicians" = "#FFB335",
++                                "Russian disinformation" = "black")) +
++   theme(legend.position = "none",
++         strip.text.x = element_text(size = 7, face = "plain"),
++         axis.text.x = element_text(face = "plain", size = 7, hjust = 0.09, lineheight = 0.9),
++         plot.margin = unit(c(2, 2, -2, 0), "mm"))
+Warning message:
+`panel.margin` is deprecated. Please use `panel.spacing` property instead 
+> 
+> 
+> # Figure 2 
+> pdf("./figures/Figure-2.pdf", 7, 4.75)
+> ggdraw() +
++   draw_plot(Figure2A, x = 0.02, y = 0.51, width = 0.98, height = 0.5) +
++   draw_plot(Figure2B, x = 0.02, y = 0.01, width = 0.98, height = 0.5) +
++   draw_plot_label(label = c("a", "b"), size = 12,
++                   x = c(0.01, 0.01), y = c(0.96, 0.46), hjust = 0, vjust = 0) +
++   draw_plot_label(label = c("Mean exposure", "Median exposure"), size = 7,
++                   x = c(0.05, 0.05), y = c(0.96, 0.46), hjust = 0, vjust = 0,
++                   fontface = "bold")
+> dev.off()
+null device 
+          1 
+> 
+> 
+> # FIGURE 3 (EXPOSURE PLOT) ------------------------------------------------
+> 
+> G3A <- readr::read_csv("./results/03_merge_and_clean_survey/G3A.csv")
+Rows: 7 Columns: 3
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+dbl (3): pid7, exposure, n
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+> 
+> wb <- readRDS("./figures_source/Source Data.rds")
+> openxlsx::addWorksheet(wb, sheetName = "figure_3a", gridLines = FALSE)
+> openxlsx::writeDataTable(wb, sheet = "figure_3a", x = G3A)
+> saveRDS(wb, "./figures_source/Source Data.rds")
+> openxlsx::saveWorkbook(wb, "./figures_source/Source Data.xlsx", overwrite = TRUE)
+> 
+> # How much more exposure to posts from IRA accounts were Strong Republicans
+> # to receive than Democrats(pid = 1, 2, 3) or Independents (pid = 4)
+> G3A$exposure[G3A$pid7 == 7] / G3A$exposure[G3A$pid7 %in% 1:4]
+[1] 9.677107 6.109219 9.111484 9.684451
+> 
+> # On average about 9x more relative to Democrats and Independents
+> mean(G3A$exposure[G3A$pid7 == 7] / G3A$exposure[G3A$pid7 %in% 1:4])
+[1] 8.645565
+> 
+> Figure3A <- ggplot(G3A, aes(x = pid7, y = exposure)) +
++   my.theme(base_size = 7,
++            borderless = 2, remove.ticks.y = TRUE, remove.ticks.x = FALSE,
++            grid.y_colour = "grey55", grid.y_linetype = 3,
++            grid.x_colour = "grey85", grid.x_linetype = 1) +
++   coord_cartesian(xlim = c(0.5, 7.5),
++                   ylim = c(0, max(G3A$exposure)*1.1), expand = FALSE) +
++   # scale_y_continuous(breaks = sort(unique(G3A$model_number)),
++   #                    labels = unique(G3A$variable)[order(G3A$variable)]) +
++   scale_x_continuous(breaks = 1:7,
++                    labels = c("Strong\nDemocrat", "", "", "Independent", "", "", "Strong\nRepublican")) +
++   labs(x = "", y = "Mean exposure to Russian disinformation accounts") +
++   geom_bar(stat = "identity", color = "#0D0887", fill = "#0D0887", width = 0.65) +
++   geom_hline(yintercept = 0, size = 1.5, linetype = 1) +
++   theme(plot.margin = unit(c(1, 3, -2, 2), "mm"))
+Warning message:
+`panel.margin` is deprecated. Please use `panel.spacing` property instead 
+> 
+> 
+> # Figure 3B: Coefficients from the model log(total_exposure_ira) ~ RHS variables
+> total_exposure_russia_log <- readRDS("./results/05_regression_analysis/total_exposure_russia_log.rds")
+> total_exposure_russia_log_square <- readRDS("./results/05_regression_analysis/total_exposure_russia_log_square.rds")
+> 
+> total_exposure_russia_poisson <- readRDS("./results/05_regression_analysis/total_exposure_russia_poisson.rds")
+> total_exposure_russia_poisson_square <- readRDS("./results/05_regression_analysis/total_exposure_russia_poisson_square.rds")
+> 
+> G3B <- data.frame(model = c(rep("OLS", length(coef(total_exposure_russia_log))),
++                             rep("OLS square", length(coef(total_exposure_russia_log_square))),
++                             rep("Poisson", length(coef(total_exposure_russia_poisson))),
++                             rep("Poisson square", length(coef(total_exposure_russia_poisson_square)))),
++                   variable = c(names(total_exposure_russia_log$coefficients),
++                                names(total_exposure_russia_log_square$coefficients),
++                                names(total_exposure_russia_poisson$coefficients),
++                                names(total_exposure_russia_poisson_square$coefficients)),
++                   coef = c(coef(total_exposure_russia_log),
++                            coef(total_exposure_russia_log_square),
++                            coef(total_exposure_russia_poisson),
++                            coef(total_exposure_russia_poisson_square)),
++                   lower95 = c(confint(total_exposure_russia_log, level = 0.95)[, 1],
++                               confint(total_exposure_russia_log_square, level = 0.95)[, 1],
++                               confint(total_exposure_russia_poisson, level = 0.95)[, 1],
++                               confint(total_exposure_russia_poisson_square, level = 0.95)[, 1]),
++                   upper95 = c(confint(total_exposure_russia_log, level = 0.95)[, 2],
++                               confint(total_exposure_russia_log_square, level = 0.95)[, 2],
++                               confint(total_exposure_russia_poisson, level = 0.95)[, 2],
++                               confint(total_exposure_russia_poisson_square, level = 0.95)[, 2]))
+Waiting for profiling to be done...
+Waiting for profiling to be done...
+Waiting for profiling to be done...
+Waiting for profiling to be done...
+Waiting for profiling to be done...
+Waiting for profiling to be done...
+Waiting for profiling to be done...
+Waiting for profiling to be done...
+> 
+> G3B$variable[G3B$variable == ""] <- ""
+> 
+> G3B$variable[G3B$variable == "(Intercept)"] <- "Constant"
+> G3B$variable[G3B$variable == "genderFemale"] <- "Woman"
+> G3B$variable[G3B$variable == "internet_social_media_w1"] <- "Social media use"
+> G3B$variable[G3B$variable == "total_tweets_log"] <- "Total tweets in feed (log)"
+> G3B$variable[G3B$variable == "age"] <- "Age"
+> G3B$variable[G3B$variable == "income"] <- "Income"
+> G3B$variable[G3B$variable == "educationCollege+"] <- "College degree"
+> G3B$variable[G3B$variable == "pid7"] <- "Party ID\n(0 = Strong D.,\n1 = Strong R.)"
+> G3B$variable[G3B$variable == "I(pid7^2)"] <- "Strength of partisanship\n(Party ID²)"
+> G3B$variable[G3B$variable == "raceNon-White"] <- "Person of color"
+> G3B$variable[G3B$variable == "race_other_hispanic"] <- "Race: Hispanic/Other"
+> G3B$variable[G3B$variable == "race_black"] <- "Race: Black"
+> G3B$variable[G3B$variable == "regionNortheast"] <- "Region: Northeast"
+> G3B$variable[G3B$variable == "regionMidwest"] <- "Region: Midwest"
+> G3B$variable[G3B$variable == "regionWest"] <- "Region: West"
+> 
+> G3B$variable <- factor(G3B$variable, levels = rev(c("Woman",
++                                                     "Age",
++                                                     "College degree",
++                                                     "Income",
++                                                     "Person of color",
++                                                     #"Race: Hispanic/Other",
++                                                     #"Race: Black",
++                                                     "Region: Northeast",
++                                                     "Region: Midwest",
++                                                     "Region: West",
++                                                     "Social media use",
++                                                     #"Total tweets in feed (log)",
++                                                     "Party ID\n(0 = Strong D.,\n1 = Strong R.)",
++                                                     "Strength of partisanship\n(Party ID²)",
++                                                     "Constant")))
+> 
+> G3B$model_number <- as.numeric(G3B$variable)
+> G3B$model_number[G3B$model_number == 2] <- 1.5
+> G3B$model_number[G3B$model_number == 3] <- 2.5
+> 
+> G3B <- subset(G3B, variable != "Constant")
+> 
+> wb <- readRDS("./figures_source/Source Data.rds")
+> openxlsx::addWorksheet(wb, sheetName = "figure_3b", gridLines = FALSE)
+> openxlsx::writeDataTable(wb, sheet = "figure_3b", x = subset(G3B, model == "OLS"))
+> saveRDS(wb, "./figures_source/Source Data.rds")
+> openxlsx::saveWorkbook(wb, "./figures_source/Source Data.xlsx", overwrite = TRUE)
+> 
+> Figure3B <- ggplot(subset(G3B, model == "OLS"),
++                    aes(x = coef, y = model_number)) +
++   my.theme(base_size = 7,
++            borderless = 2, remove.ticks.y = TRUE, remove.ticks.x = FALSE,
++            grid.y_colour = "grey85", grid.y_linetype = 3,
++            grid.x_colour = "grey85", grid.x_linetype = 1) +
++   coord_cartesian(xlim = c(-0.603, 1.03), ylim = c(1.75, max(G3B$model_number[G3B$model == "OLS"])+0.5), expand = FALSE) +
++   scale_y_continuous(breaks = sort(unique(G3B$model_number[G3B$model == "OLS"])),
++                      labels = unique(G3B$variable[G3B$model == "OLS"])[order(G3B$variable[G3B$model == "OLS"])]) +
++   scale_x_continuous(breaks = c(-0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8, 1, 1.2),
++                    labels = c("-.6", "-.4", "-.2", "0", ".2", ".4", ".6", ".8", "1", "1.2")) +
++   labs(x = "Coefficient", y = "") +
++   geom_vline(xintercept = 0, size = 0.25) +
++   geom_hline(yintercept = 3.25, size = 0.25, linetype = 5) +
++   geom_hline(yintercept = 1.75, size = 1.5, linetype = 1) +
++   geom_segment(aes(x = lower95, xend = upper95, y = model_number, yend = model_number),
++                size = 3, color = "grey85") +
++   geom_point(size = 2, color = "#0D0887") +
++   labs(y = "Predictor") +
++   theme(plot.margin = unit(c(1, 2, 1, -2), "mm"))
+Warning message:
+`panel.margin` is deprecated. Please use `panel.spacing` property instead 
+> 
+> #pdf("./figures/total_russia_exposure_linear_log.pdf", 6.5, 2.6)
+> pdf("./figures/Figure-3.pdf", 7, 2.8)
+> ggdraw() +
++ draw_plot(Figure3A, x = 0.03, y = 0.01, width = 0.45, height = 0.97) +
++ draw_plot(Figure3B, x = 0.50, y = 0.01, width = 0.5, height = 0.97) +
++ draw_plot_label(label = c("a", "b"), size = 14,
++                 x = c(0, 0.48), y = c(0.995, 0.995))
+> dev.off()
+null device 
+          1 
+> 
+> 
+> # FIGURE 4 (ISSUE AND IDEOLOGICAL POSITIONS) -----------------------------------
+> 
+> # Respondent issue-position models
+> issue_distance_log_exposure_russia <- readRDS(
++   "./results/05_regression_analysis/issue_distance_log_exposure_russia.rds"
++ )
+> issue_distance_log_exposure_russia_controls <- readRDS(
++   "./results/05_regression_analysis/issue_distance_log_exposure_russia_controls.rds"
++ )
+> 
+> issue_distance_log0_exposure_russia <- readRDS(
++   "./results/05_regression_analysis/issue_distance_log0_exposure_russia.rds"
++ )
+> issue_distance_log0_exposure_russia_controls <- readRDS(
++   "./results/05_regression_analysis/issue_distance_log0_exposure_russia_controls.rds"
++ )
+> 
+> issue_distance_binary_exposure_russia <- readRDS(
++   "./results/05_regression_analysis/issue_distance_binary_exposure_russia.rds"
++ )
+> issue_distance_binary_exposure_russia_controls <- readRDS(
++   "./results/05_regression_analysis/issue_distance_binary_exposure_russia_controls.rds"
++ )
+> 
+> issue_distance_follow_troll_russia <- readRDS(
++   "./results/05_regression_analysis/issue_distance_follow_troll_russia.rds"
++ )
+> issue_distance_follow_troll_russia_controls <- readRDS(
++   "./results/05_regression_analysis/issue_distance_follow_troll_russia_controls.rds"
++ )
+> 
+> # Candidate distance models (polarization)
+> candidate_distance_log_exposure_russia <- readRDS(
++   "./results/05_regression_analysis/candidate_distance_log_exposure_russia.rds"
++ )
+> candidate_distance_log_exposure_russia_controls <- readRDS(
++   "./results/05_regression_analysis/candidate_distance_log_exposure_russia_controls.rds"
++ )
+> 
+> candidate_distance_log0_exposure_russia <- readRDS(
++   "./results/05_regression_analysis/candidate_distance_log0_exposure_russia.rds"
++ )
+> candidate_distance_log0_exposure_russia_controls <- readRDS(
++   "./results/05_regression_analysis/candidate_distance_log0_exposure_russia_controls.rds"
++ )
+> 
+> candidate_distance_binary_exposure_russia <- readRDS(
++   "./results/05_regression_analysis/candidate_distance_binary_exposure_russia.rds"
++ )
+> candidate_distance_binary_exposure_russia_controls <- readRDS(
++   "./results/05_regression_analysis/candidate_distance_binary_exposure_russia_controls.rds"
++ )
+> 
+> candidate_distance_follow_troll_russia <- readRDS(
++   "./results/05_regression_analysis/candidate_distance_follow_troll_russia.rds"
++ )
+> candidate_distance_follow_troll_russia_controls <- readRDS(
++   "./results/05_regression_analysis/candidate_distance_follow_troll_russia_controls.rds"
++ )
+> 
+> # Must match up with names(issue_distance_log_exposure_russia_controls) and
+> # names(candidate_distance_log_exposure_russia_controls)
+> dv_labels <- c("Political ideology\n(left-right scale)",
++                "Immigration",
++                "Ban on Muslims",
++                "Building a wall",
++                "Support for Obamacare",
++                "Expanding the ACA",
++                "Support for free trade",
++                "Oppose Chinese tariffs",
++                "Use of military force")
+> 
+> 
+> # ISSUE POSITIONS
+> G4A_log_exposure <- lapply(issue_distance_log_exposure_russia_controls, get_coefs,
++                           iv = "log(Exposure + 1)", dv = "Label me")
+> for(i in 1:length(G4A_log_exposure)) G4A_log_exposure[[i]]$dv <- dv_labels[i]
+> 
+> G4A_log0_exposure <- lapply(issue_distance_log0_exposure_russia_controls, get_coefs,
++                             iv = "min(0, log(Exposure)) & binary", dv = "Label me")
+> for(i in 1:length(G4A_log0_exposure)) G4A_log0_exposure[[i]]$dv <- dv_labels[i]
+> 
+> G4A_binary_exposure <- lapply(issue_distance_binary_exposure_russia_controls, get_coefs,
++                           iv = "Exposure (binary)", dv = "Label me")
+> for(i in 1:length(G4A_binary_exposure)) G4A_binary_exposure[[i]]$dv <- dv_labels[i]
+> 
+> G4A_follow_troll <- lapply(issue_distance_follow_troll_russia_controls, get_coefs,
++                           iv = "1(Follow > 0 IRA accounts)", dv = "Label me")
+> for(i in 1:length(G4A_follow_troll)) G4A_follow_troll[[i]]$dv <- dv_labels[i]
+> 
+> G4A <- rbind(do.call(rbind, G4A_log_exposure),
++              do.call(rbind, G4A_log0_exposure),
++              do.call(rbind, G4A_binary_exposure),
++              do.call(rbind, G4A_follow_troll))
+> 
+> 
+> G4A$outcome <- "Issues"
+> 
+> 
+> # POLARIZATION
+> G4B_log_exposure <- lapply(candidate_distance_log_exposure_russia_controls, get_coefs,
++                           iv = "log(Exposure + 1)", dv = "Label me")
+> for(i in 1:length(G4B_log_exposure)) G4B_log_exposure[[i]]$dv <- dv_labels[i]
+> 
+> G4B_log0_exposure <- lapply(candidate_distance_log0_exposure_russia_controls, get_coefs,
++                           iv = "min(0, log(Exposure)) & binary", dv = "Label me")
+> for(i in 1:length(G4B_log0_exposure)) G4B_log0_exposure[[i]]$dv <- dv_labels[i]
+> 
+> 
+> 
+> G4B_binary_exposure <- lapply(candidate_distance_binary_exposure_russia_controls, get_coefs,
++                           iv = "Exposure (binary)", dv = "Label me")
+> for(i in 1:length(G4B_binary_exposure)) G4B_binary_exposure[[i]]$dv <- dv_labels[i]
+> 
+> G4B_follow_troll <- lapply(candidate_distance_follow_troll_russia_controls, get_coefs,
++                           iv = "1(Follow > 0 IRA accounts)", dv = "Label me")
+> for(i in 1:length(G4B_follow_troll)) G4B_follow_troll[[i]]$dv <- dv_labels[i]
+> 
+> 
+> G4B <- rbind(do.call(rbind, G4B_log_exposure),
++              do.call(rbind, G4B_log0_exposure),
++              do.call(rbind, G4B_binary_exposure),
++              do.call(rbind, G4B_follow_troll))
+> 
+> G4B$outcome <- "Polarization"
+> 
+> # Reorder labels and prep for graphing
+> G4 <- rbind(G4A, G4B)
+> 
+> G4$iv <- factor(G4$iv, levels = c("log(Exposure + 1)",
++                                   "Exposure (binary)",
++                                   "1(Follow > 0 IRA accounts)",
++                                   "min(0, log(Exposure)) & binary"))
+> 
+> G4$dv <- factor(G4$dv, levels = c("Immigration",
++                                   "Building a wall",
++                                   "Support for Obamacare",
++                                   "Expanding the ACA",
++                                   "Ban on Muslims",
++                                   "Support for free trade",
++                                   "Oppose Chinese tariffs",
++                                   "Use of military force",
++                                   "Political ideology\n(left-right scale)"))
+> 
+> G4$model_number <- as.numeric(G4$dv)
+> G4$model_number[G4$model_number == max(G4$model_number)] <- max(G4$model_number) + 0.25
+> 
+> G4$model_number[G4$iv == "min(0, log(Exposure)) & binary" & G4$treatment == "Treatment"][seq(1, 36, by = 2)] <- G4$model_number[G4$iv == "min(0, log(Exposure)) & binary" & G4$treatment == "Treatment"][seq(1, 36, by = 2)] + 0.2
+> G4$model_number[G4$iv == "min(0, log(Exposure)) & binary" & G4$treatment == "Treatment"][seq(2, 36, by = 2)] <- G4$model_number[G4$iv == "min(0, log(Exposure)) & binary" & G4$treatment == "Treatment"][seq(2, 36, by = 2)] - 0.2
+> 
+> blank_data <- data.frame(iv = rep(levels(G4$iv), each = 2),
++                          model_number = 1,
++                          coef = c(-4, 4, -27, 27, -27, 27, -12, 12))
+> blank_data$iv <- factor(blank_data$iv, levels = c("log(Exposure + 1)",
++                                                   "Exposure (binary)",
++                                                   "1(Follow > 0 IRA accounts)",
++                                                   "min(0, log(Exposure)) & binary"))
+> 
+> count <- 0
+> breaks_fun <- function(x) {
++   count <<- count + 1L
++   switch(
++     count,
++     seq(-3, 3, by = 1), seq(-3, 3, by = 1),
++     seq(-30, 30, by = 10), seq(-30, 30, by = 10),
++     seq(-30, 30, by = 10), seq(-30, 30, by = 10),
++     seq(-10, 10, by = 5), seq(-10, 10, by = 5)
++   )
++ }
+> 
+> 
+> wb <- readRDS("./figures_source/Source Data.rds")
+> openxlsx::addWorksheet(wb, sheetName = "figure_4a", gridLines = FALSE)
+> openxlsx::writeDataTable(
++   wb, sheet = "figure_4a",
++   x = subset(G4, outcome == "Issues" & treatment == "Treatment" &
++                iv %in% c("log(Exposure + 1)", "Exposure (binary)"))
++ )
+> openxlsx::addWorksheet(wb, sheetName = "figure_4b", gridLines = FALSE)
+> openxlsx::writeDataTable(
++   wb, sheet = "figure_4b",
++   x = subset(G4, outcome == "Polarization" & treatment == "Treatment" &
++                iv %in% c("log(Exposure + 1)", "Exposure (binary)"))
++ )
+> saveRDS(wb, "./figures_source/Source Data.rds")
+> openxlsx::saveWorkbook(wb, "./figures_source/Source Data.xlsx", overwrite = TRUE)
+> 
+> 
+> # Issue-placement graph
+> count <- 0
+> Figure4A <- ggplot(subset(G4, outcome == "Issues" & treatment == "Treatment" &
++                               iv %in% c("log(Exposure + 1)", "Exposure (binary)")),
++                     aes(x = coef, y = model_number)) +
++   my.theme(base_size = 7,
++            borderless = 2, remove.ticks.y = TRUE, remove.ticks.x = FALSE,
++            grid.x_colour = "grey85", grid.y_colour = "grey35",
++            grid.y_linetype = 3) +
++   labs(x = "Coefficient", y = "Outcome variable", color = "", fill = "") +
++   geom_blank(data = subset(blank_data, iv %in% c("log(Exposure + 1)", "Exposure (binary)"))) +
++   coord_cartesian(ylim = c(0.35, max(G4$model_number[G4$iv %in% c("log(Exposure + 1)", "Exposure (binary)")], na.rm = TRUE) + 0.65), expand = FALSE) +
++   facet_wrap(~ iv, ncol = 3, scale = "free_x") +
++   scale_x_continuous(breaks = breaks_fun) +
++   scale_y_continuous(breaks = sort(unique(G4$model_number[G4$iv %in% c("log(Exposure + 1)", "Exposure (binary)")])),
++                      labels = levels(G4$dv[G4$iv %in% c("log(Exposure + 1)", "Exposure (binary)")])) +
++   geom_vline(xintercept = 0, size = 0.25) +
++   geom_hline(yintercept = max(G4$model_number[G4$iv %in% c("log(Exposure + 1)", "Exposure (binary)")], na.rm = TRUE) - 0.65, size = 0.25, linetype = 1) +
++   geom_hline(yintercept = c(0.35, max(G4$model_number[G4$iv %in% c("log(Exposure + 1)", "Exposure (binary)")], na.rm = TRUE) + 0.65), size = 1.5) +
++   geom_segment(aes(yend = model_number, x = lower95, xend = upper95),
++                size = 3, color = "grey80") +
++   geom_point(data = subset(G4, outcome == "Issues" & treatment == "Treatment" &
++                                dv != "Political ideology\n(left-right scale)" &
++                                iv %in% c("log(Exposure + 1)", "Exposure (binary)")),
++              size = 2.25, color = "#0D0887", show.legend = FALSE) +
++   geom_point(data = subset(G4, outcome == "Issues" & treatment == "Treatment" &
++                                dv == "Political ideology\n(left-right scale)" &
++                                iv %in% c("log(Exposure + 1)", "Exposure (binary)")),
++              size = 3, shape = 21, fill = "white", stroke = 0.5,
++              color = "#0D0887", show.legend = FALSE) +
++   theme(plot.margin = unit(c(0, 1, 1, 0), "mm"),
++         legend.position = "none",
++         panel.margin = unit(0.75, "lines"),
++         plot.title.position = "plot",
++         plot.title = element_text(family = "", size = 7, vjust = 0.5, hjust = 0, face = "bold"),
++         axis.text.y = element_text(family = "", colour = "black", face = "plain", size = 7, hjust = 1, lineheight = 0.9),
++         axis.title.y = element_text(family = "", colour = "black", face = "bold", size = 7))
+Warning messages:
+1: `panel.margin` is deprecated. Please use `panel.spacing` property instead 
+2: `panel.margin` is deprecated. Please use `panel.spacing` property instead 
+> 
+> # Polarization graph
+> count <- 0
+> Figure4B <- ggplot(subset(G4, outcome == "Polarization" & treatment == "Treatment" &
++                               iv %in% c("log(Exposure + 1)", "Exposure (binary)")),
++                     aes(x = coef, y = model_number)) +
++   my.theme(base_size = 7,
++            borderless = 2, remove.ticks.y = TRUE, remove.ticks.x = FALSE,
++            grid.x_colour = "grey85", grid.y_colour = "grey35",
++            grid.y_linetype = 3) +
++   labs(x = "Coefficient", y = "Outcome variable", color = "", fill = "") +
++   geom_blank(data = subset(blank_data, iv %in% c("log(Exposure + 1)", "Exposure (binary)"))) +
++   coord_cartesian(ylim = c(0.35, max(G4$model_number[G4$iv %in% c("log(Exposure + 1)", "Exposure (binary)")], na.rm = TRUE) + 0.65), expand = FALSE) +
++   facet_wrap(~ iv, ncol = 3, scale = "free_x") +
++   scale_x_continuous(breaks = breaks_fun) +
++   scale_y_continuous(breaks = sort(unique(G4$model_number[G4$iv %in% c("log(Exposure + 1)", "Exposure (binary)")])),
++                      labels = levels(G4$dv[G4$iv %in% c("log(Exposure + 1)", "Exposure (binary)")])) +
++   geom_vline(xintercept = 0, size = 0.25) +
++   geom_hline(yintercept = max(G4$model_number[G4$iv %in% c("log(Exposure + 1)", "Exposure (binary)")], na.rm = TRUE) - 0.65, size = 0.25, linetype = 1) +
++   geom_hline(yintercept = c(0.35, max(G4$model_number[G4$iv %in% c("log(Exposure + 1)", "Exposure (binary)")], na.rm = TRUE) + 0.65), size = 1.5) +
++   geom_segment(aes(yend = model_number, x = lower95, xend = upper95),
++                size = 3, color = "grey80") +
++   geom_point(data = subset(G4, outcome == "Polarization" & treatment == "Treatment" &
++                                dv != "Political ideology\n(left-right scale)" &
++                                iv %in% c("log(Exposure + 1)", "Exposure (binary)")),
++              size = 2.25, color = "#0D0887", show.legend = FALSE) +
++   geom_point(data = subset(G4, outcome == "Polarization" & treatment == "Treatment" &
++                                dv == "Political ideology\n(left-right scale)" &
++                                iv %in% c("log(Exposure + 1)", "Exposure (binary)")),
++              size = 3, shape = 21, fill = "white", stroke = 0.5,
++              color = "#0D0887", show.legend = FALSE) +
++   theme(plot.margin = unit(c(0, 1, 1, 0), "mm"),
++         legend.position = "none",
++         panel.margin = unit(0.75, "lines"),
++         plot.title.position = "plot",
++         plot.title = element_text(family = "", size = 7, vjust = 0.5, hjust = 0, face = "bold"),
++         axis.text.y = element_text(family = "", colour = "black", face = "plain", size = 7, hjust = 1, lineheight = 0.9),
++         axis.title.y = element_text(family = "", colour = "black", face = "bold", size = 7))
+Warning messages:
+1: `panel.margin` is deprecated. Please use `panel.spacing` property instead 
+2: `panel.margin` is deprecated. Please use `panel.spacing` property instead 
+> 
+> 
+> # Count is needed to specify the x-axis labels
+> # using the hack break_fun()
+> # Thus we graph the top panel first, reset the count to 0 and then add on
+> # the second panel
+> count <- 0
+> Figure4 <- ggdraw() +
++            draw_plot(Figure4A, x = 0, y = 0.5, width = 1, height = 0.47)
+> count <- 0
+> Figure4 <- Figure4 +
++            draw_plot(Figure4B, x = 0, y = 0, width = 1, height = 0.47) +
++            draw_plot_label(label = c("a", "b"),
++                            x = c(0.005, 0.005),
++                            y = c(0.97, 0.48),
++                            size = 14, hjust = 0, vjust = 0) +
++            draw_plot_label(label = c("Issue positions", "Polarization"),
++                            x = c(0.05, 0.05),
++                            y = c(0.97, 0.48),
++                            size = 7, hjust = 0, vjust = 0,
++                            fontface = "bold")
+> 
+> pdf("./figures/Figure-4.pdf", 7, 5.5)
+> Figure4
+> dev.off()
+null device 
+          1 
+> 
+> 
+> # FIGURE 5 (VOTE CHOICE) -------------------------------------------------------
+> 
+> vote_rank_total_russia_count_lm_controls <- readRDS(
++   "./results/05_regression_analysis/vote_rank_total_russia_count_lm_controls.rds"
++ )
+> vote_choice_total_russia_count_lm_controls <- readRDS(
++   "./results/05_regression_analysis/vote_choice_total_russia_count_lm_controls.rds"
++ )
+> vote_choice_benefit_total_russia_count_lm_controls <- readRDS(
++   "./results/05_regression_analysis/vote_choice_benefit_total_russia_count_lm_controls.rds"
++ )
+> 
+> vote_rank_total_russia_binary_lm_controls <- readRDS(
++   "./results/05_regression_analysis/vote_rank_total_russia_binary_lm_controls.rds"
++ )
+> vote_choice_total_russia_binary_lm_controls <- readRDS(
++   "./results/05_regression_analysis/vote_choice_total_russia_binary_lm_controls.rds"
++ )
+> vote_choice_benefit_total_russia_binary_lm_controls <- readRDS(
++   "./results/05_regression_analysis/vote_choice_benefit_total_russia_binary_lm_controls.rds"
++ )
+> 
+> vote_rank_total_russia_follow_lm_controls <- readRDS(
++   "./results/05_regression_analysis/vote_rank_total_russia_follow_lm_controls.rds"
++ )
+> vote_choice_total_russia_follow_lm_controls <- readRDS(
++   "./results/05_regression_analysis/vote_choice_total_russia_follow_lm_controls.rds"
++ )
+> vote_choice_benefit_total_russia_follow_lm_controls <- readRDS(
++   "./results/05_regression_analysis/vote_choice_benefit_total_russia_follow_lm_controls.rds"
++ )
+> 
+> G5 <- rbind(get_coefs(vote_rank_total_russia_count_lm_controls,
++                       dv = "Rank\n(Trump > Clinton)",
++                       iv = "log(Exposure + 1)"),
++             get_coefs(vote_choice_total_russia_count_lm_controls,
++                       dv = "Vote choice\n(Clinton toward Trump)",
++                       iv = "log(Exposure + 1)"),
++             get_coefs(vote_choice_benefit_total_russia_count_lm_controls,
++                       dv = "Vote choice\n(Clinton toward Trump,\n3rd party, or not voting)",
++                       iv = "log(Exposure + 1)"),
++ 
++             get_coefs(vote_rank_total_russia_binary_lm_controls,
++                       dv = "Rank\n(Trump > Clinton)",
++                       iv = "Exposure (binary)"),
++             get_coefs(vote_choice_total_russia_binary_lm_controls,
++                       dv = "Vote choice\n(Clinton toward Trump)",
++                       iv = "Exposure (binary)"),
++             get_coefs(vote_choice_benefit_total_russia_binary_lm_controls,
++                       dv = "Vote choice\n(Clinton toward Trump,\n3rd party, or not voting)",
++                       iv = "Exposure (binary)"),
++ 
++             get_coefs(vote_rank_total_russia_follow_lm_controls,
++                       dv = "Rank\n(Trump > Clinton)",
++                       iv = "1(follow > 0 accounts)"),
++             get_coefs(vote_choice_total_russia_follow_lm_controls,
++                       dv = "Vote choice\n(Clinton toward Trump)",
++                       iv = "1(follow > 0 accounts)"),
++             get_coefs(vote_choice_benefit_total_russia_follow_lm_controls,
++                       dv = "Vote choice\n(Clinton toward Trump,\n3rd party, or not voting)",
++                       iv = "1(follow > 0 accounts)"))
+> 
+> G5$iv <- factor(G5$iv, levels = c("log(Exposure + 1)",
++                                   "Exposure (binary)",
++                                   "1(follow > 0 accounts)"))
+> 
+> G5$variable <- factor(G5$variable,
++                       levels = c("Vote choice\n(Clinton toward Trump,\n3rd party, or not voting)",
++                                  "Vote choice\n(Clinton toward Trump)",
++                                  "Rank\n(Trump > Clinton)"))
+> 
+> blank_data <- data.frame(iv = rep(levels(G5$iv), each = 2),
++                          variable = rep(levels(G5$variable), each = 2),
++                          coef = c(-0.05, 0.05,
++                                   -0.25, 0.25,
++                                   -0.3, 0.3))
+> 
+> blank_data$iv <- factor(blank_data$iv, levels = c("log(Exposure + 1)",
++                                                   "Exposure (binary)",
++                                                   "1(follow > 0 accounts)"))
+> 
+> blank_data$variable <- factor(blank_data$variable,
++                               levels = c("Vote choice\n(Clinton toward Trump,\n3rd party, or not voting)",
++                                          "Vote choice\n(Clinton toward Trump)",
++                                          "Rank\n(Trump > Clinton)"))
+> 
+> count <- 0
+> breaks_fun <- function(x) {
++   count <<- count + 1L
++   switch(
++     count,
++     seq(-0.04, 0.04, by = 0.02), seq(-0.04, 0.04, by = 0.02),
++     seq(-0.2, 0.2, by = 0.1), seq(-0.2, 0.2, by = 0.1),
++     seq(-0.2, 0.2, by = 0.1), seq(-0.2, 0.2, by = 0.1)
++   )
++ }
+> 
+> wb <- readRDS("./figures_source/Source Data.rds")
+> openxlsx::addWorksheet(wb, sheetName = "figure_5", gridLines = FALSE)
+> openxlsx::writeDataTable(
++   wb, sheet = "figure_5",
++   x = subset(G5, treatment == "Treatment" &
++                iv %in% c("log(Exposure + 1)", "Exposure (binary)"))
++ )
+> saveRDS(wb, "./figures_source/Source Data.rds")
+> openxlsx::saveWorkbook(wb, "./figures_source/Source Data.xlsx", overwrite = TRUE)
+> 
+> # VERTICAL: pdf("./figures/vote_choice_total_lm_controls_plot.pdf", 3.25, 3.75) # 4.5, 1.8
+> # Change facet_wrap() to ncol = 1
+> # HORIZONTAL:
+> # Change facet_wrap() to ncol = 2
+> pdf("./figures/Figure-5.pdf", 7, 2.1) # 4.5, 1.8
+> count <- 0
+> ggplot(subset(G5, treatment == "Treatment" & iv %in% c("log(Exposure + 1)", "Exposure (binary)")),
++        aes(x = coef, y = variable)) +
++   my.theme(base_size = 7,
++            borderless = 2, remove.ticks.y = TRUE, remove.ticks.x = FALSE,
++            grid.x_colour = "grey85", grid.y_colour = "grey35",
++            grid.y_linetype = 3) +
++   labs(x = "Coefficient", y = "", color = "", fill = "") +
++   coord_cartesian(ylim = c(0.35, 3.65), expand = FALSE) +
++   facet_wrap(~ iv, ncol = 2, scale = "free_x") +
++   geom_blank(data = subset(blank_data, iv %in% c("log(Exposure + 1)", "Exposure (binary)"))) +
++   # geom_rect(data = subset(G5, iv == "log(Exposure)" & treatment == "Treatment")[1, ],
++   #           fill = "black", xmin = -Inf, xmax = Inf,
++   #           ymin = -Inf, ymax = Inf, alpha = 0.02) +
++   scale_x_continuous(breaks = breaks_fun) +
++   geom_vline(xintercept = 0, size = 0.25) +
++   geom_hline(yintercept = c(0.35, 3.65), size = 1.5) +
++   geom_segment(aes(yend = variable, x = lower95, xend = upper95),
++                size = 3, color = "grey83") +
++   geom_point(size = 2, color = "#0D0887") +
++   theme(plot.margin = unit(c(0, 1, 1, -2), "mm"),
++         legend.position = "none",
++         axis.text.y = element_text(family = "", colour = "black", face = "plain", size = 7, hjust = 1, lineheight = 0.9))
+Warning message:
+`panel.margin` is deprecated. Please use `panel.spacing` property instead 
+> dev.off()
+null device 
+          1 
+> 
+> 
+> # FIGURE 6 (SIMULATED VOTE CHOICE RESULTS)  -------------------------------
+> 
+> Sims <- readRDS("./results/05_regression_analysis/Vote_Models_Simulations.rds")
+> 
+> G6 <- subset(Sims, name %in% c("vote_choice_benefit_total_russia_count_lm_controls",
++                                "vote_choice_total_russia_count_lm_controls",
++                                "vote_rank_total_russia_count_lm_controls",
++                                "vote_choice_benefit_total_russia_count_log0_lm_controls",
++                                "vote_choice_total_russia_count_log0_lm_controls",
++                                "vote_rank_total_russia_count_log0_lm_controls",
++                                "vote_choice_benefit_total_russia_binary_lm_controls",
++                                "vote_choice_total_russia_binary_lm_controls",
++                                "vote_rank_total_russia_binary_lm_controls"))
+> 
+> G6$treatment <- NA
+> G6$treatment[G6$name == "vote_choice_total_russia_count_lm_controls"] <- "ln Exposure"
+> G6$treatment[G6$name == "vote_choice_benefit_total_russia_count_lm_controls"] <- "ln Exposure"
+> G6$treatment[G6$name == "vote_rank_total_russia_count_lm_controls"] <- "ln Exposure"
+> G6$treatment[G6$name == "vote_choice_total_russia_count_log0_lm_controls"] <- "min(0, log(Exposure)) & binary"
+> G6$treatment[G6$name == "vote_choice_benefit_total_russia_count_log0_lm_controls"] <- "min(0, log(Exposure)) & binary"
+> G6$treatment[G6$name == "vote_rank_total_russia_count_log0_lm_controls"] <- "min(0, log(Exposure)) & binary"
+> G6$treatment[G6$name == "vote_choice_total_russia_binary_lm_controls"] <- "Exposure (binary)"
+> G6$treatment[G6$name == "vote_choice_benefit_total_russia_binary_lm_controls"] <- "Exposure (binary)"
+> G6$treatment[G6$name == "vote_rank_total_russia_binary_lm_controls"] <- "Exposure (binary)"
+> 
+> G6$name[G6$name == "vote_choice_total_russia_count_lm_controls"] <- "Vote choice\n(Clinton toward Trump)\n"
+> G6$name[G6$name == "vote_choice_benefit_total_russia_count_lm_controls"] <- "Vote choice\n(Clinton toward Trump,\n3rd party, or not voting)"
+> G6$name[G6$name == "vote_rank_total_russia_count_lm_controls"] <- "Rank\n(Trump > Clinton)\n"
+> G6$name[G6$name == "vote_choice_total_russia_count_log0_lm_controls"] <- "Vote choice\n(Clinton toward Trump)\n"
+> G6$name[G6$name == "vote_choice_benefit_total_russia_count_log0_lm_controls"] <- "Vote choice\n(Clinton toward Trump,\n3rd party, or not voting)"
+> G6$name[G6$name == "vote_rank_total_russia_count_log0_lm_controls"] <- "Rank\n(Trump > Clinton)\n"
+> G6$name[G6$name == "vote_choice_total_russia_binary_lm_controls"] <- "Vote choice\n(Clinton toward Trump)\n"
+> G6$name[G6$name == "vote_choice_benefit_total_russia_binary_lm_controls"] <- "Vote choice\n(Clinton toward Trump,\n3rd party, or not voting)"
+> G6$name[G6$name == "vote_rank_total_russia_binary_lm_controls"] <- "Rank\n(Trump > Clinton)\n"
+> 
+> G6$name <- factor(G6$name, levels = c("Vote choice\n(Clinton toward Trump)\n",
++                                       "Rank\n(Trump > Clinton)\n",
++                                       "Vote choice\n(Clinton toward Trump,\n3rd party, or not voting)"))
+> 
+> wb <- readRDS("./figures_source/Source Data.rds")
+> openxlsx::addWorksheet(wb, sheetName = "figure_6", gridLines = FALSE)
+> openxlsx::writeDataTable(
++   wb, sheet = "figure_6",
++   x = subset(G6, treatment == "ln Exposure")
++ )
+> saveRDS(wb, "./figures_source/Source Data.rds")
+> openxlsx::saveWorkbook(wb, "./figures_source/Source Data.xlsx", overwrite = TRUE)
+> 
+> pdf("./figures/Figure-6.pdf", 7, 2.6)
+> ggplot(subset(G6, treatment == "ln Exposure"),
++   aes(x = value * 100, y = ..density..)) +
++   my.theme(base_size = 7,
++            borderless = 2, remove.ticks.y = TRUE, remove.ticks.x = TRUE,
++            grid.x_colour = "grey85", grid.y_colour = "grey35",
++            grid.y_linetype = 3) +
++   labs(x = "%-pt change in vote choice for Trump", y = "") +
++   facet_wrap(~ name, scale = "free") +
++   coord_cartesian(xlim = c(-4.5, 6.5)) +
++   scale_x_continuous(breaks = c(-4, -3, -2, -1, 0,
++                                 1, 2, 3, 4, 5, 6, 7),
++                      labels = c("4", "3", "2", "1", "0",
++                                 "1", "2", "3", "4", "5", "6", "7")) +
++   scale_y_continuous(breaks = c()) +
++   geom_histogram(fill = "grey75", color = "grey75", binwidth = 0.15) +
++   geom_hline(yintercept = 0, size = 0.5) +
++   # geom_vline(xintercept = 0, linetype = 1, size = 0.5, color = "black") +
++   geom_vline(data = filter(G6, treatment == "ln Exposure") %>%
++                     group_by(name) %>%
++                     summarize(the_median = median(value)*100),
++              aes(xintercept = the_median), color = "red", linetype = 1) +
++   geom_vline(data = filter(G6, treatment == "ln Exposure") %>%
++                     group_by(name) %>%
++                     summarize(lower90 = quantile(value, 0.975)*100),
++              aes(xintercept = lower90), color = "black", linetype = 1, size = 0.3) +
++   geom_vline(data = filter(G6, treatment == "ln Exposure") %>%
++                     group_by(name) %>%
++                     summarize(upper90 = quantile(value, 0.025)*100),
++              aes(xintercept = upper90), color = "black", linetype = 1, size = 0.3) +
++   theme(legend.position = "none",
++         strip.text.x = element_text(size = 7, face = "plain"),
++         plot.margin = unit(c(0, 1, 1.5, -2), "mm"))
+Warning message:
+`panel.margin` is deprecated. Please use `panel.spacing` property instead 
+> dev.off()
+null device 
+          1 
+> 
+> 
+> proc.time()
+   user  system elapsed 
+ 10.519   0.297  11.466 

@@ -1,0 +1,3246 @@
+---
+title: "\\Large \\textbf{Exposure to Russian foreign influence campaign on Twitter in the 2016 US Election and its relationship to attitudes and voting behavior}\\vspace{2mm}"
+subtitle: "\\Large Supplementary Information"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+  bookdown::pdf_book:
+    citation_package: natbib
+    includes:
+      in_header: header.tex
+    keep_tex: true
+    toc: true
+fontsize: 12pt
+linkcolor: blue
+urlcolor: blue
+natbiboptions: "square, sort, comma, numbers"
+bibliography: [bibliography.bib, software.bib]
+biblio-style: abbrvnat
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  cache = FALSE,
+  eval = TRUE,
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE,
+  dev = "cairo_pdf",
+  fig.pos = "h"
+)
+
+options(scipen = 6)
+```
+
+```{r packages}
+library("tibble")
+library("dplyr")
+library("tidyr")
+library("readr")
+library("lubridate")
+library("ggplot2")
+library("cowplot")
+library("gridExtra")
+library("MASS")
+library("mvtnorm")
+library("estimatr")
+library("lmtest")
+library("stargazer")
+library("kableExtra")
+library("knitr")
+library("openxlsx")
+
+source("../code/helper_functions.R")
+source("../code/ggplot_theme.R")
+```
+
+```{r read-in}
+# Data for section A
+# Summary of Twitter Electoral Integrity releases (2016 and earlier)
+summary_rogue_tweets_2016_lite <- readr::read_csv(
+  "../results/01_descriptives/summary_rogue_tweets_2016_lite.csv"
+)
+
+# Daily summary of trolls' tweets from Twitter Electoral Integrity releases
+daily_rogue_tweets_2016_lite <- readr::read_csv(
+  "../results/01_descriptives/daily_rogue_tweets_2016_lite.csv"
+)
+
+survey_comparison <- readr::read_csv("../results/06_survey_comparison/survey_comparison.csv")
+
+summary_ideology <- readr::read_csv("../results/06_survey_comparison/summary_ideology.csv")
+
+# Data for section B
+G1 <- readr::read_csv("../results/07_equivalence_tests/G1.csv")
+
+# Data for section C
+# Exposure Models
+# Party ID and (log) exposure to posts from Russian trolls
+total_exposure_russia_log <- readRDS(
+  "../results/05_regression_analysis/total_exposure_russia_log.rds"
+)
+total_exposure_russia_log_square <- readRDS(
+  "../results/05_regression_analysis/total_exposure_russia_log_square.rds"
+)
+total_exposure_russia_log_black <- readRDS(
+  "../results/05_regression_analysis/total_exposure_russia_log_black.rds"
+)
+total_exposure_russia_log_total_tweets <- readRDS(
+  "../results/05_regression_analysis/total_exposure_russia_log_total_tweets.rds"
+)
+
+# Quasi-Poisson
+total_exposure_russia_poisson <- readRDS(
+  "../results/05_regression_analysis/total_exposure_russia_poisson.rds"
+)
+total_exposure_russia_poisson_square <- readRDS(
+  "../results/05_regression_analysis/total_exposure_russia_poisson_square.rds"
+)
+total_exposure_russia_poisson_black <- readRDS(
+  "../results/05_regression_analysis/total_exposure_russia_poisson_black.rds"
+)
+total_exposure_russia_poisson_total_tweets <- readRDS(
+  "../results/05_regression_analysis/total_exposure_russia_poisson_total_tweets.rds"
+)
+
+G3C <- readr::read_csv("../results/05_regression_analysis/G3C.csv")  
+
+# Data for section D
+newsmedia_concentration <- readr::read_csv(
+  "../results/02_match_respondents/newsmedia_concentration.csv"
+)
+newsmedia_respondents_concentration <- readr::read_csv(
+  "../results/02_match_respondents/newsmedia_respondents_concentration.csv"
+)
+politicians_concentration <- readr::read_csv(
+  "../results/02_match_respondents/politicians_concentration.csv"
+)
+politicians_respondents_concentration <- readr::read_csv(
+  "../results/02_match_respondents/politicians_respondents_concentration.csv"
+)
+
+# Data for section E
+# Count of exposure
+# vote_rank_total_russia_count_lm <- readRDS("../results/05_regression_analysis/vote_rank_total_russia_count_lm.rds")
+# vote_rank_total_russia_count_ordered <- readRDS("../results/05_regression_analysis/vote_rank_total_russia_count_ordered.rds")
+vote_rank_total_russia_count_lm_controls <- readRDS("../results/05_regression_analysis/vote_rank_total_russia_count_lm_controls.rds")
+vote_rank_total_russia_count_lm_controls_rhs <- readRDS("../results/05_regression_analysis/vote_rank_total_russia_count_lm_controls_rhs.rds")
+vote_rank_total_russia_count_lm_controls_black <- readRDS("../results/05_regression_analysis/vote_rank_total_russia_count_lm_controls_black.rds")
+vote_rank_total_russia_count_lm_controls_total_tweets <- readRDS("../results/05_regression_analysis/vote_rank_total_russia_count_lm_controls_total_tweets.rds")
+
+# vote_choice_total_russia_count_lm <- readRDS("../results/05_regression_analysis/vote_choice_total_russia_count_lm.rds")
+vote_choice_total_russia_count_lm_controls <- readRDS("../results/05_regression_analysis/vote_choice_total_russia_count_lm_controls.rds")
+vote_choice_total_russia_count_lm_controls_rhs <- readRDS("../results/05_regression_analysis/vote_choice_total_russia_count_lm_controls_rhs.rds")
+vote_choice_total_russia_count_lm_controls_black <- readRDS("../results/05_regression_analysis/vote_choice_benefit_total_russia_count_lm_controls_black.rds")
+vote_choice_total_russia_count_lm_controls_total_tweets <- readRDS("../results/05_regression_analysis/vote_choice_benefit_total_russia_count_lm_controls_total_tweets.rds")
+
+# vote_choice_benefit_total_russia_count_lm <- readRDS("../results/05_regression_analysis/vote_choice_benefit_total_russia_count_lm.rds")
+vote_choice_benefit_total_russia_count_lm_controls <- readRDS("../results/05_regression_analysis/vote_choice_benefit_total_russia_count_lm_controls.rds")
+vote_choice_benefit_total_russia_count_lm_controls_rhs <- readRDS("../results/05_regression_analysis/vote_choice_benefit_total_russia_count_lm_controls_rhs.rds")
+vote_choice_benefit_total_russia_count_lm_controls_black <- readRDS("../results/05_regression_analysis/vote_choice_benefit_total_russia_count_lm_controls_black.rds")
+vote_choice_benefit_total_russia_count_lm_controls_total_tweets <- readRDS("../results/05_regression_analysis/vote_choice_benefit_total_russia_count_lm_controls_total_tweets.rds")
+
+# Binary exposure
+# vote_rank_total_russia_binary_lm <- readRDS("../results/05_regression_analysis/vote_rank_total_russia_binary_lm.rds")
+vote_rank_total_russia_binary_lm_controls <- readRDS("../results/05_regression_analysis/vote_rank_total_russia_binary_lm_controls.rds")
+vote_rank_total_russia_binary_lm_controls_rhs <- readRDS("../results/05_regression_analysis/vote_rank_total_russia_binary_lm_controls_rhs.rds")
+vote_rank_total_russia_binary_lm_controls_black <- readRDS("../results/05_regression_analysis/vote_rank_total_russia_binary_lm_controls_black.rds")
+vote_rank_total_russia_binary_lm_controls_total_tweets <- readRDS("../results/05_regression_analysis/vote_rank_total_russia_binary_lm_controls_total_tweets.rds")
+# vote_rank_total_russia_binary_ordered_controls <- readRDS("../results/05_regression_analysis/vote_rank_total_russia_binary_ordered_controls.rds")
+
+# vote_choice_total_russia_binary_lm <- readRDS("../results/05_regression_analysis/vote_choice_total_russia_binary_lm.rds")
+vote_choice_total_russia_binary_lm_controls <- readRDS("../results/05_regression_analysis/vote_choice_total_russia_binary_lm_controls.rds")
+vote_choice_total_russia_binary_lm_controls_rhs <- readRDS("../results/05_regression_analysis/vote_choice_total_russia_binary_lm_controls_rhs.rds")
+vote_choice_total_russia_binary_lm_controls_black <- readRDS("../results/05_regression_analysis/vote_choice_total_russia_binary_lm_controls_black.rds")
+vote_choice_total_russia_binary_lm_controls_total_tweets <- readRDS("../results/05_regression_analysis/vote_choice_total_russia_binary_lm_controls_total_tweets.rds")
+# vote_choice_total_russia_binary_ordered_controls <- readRDS("../results/05_regression_analysis/vote_choice_total_russia_binary_ordered_controls.rds")
+
+# vote_choice_benefit_total_russia_binary_lm <- readRDS("../results/05_regression_analysis/vote_choice_benefit_total_russia_binary_lm.rds")
+vote_choice_benefit_total_russia_binary_lm_controls <- readRDS("../results/05_regression_analysis/vote_choice_benefit_total_russia_binary_lm_controls.rds")
+vote_choice_benefit_total_russia_binary_lm_controls_rhs <- readRDS("../results/05_regression_analysis/vote_choice_benefit_total_russia_binary_lm_controls_rhs.rds")
+vote_choice_benefit_total_russia_binary_lm_controls_black <- readRDS("../results/05_regression_analysis/vote_choice_benefit_total_russia_binary_lm_controls_black.rds")
+vote_choice_benefit_total_russia_binary_lm_controls_total_tweets <- readRDS("../results/05_regression_analysis/vote_choice_benefit_total_russia_binary_lm_controls_total_tweets.rds")
+
+# Follow troll
+# vote_rank_total_russia_follow_lm <- readRDS("../results/05_regression_analysis/vote_rank_total_russia_follow_lm.rds")
+vote_rank_total_russia_follow_lm_controls <- readRDS("../results/05_regression_analysis/vote_rank_total_russia_follow_lm_controls.rds")
+vote_rank_total_russia_follow_lm_controls_rhs <- readRDS("../results/05_regression_analysis/vote_rank_total_russia_follow_lm_controls_rhs.rds")
+vote_rank_total_russia_follow_lm_controls_black <- readRDS("../results/05_regression_analysis/vote_rank_total_russia_follow_lm_controls_black.rds")
+vote_rank_total_russia_follow_lm_controls_total_tweets <- readRDS("../results/05_regression_analysis/vote_rank_total_russia_follow_lm_controls_total_tweets.rds")
+
+# vote_choice_total_russia_follow_lm <- readRDS("../results/05_regression_analysis/vote_choice_total_russia_follow_lm.rds")
+vote_choice_total_russia_follow_lm_controls <- readRDS("../results/05_regression_analysis/vote_choice_total_russia_follow_lm_controls.rds")
+vote_choice_total_russia_follow_lm_controls_rhs <- readRDS("../results/05_regression_analysis/vote_choice_total_russia_follow_lm_controls_rhs.rds")
+vote_choice_total_russia_follow_lm_controls_black <- readRDS("../results/05_regression_analysis/vote_choice_total_russia_follow_lm_controls_black.rds")
+vote_choice_total_russia_follow_lm_controls_total_tweets <- readRDS("../results/05_regression_analysis/vote_choice_total_russia_follow_lm_controls_total_tweets.rds")
+
+# vote_choice_benefit_total_russia_follow_lm <- readRDS("../results/05_regression_analysis/vote_choice_benefit_total_russia_follow_lm.rds")
+vote_choice_benefit_total_russia_follow_lm_controls <- readRDS("../results/05_regression_analysis/vote_choice_benefit_total_russia_follow_lm_controls.rds")
+vote_choice_benefit_total_russia_follow_lm_controls_rhs <- readRDS("../results/05_regression_analysis/vote_choice_benefit_total_russia_follow_lm_controls_rhs.rds")
+vote_choice_benefit_total_russia_follow_lm_controls_black <- readRDS("../results/05_regression_analysis/vote_choice_benefit_total_russia_follow_lm_controls_black.rds")
+vote_choice_benefit_total_russia_follow_lm_controls_total_tweets <- readRDS("../results/05_regression_analysis/vote_choice_benefit_total_russia_follow_lm_controls_total_tweets.rds")
+
+# Data for section F-H
+# Issue-based and Ideological Outcomes (Linear)
+# issue_distance_log_exposure_russia <- readRDS("../results/05_regression_analysis/issue_distance_log_exposure_russia.rds")
+issue_distance_log_exposure_russia_controls <- readRDS("../results/05_regression_analysis/issue_distance_log_exposure_russia_controls.rds")
+issue_distance_log_exposure_russia_controls_black <- readRDS("../results/05_regression_analysis/issue_distance_log_exposure_russia_controls_black.rds")
+issue_distance_log_exposure_russia_controls_total_tweets <- readRDS("../results/05_regression_analysis/issue_distance_log_exposure_russia_controls_total_tweets.rds")
+
+# issue_distance_log0_exposure_russia <- readRDS("../results/05_regression_analysis/issue_distance_log0_exposure_russia.rds")
+issue_distance_log0_exposure_russia_controls <- readRDS("../results/05_regression_analysis/issue_distance_log0_exposure_russia_controls.rds")
+
+# issue_distance_binary_exposure_russia <- readRDS("../results/05_regression_analysis/issue_distance_binary_exposure_russia.rds")
+issue_distance_binary_exposure_russia_controls <- readRDS("../results/05_regression_analysis/issue_distance_binary_exposure_russia_controls.rds")
+issue_distance_binary_exposure_russia_controls_black <- readRDS("../results/05_regression_analysis/issue_distance_binary_exposure_russia_controls_black.rds")
+issue_distance_binary_exposure_russia_controls_total_tweets <- readRDS("../results/05_regression_analysis/issue_distance_binary_exposure_russia_controls_total_tweets.rds")
+
+# issue_distance_follow_troll_russia <- readRDS("../results/05_regression_analysis/issue_distance_follow_troll_russia.rds")
+issue_distance_follow_troll_russia_controls <- readRDS("../results/05_regression_analysis/issue_distance_follow_troll_russia_controls.rds")
+issue_distance_follow_troll_russia_controls_black <- readRDS("../results/05_regression_analysis/issue_distance_follow_troll_russia_controls_black.rds")
+issue_distance_follow_troll_russia_controls_total_tweets <- readRDS("../results/05_regression_analysis/issue_distance_follow_troll_russia_controls_total_tweets.rds")
+
+# candidate_distance_log_exposure_russia <- readRDS("../results/05_regression_analysis/candidate_distance_log_exposure_russia.rds")
+candidate_distance_log_exposure_russia_controls <- readRDS("../results/05_regression_analysis/candidate_distance_log_exposure_russia_controls.rds")
+candidate_distance_log_exposure_russia_controls_black <- readRDS("../results/05_regression_analysis/candidate_distance_log_exposure_russia_controls_black.rds")
+candidate_distance_log_exposure_russia_controls_total_tweets <- readRDS("../results/05_regression_analysis/candidate_distance_log_exposure_russia_controls_total_tweets.rds")
+
+# candidate_distance_log0_exposure_russia <- readRDS("../results/05_regression_analysis/candidate_distance_log0_exposure_russia.rds")
+candidate_distance_log0_exposure_russia_controls <- readRDS("../results/05_regression_analysis/candidate_distance_log0_exposure_russia_controls.rds")
+
+# candidate_distance_binary_exposure_russia <- readRDS("../results/05_regression_analysis/candidate_distance_binary_exposure_russia.rds")
+candidate_distance_binary_exposure_russia_controls <- readRDS("../results/05_regression_analysis/candidate_distance_binary_exposure_russia_controls.rds")
+candidate_distance_binary_exposure_russia_controls_black <- readRDS("../results/05_regression_analysis/candidate_distance_binary_exposure_russia_controls_black.rds")
+candidate_distance_binary_exposure_russia_controls_total_tweets <- readRDS("../results/05_regression_analysis/candidate_distance_binary_exposure_russia_controls_total_tweets.rds")
+
+# candidate_distance_follow_troll_russia <- readRDS("../results/05_regression_analysis/candidate_distance_follow_troll_russia.rds")
+candidate_distance_follow_troll_russia_controls <- readRDS("../results/05_regression_analysis/candidate_distance_follow_troll_russia_controls.rds")
+candidate_distance_follow_troll_russia_controls_black <- readRDS("../results/05_regression_analysis/candidate_distance_follow_troll_russia_controls_black.rds")
+candidate_distance_follow_troll_russia_controls_total_tweets <- readRDS("../results/05_regression_analysis/candidate_distance_follow_troll_russia_controls_total_tweets.rds")
+```
+
+\clearpage
+# Data
+
+## Twitter Elections Integrity releases
+
+In the run-up to the 2018 US midterm elections, Twitter announced a new initiative designed to combat foreign-backed information campaigns.^[[https://blog.twitter.com/en_us/topics/company/2018/2016-election-update.html](https://blog.twitter.com/en_us/topics/company/2018/2016-election-update.html), [https://blog.twitter.com/en_us/topics/company/2018/an-update-on-our-elections-integrity-work.html](https://blog.twitter.com/en_us/topics/company/2018/an-update-on-our-elections-integrity-work.html)] As part of this initiative, the company continuously identified and blocked accounts of suspected foreign influence accounts. Fortunately, Twitter also released data that included the account IDs of those accounts identified as foreign influence accounts and from where they originated.
+
+To date, Twitter has released 27 Elections Integrity datasets that include the user profiles, tweets, and associated media from accounts that it classified as belonging to state-backed foreign influence campaigns. Overall, these datasets cover a wide range of national, political, and temporal contexts. Of those released to date, 17 of these datasets include at least one tweet from 2016 or earlier. In \autoref{tab:tab28}, we present a summary of these releases covering the time period relevant to our research (2016 and earlier).
+
+In \autoref{fig:Figure-A1}, we also show the daily prevalence of tweets from different campaigns in the Elections Integrity data. Analogous to Panel A of Figure 1 in the main article, \autoref{fig:Figure-A1} demonstrates that the over-representation of tweets from accounts linked to Russia in our respondents' feeds is not a function of higher prevalence of this content in the datasets released by Twitter, but instead likely to result from a coordinated effort to target voters in the US prior to the 2016 election. Furthermore, \autoref{fig:Figure-A2} shows the potential daily outreach of foreign influence accounts' messages by aggregating the number of the original tweets as well as the number of times they were retweeted or quote-tweeted. As can be seen from the figure and table below, the Russian campaign had a noticeably higher virality than the rest of the foreign influence campaigns in that period. Some of the posted tweets received especially high traction, resulting in clear visible spikes in October and November of 2016.
+
+The precise process by which Twitter identifies foreign influence accounts is not publicly detailed by Twitter. However, because Twitter has additional internal data about each account's behavior, and has an overall corporate interest in discovering these accounts, we assume that the company's identification is generally robust, unbiased, and of higher accuracy than could be done externally, especially considering that many these accounts are routinely suspended.
+
+\clearpage
+```{r}
+daily_rogue_tweets_2016_lite <- daily_rogue_tweets_2016_lite %>%
+  dplyr::mutate(country = factor(country, levels = rev(c("Russia", "Venezuela", "China", "Iran", "Other"))))
+
+figure_1ACD_colors = c("Russia" = "#0D0887", # 404272
+                       "Venezuela" = "#2BAEB3",
+                       "China" = "#FF6E3C",
+                       "Iran" = "#FFD74B",
+                       "Other" = "grey70")
+
+# Figure A1
+wb <- readRDS("../figures_source/Source Data.rds")
+openxlsx::addWorksheet(wb, sheetName = "figure_a1", gridLines = FALSE)
+openxlsx::writeDataTable(wb, sheet = "figure_a1", x = daily_rogue_tweets_2016_lite[,c("country", "tweet_date", "n_tweets")])
+# Figure A2
+openxlsx::addWorksheet(wb, sheetName = "figure_a2", gridLines = FALSE)
+openxlsx::writeDataTable(wb, sheet = "figure_a2", x = daily_rogue_tweets_2016_lite[,c("country", "tweet_date", "total_exposures")])
+# Table A1
+openxlsx::addWorksheet(wb, sheetName = "table_a1", gridLines = FALSE)
+openxlsx::writeDataTable(wb, sheet = "table_a1", x = summary_rogue_tweets_2016_lite)
+saveRDS(wb, "../figures_source/Source Data.rds")
+openxlsx::saveWorkbook(wb, "../figures_source/Source Data.xlsx", overwrite = TRUE)
+```
+
+```{r Figure-A1, out.width="100%", out.height="60%", fig.align="center", fig.cap="Prevalence of tweets among surveyed respondents' Twitter feeds for each campaign in the Twitter Elections Integrity dataset (tweets only)"}
+ggplot(daily_rogue_tweets_2016_lite, aes(x = tweet_date, y = n_tweets,
+               fill = country, color = country)) +
+  my.theme(base_size = 7,
+           borderless = 2, remove.ticks.y = TRUE, remove.ticks.x = TRUE,
+           grid.x_colour = "grey85", grid.y_colour = "grey85") +
+  labs(fill = "", color = "", x = "", y = "Total number of tweets\nacross all releases") +
+  coord_cartesian(xlim = c(min(daily_rogue_tweets_2016_lite$tweet_date)-2, max(daily_rogue_tweets_2016_lite$tweet_date)+2),
+                  ylim = c(0, max(daily_rogue_tweets_2016_lite$n_tweets*2.1)),
+                  expand = FALSE) +
+  scale_x_date(date_breaks = "months",
+               date_labels = "%b '16") +
+  scale_y_continuous(breaks = seq(5000, 70000, by = 5000),
+                     labels = format(seq(5000, 70000, by = 5000), big.mark = ",")) +
+  geom_bar(stat = "identity", size = 0.05) +
+  geom_hline(yintercept = 0, size = 0.75) +
+  geom_vline(xintercept = lubridate::ymd("2016-11-08") + 0.5, color = "black", linetype = 1, size = 0.25) +
+  geom_vline(xintercept = lubridate::ymd("2016-11-08") + 0.5, color = "white", linetype = 5, size = 0.25) +
+  geom_segment(data = data.frame(country = "Other",
+               tweet_date = lubridate::ymd("2016-11-06"),
+               n_tweets = 60000),
+               aes(x = lubridate::ymd("2016-11-02"), xend = lubridate::ymd("2016-11-08"),
+                   y = 60000, yend = 60000), size = 0.25, color = "black") +
+  geom_label(data = data.frame(x = lubridate::ymd("2016-11-01"),
+                               y = 60000, text = "Election day", country = "Other"),
+             aes(x = x, y = y, label = text), color = "black", fill = "white",
+             nudge_x = -0.5, size = 2.75, hjust = 1,
+             label.r = unit(0, "lines"), label.size = NA, label.padding = unit(0.12, "lines")) +
+  scale_color_manual(values = figure_1ACD_colors) +
+  scale_fill_manual(values = figure_1ACD_colors) +
+  theme(axis.text.y.right = element_text(hjust = 0),
+        legend.position = c(0.031, 0.925),
+        legend.direction = "horizontal",
+        legend.background = element_rect(fill = "white"),
+        legend.key.size = unit(0.5, "lines"),
+        legend.margin = margin(4, 0, 4, 0)) +
+  guides(fill = guide_legend(reverse = TRUE, override.aes = list(alpha = 0.9)),
+         color = guide_legend(reverse = TRUE, override.aes = list(size = 1, alpha = 1)))
+```
+
+```{r Figure-A2, out.width="100%",out.height="65%", fig.align="center", fig.cap="Prevalence of tweets, retweets, and quote tweets among surveyed respondents' Twitter feeds for each campaign in the Twitter Elections Integrity dataset", echo = FALSE}
+ggplot(daily_rogue_tweets_2016_lite, aes(x = tweet_date, y = total_exposures,
+               fill = country, color = country)) +
+  my.theme(base_size = 7,
+           borderless = 2, remove.ticks.y = TRUE, remove.ticks.x = TRUE,
+           grid.x_colour = "grey85", grid.y_colour = "grey85") +
+  labs(fill = "", color = "", x = "", y = "Total number of potential exposures\nacross all releases") +
+  coord_cartesian(xlim = c(min(daily_rogue_tweets_2016_lite$tweet_date)-2, max(daily_rogue_tweets_2016_lite$tweet_date)+2),
+                  ylim = c(0, max(daily_rogue_tweets_2016_lite$n_tweets*7)),
+                  expand = FALSE) +
+  scale_x_date(date_breaks = "months",
+               date_labels = "%b '16") +
+  scale_y_continuous(breaks = seq(20000, 240000, by = 20000),
+                     labels = format(seq(20000, 240000, by = 20000), big.mark = ",")) +
+  geom_bar(stat = "identity", size = 0.05) +
+  geom_hline(yintercept = 0, size = 0.75) +
+  geom_vline(xintercept = lubridate::ymd("2016-11-08") + 0.5, color = "black", linetype = 1, size = 0.25) +
+  geom_vline(xintercept = lubridate::ymd("2016-11-08") + 0.5, color = "white", linetype = 5, size = 0.25) +
+  geom_segment(data = data.frame(country = "Other",
+               tweet_date = lubridate::ymd("2016-11-06"),
+               n_tweets = 200000),
+               aes(x = lubridate::ymd("2016-11-02"), xend = lubridate::ymd("2016-11-08"),
+                   y = 200000, yend = 200000), size = 0.25, color = "black") +
+  geom_label(data = data.frame(x = lubridate::ymd("2016-11-01"),
+                               y = 200000, text = "Election day", country = "Other"),
+             aes(x = x, y = y, label = text), color = "black", fill = "white",
+             nudge_x = -0.5, size = 2.75, hjust = 1,
+             label.r = unit(0, "lines"), label.size = NA, label.padding = unit(0.12, "lines")) +
+  scale_color_manual(values = figure_1ACD_colors) +
+  scale_fill_manual(values = figure_1ACD_colors) +
+  theme(axis.text.y.right = element_text(hjust = 0),
+        legend.position = c(0.031, 0.925),
+        legend.direction = "horizontal",
+        legend.background = element_rect(fill = "white"),
+        legend.key.size = unit(0.5, "lines"),
+        legend.margin = margin(4, 0, 4, 0)) +
+  guides(fill = guide_legend(reverse = TRUE, override.aes = list(alpha = 0.9)),
+         color = guide_legend(reverse = TRUE, override.aes = list(size = 1, alpha = 1)))
+```
+
+\begin{landscape}
+\vspace*{\fill}
+```{r, results = 'asis', echo = FALSE}
+kable(summary_rogue_tweets_2016_lite,
+             col.names = c("Country Responsible",
+                           "Data Released",
+                           "N Tweets",
+                           "N Users",
+                           "Earliest Tweet",
+                           "Last Tweet",
+                           "Total",
+                           "Mean",
+                           "Total",
+                           "Mean",
+                           "Total",
+                           "Mean",
+                           "Total",
+                           "Mean"),
+             booktabs = TRUE,
+             align = "c",
+             format.args = list(big.mark = ','),
+             caption = "\\label{tab:tab28}Summary of the Twitter Elections Integrity Releases (covering 2016 and earlier)") %>%
+  add_header_above(header = c(
+    " " = 6,
+    "Retweets" = 2,
+    "Likes" = 2,
+    "Replies" = 2,
+    "Quotes" = 2
+  )) %>%
+  kable_styling(latex_options = c("hold_position", "scale_down"))
+  # landscape()
+```
+\vfill
+\end{landscape}
+
+
+\clearpage
+## Survey
+
+The YouGov survey waves took place between April 2016 and November 2016. However, the survey question asking who respondents voted for was obtained in a post-election questionaire that was collected by YouGov separately after the election. The fielding dates of each survey wave were as follows:
+
+* Wave 1: April 9--May 1 2016
+* Wave 2: September 9--October 9 2016
+* Wave 3: October 25--November 7 2016
+* Post-election (whether a respondent voted, and for whom)
+
+In \autoref{tab:tab29}, we provide summary statistics regarding the socio-demographic characteristics of the YouGov survey Twitter users. For comparison, we also provide analogous data from a 2018 survey of Twitter users conducted by Pew Research Center.^[[https://www.pewresearch.org/internet/2019/04/24/sizing-up-twitter-users/](https://www.pewresearch.org/internet/2019/04/24/sizing-up-twitter-users/)] Although our population of interest is US Twitter users and not the general US population, we also provide data from the 2016 American Community Survey (ACS) for comparison. These data show that our sample is nevertheless similar to the demographic profile of US adults. \autoref{tab:tab30} further provides the comparison by party ID of the sub-samples of respondents who use Twitter and who agreed to provide links to their accounts and the rest of the survey panel.
+
+```{r}
+# Table A2
+wb <- readRDS("../figures_source/Source Data.rds")
+openxlsx::addWorksheet(wb, sheetName = "table_a2", gridLines = FALSE)
+openxlsx::writeDataTable(wb, sheet = "table_a2", x = survey_comparison)
+# Table A3
+wb <- readRDS("../figures_source/Source Data.rds")
+openxlsx::addWorksheet(wb, sheetName = "table_a3", gridLines = FALSE)
+openxlsx::writeDataTable(wb, sheet = "table_a3", x = summary_ideology)
+saveRDS(wb, "../figures_source/Source Data.rds")
+openxlsx::saveWorkbook(wb, "../figures_source/Source Data.xlsx", overwrite = TRUE)
+```
+
+```{r, results='asis'}
+kable(survey_comparison,
+      col.names = c("Variable",
+                    "Category",
+                    "YouGov (2016)",
+                    "Pew Twitter Survey (2018)",
+                    "US Population (ACS, 2016)"),
+      booktabs = FALSE,
+      align = "c",
+      digits = 1,
+      # format.args = list(big.mark = ','),
+      caption = "\\label{tab:tab29}Comparison of YouGov Twitter users to US Census Bureau data and a Pew Research survey of Twitter users. Numbers indicate percentages.") %>%
+  row_spec(c(2,6,8,10), hline_after = TRUE) %>%
+  collapse_rows(columns = 1, latex_hline = "none") %>%
+  kable_styling(latex_options = "hold_position", font_size = 10)
+```
+
+```{r, results='asis'}
+kable(summary_ideology,
+      col.names = c("Party ID",
+                    "With Twitter Data",
+                    "Without Twitter Data"),
+      booktabs = FALSE,
+      align = "c",
+      digits = 1,
+      # format.args = list(big.mark = ','),
+      caption = "\\label{tab:tab30}Partisan distribution of survey respondents broken down by Twitter use (respondents whose exposure we observe on Twitter vs. those who do not use Twitter/have not provided their data). Numbers indicate percentages.") %>%
+  add_header_above(header = c(" " = 1, "YouGov" = 2)) %>%
+  row_spec(7, hline_after = TRUE) %>%
+  kable_styling(latex_options = "hold_position", font_size = 10)
+```
+
+
+\clearpage
+## Survey questions
+
+In Figure 4 of the main article, we estimate the relationship between exposure to posts from Russian foreign influence accounts and respondents' political ideology and issues positions. Below we present the question wording for each outcome that is presented in Figure 4. We then present the question text for the question that asks respondents how they rank the presidential comparisons, as used in Figure 5.\vspace{6mm}
+
+
+\textbf{Political ideology}
+
+\sloppypar{\noindent\texttt{As shown on the scales below, some people in the US tend to identify more with the political left, while others tend to identify more with the political right. And of course, some other people have opinions somewhere in between. Please place yourself on this scale. Then place both of the US's two major parties on the same scale. Then, place each of the following candidates for president on the same scale.}}\newline
+
+\noindent\texttt{[0 = Far left, 1, 2, ..., 99, 100 = Far right]}\vspace{4mm}\newline
+
+
+\textbf{Use of military force}
+
+\sloppypar{\noindent\texttt{As shown on the scales below, some people think that military force should be used only as a last resort, while other people think that military force is usually the best way to solve international problems. And of course, some other people have opinions somewhere in between. Please place yourself on this scale. Then place each of the following national figures on the same scale.}}\newline
+
+\noindent\texttt{[0 = Military force should be used only as a last resort, 1, 2, ..., 99, 100 = Military force is usually the best way to solve international problems]}\vspace{4mm}\newline
+
+
+\textbf{Chinese tariffs}
+
+\sloppypar{\noindent\texttt{As shown on the scale below, some people think that we should increase tariffs on goods from China to protect American jobs from unfair competition, others think that this would lead to a trade war that would harm the American economy and cost jobs. And of course some people have opinions in between. Please place yourself on this scale. Then place each of the following national figures on the same scale. }}\newline
+
+\noindent\texttt{[0 = Increase Tariffs on China, 1, 2, ..., 99, 100 = A Trade War Would Cost Jobs]}\vspace{4mm}\newline
+
+
+\textbf{Free trade}
+
+\sloppypar{\noindent\texttt{As shown on the scales below, some people think that we should reduce trade with other countries to protect American jobs from foreign competition, while others believe that we should increase trade to benefit American consumers and create more markets for American goods. And of course others have opinions in between. Please place yourself on this scale. Then place each of the following national figures on the same scale. }}\newline
+
+\noindent\texttt{[0 = Reduce free trade with other countries, 1, 2, ..., 99, 100 = Increase free trade with other countries]}\vspace{4mm}\newline
+
+
+\textbf{Ban on Muslims}
+
+\sloppypar{\noindent\texttt{As shown on the scale below, some people think we should bar Muslims from entering the US to prevent terrorism, others think it is an essential aspect of the United States that we do not discriminate based on religion, and of course some people have opinions in between. Please place yourself on this scale. Then place each of the following national figures on the same scale.}}\newline
+
+\noindent\texttt{[0 = Bar Muslims From Entering the US, 1, 2, ..., 99, 100 = Do Not Discriminate Based on Religion]}\vspace{4mm}\newline
+
+
+\textbf{Expanding the ACA}
+
+\sloppypar{\noindent\texttt{The Affordable Care Act, signed into law by President Obama in 2010, restructured the US health care system. As shown on the scales below, some people think that the health care law should be repealed entirely, while others think it should be expanded to cover more people and services. And of course, some other people have opinions somewhere in between, such as simply keeping the law as it is now. Please place yourself on this scale. Then place each of the following national figures on the same scale.}}\newline
+
+\noindent\texttt{[0 = Completely replease the entire health care law, 1, 2, ..., 99, 100 = Expand the health care law's coverage]}\vspace{4mm}\newline
+
+
+\textbf{Obamacare}
+
+\sloppypar{\noindent\texttt{As shown on the scale below, some people think we should repeal Obamacare and start over to handle health insurance, others think we should leave Obamacare in place, but expand coverage, and of course some people have opinions in between. Please place yourself on this scale. Then place each of the following national figures on the same scale.}}\newline
+
+\noindent\texttt{[0 = Repeal Obamacare, 1, 2, ..., 99, 100 = Start Over]}\vspace{4mm}\newline
+
+
+\textbf{Building a wall}
+
+\sloppypar{\noindent\texttt{As shown on the scale below, some people think we should build a wall between the United States and Mexico, while others think that this would be a foolish waste of resources and not address real issues of immigration. And of course some people have opinions in between. Please place yourself on this scale. Then place each of the following national figures on the same scale.}}\newline
+
+\noindent\texttt{[0 = Build a wall, 1, 2, ..., 99, 100 = Address immigration issues via other means]}\vspace{4mm}\newline
+
+
+\textbf{Immigration}
+
+\sloppypar{\noindent\texttt{As shown on the scales below, some people think that the US should deport all illegal immigrants and others think we should instead provide them with a path to citizenship. And of course others have opinions in between, such as allowing illegal immigrants to obtain guest worker status. Please place yourself on this scale. Then place each of the following national figures on the same scale.}}\newline
+
+\noindent\texttt{[0 = Deport all illegal immigrants back to their home countries, 1, 2, ..., 99, 100 = Provide all illegal immigrants an eventual path to citizenship]}\vspace{4mm}\newline
+
+
+\textbf{Presidential candidate rankings}
+
+\sloppypar{\noindent\texttt{Please rank how much you like each of the following candidates for president. We are not asking you who you will vote for, but which candidate would be your first choice to be president, which
+would be your next favorite choice to be president, and so on.}}\newline
+
+\noindent\texttt{Hillary Clinton (D)}\newline
+\noindent\texttt{Bernie Sanders (D)}\newline
+\noindent\texttt{Donald Trump (R)}\newline
+\noindent\texttt{John Kasich (R)}\newline
+\noindent\texttt{Ted Cruz (R)}\newline
+
+
+\clearpage
+## Twitter data collection for YouGov survey
+
+The lists of friends for all YouGov respondents who provided their Twitter profiles were retrieved in April 2016. After the election, in December 2016, we further collected the posts of YouGov respondents and their friends. In total we collected 1,244,124,493 tweets from the timelines of our respondents' friends. These tweets represent the corpus of posts that potentially appeared in respondents' timelines. 
+
+We then matched the posts appearing in the timelines of respondents' friends to the list of accounts identified as belonging to foreign influence campaigns by the Twitter Elections Integrity project, as described above. To do so, we extracted the unique identifiers of the authors of tweets that were posted or retweeted by respondents' friends. In addition to original tweets, we extracted the unique identifiers of the authors of retweets and quote tweets. These unique identifiers were matched to the unique identifiers of accounts linked to foreign influence campaigns.
+
+Overall, we identified 786,634 posts from foreign influence campaign accounts that had the potential to appear in respondents' timelines. These posts could appear and be viewed by respondents, although given the black-box of the Twitter's timeline algorithm, this cannot be known with certainty for any specific post. As we note in the article, we follow the literature [e.g. @Grinberg2019] in referring to these posts as ``exposures.''
+
+
+## Accounts of politicians and national news media organizations
+
+In the Results section of the main article, we compare the number of exposures from Russian Internet Research Agency accounts to those from politicians and national news media. The list of politicians includes all Members of Congress and political candidates in the 2016 race. National news media include all major national news organizations, including their politics-related specialized accounts (e.g. ABC This Week, CBS 60 Minutes, New York Times The Upshot). Lists of these sets of actors are available on request.
+
+
+\clearpage
+# Equivalence testing for minimal relationships
+
+In the article, we present a series of regression results in Figure 4 to examine the relationship between exposure to posts from Russian Internet Research Agency accounts and political attitudes and polarization. In general, we find no meaningful relationship between exposure and these outcomes. Theoretically, this is consistent with the descriptive data, which demonstrates that exposure to posts from Russian foreign influence accounts was dwarfed by posts from politicians and news media, and was heavily concentrated among those who identify as Republican partisans.
+
+However, because the absence of statistically significant results is not necessarily strong evidence of a minimal relationship [@Rainey2014], in this section we examine these results in an equivalence testing framework  [@Rainey2014; @Hartman2018; @Lakens2017]. This framework addresses the problem that the absence of statistically significant differences is not necessarily itself strong evidence of a negligible relationship. If a study is heavily underpowered, meaningful relationships will be difficult to detect---for lack of sufficient data---under the null hypothesis of no difference. We first briefly explain the use of equivalence testing, after which we present the results.
+
+In the standard null hypothesis framework, a researcher typically seeks to find statistical evidence to reject the null hypothesis that a relationship is zero. In an equivalence testing framework, researchers seek to provide statistical evidence to reject the hypothesis that a relationship is meaningful. Thus, whereas in null hypothesis testing framework one seeks to find evidence against a null relationship, in equivalence testing one seeks to find evidence in favor of a negligible one.
+
+Equivalence testing operates by constructing a lower bound $\epsilon_L$ and an upper bound $\epsilon_H$ that a researcher defines as the range of the magntiude of a relationship that substantively would be considered negligible (e.g. $\epsilon_L = -.25$, $\epsilon_H = .25$). Given this range, one then seeks to reject the hypothesis that the magnitude of the relationship is greater than $|\epsilon|$.^[Equivalence bounds do not need to be defined symmetrically---such that $\epsilon_L$ and $\epsilon_H$ can be of different magnitude---but this is rare in practice.] Statistically rejecting the null hypothesis that the relationship is of magnitude $|\epsilon|$ or larger helps provide evidence for the alternative hypothesis that the relationship is negligible. In practice, this typically works by applying a Two One-Sided Test (TOST) procedure that, as the name suggests, first calculates a one-sided test to provide evidence that a relationship is greater than the lower bound $\epsilon_L$, and calculates a second one-sided test to provide evidence that the relationship is less than the upper bound $\epsilon_H$. Jointly, these tests provide evidence that a relationship lies within the range $[\epsilon_L, \epsilon_H]$ that defines what would be considered a negligible.
+
+In political science research, defining the values of $\epsilon_L$ and $\epsilon_H$ is typically done with outcome variables that are re-scaled in terms of standard deviations. For the issue-based outcomes, this is sensible because the scale (from 0-100) is arbitrary. Because vote choice is more comprehensible on a percentage point scale, we use simulation in the main article to examine the magnitude of the relationship between exposure and voting behavior. In standard deviations, defining what constitutes a negligible relationship is an area of active research. In a recent article, for example, @Hartman2018 define meaningful relationships as those greater than 0.36 standard deviations; others more conservatively, as those greater than 0.25 standard deviations [@Ho2007; @Imbens2015]; and @Cohen1969, in his classic work, as less than 0.2 standard deviations. We include all three of these definitions of minimal relationships for comparison in our results below. Nevertheless, one can also simply calculate Two One-Sided Test intervals that define the range of the size of a relationship that would not be rejected by the Two One-Sided Test procedure. Defining $\epsilon_L$ and $\epsilon_H$ anywhere outside of this interval would, in a Two One-Sided Test procedure, lead to the rejection of the null hypothesis of a meaningful relationship. These intervals thus allow researchers to assess the strength of the evidence in favor of a minimal relationship, without reference to pre-defined values of $\epsilon_L$ and $\epsilon_H$ (which we nevertheless include for reference below).
+
+```{r}
+# Figure B3
+wb <- readRDS("../figures_source/Source Data.rds")
+openxlsx::addWorksheet(wb, sheetName = "figure_b3a", gridLines = FALSE)
+openxlsx::writeDataTable(wb, sheet = "figure_b3a", 
+                         x = subset(G1, outcome == "Issues" & treatment == "Treatment"))
+openxlsx::addWorksheet(wb, sheetName = "figure_b3b", gridLines = FALSE)
+openxlsx::writeDataTable(wb, sheet = "figure_b3b", 
+                         x = subset(G1, outcome == "Polarization" & treatment == "Treatment"))
+saveRDS(wb, "../figures_source/Source Data.rds")
+openxlsx::saveWorkbook(wb, "../figures_source/Source Data.xlsx", overwrite = TRUE)
+```
+
+```{r}
+FigureB3A <- ggplot(subset(G1, outcome == "Issues" & treatment == "Treatment"),
+                    aes(x = coef, y = model_number)) +
+  my.theme(base_size = 8,
+           borderless = 2, remove.ticks.y = TRUE, remove.ticks.x = FALSE,
+           grid.x_colour = NA, grid.y_colour = "grey85") +
+  labs(x = "Coefficient", y = "", color = "", fill = "") +
+  coord_cartesian(ylim = c(0.35, max(G1$model_number, na.rm = TRUE) + 0.65),
+                  xlim = c(-0.501, 0.501), expand = FALSE) +
+  facet_wrap(~ iv) +
+  scale_x_continuous(breaks = seq(-0.4, 0.4, by = 0.1),
+                     labels = c("-.4", "-.3", "-.2", "-.1", "0", ".1", ".2", ".3", ".4")) +
+  scale_y_continuous(breaks = sort(unique(G1$model_number)),
+                     labels = levels(G1$dv)) +
+  geom_vline(xintercept = 0, size = 0.25, color = "grey80") +
+  geom_segment(aes(yend = model_number, x = lower95, xend = upper95),
+               size = 0.5, color = "black", fill = "white") +
+  geom_point(size = 2.25, color = "black", show.legend = FALSE) +
+  geom_vline(xintercept = c(-0.2, 0.2), size = 0.4, linetype = 3, color = "red") +
+  geom_vline(xintercept = c(-0.25, 0.25), size = 0.4, linetype = 5, color = "red") +
+  geom_vline(xintercept = c(-0.36, 0.36), size = 0.4, linetype = 1, color = "red") +
+  geom_hline(yintercept = c(0.35, max(G1$model_number, na.rm = TRUE) + 0.65), size = 1.5) +
+  theme(plot.margin = unit(c(0, 1, 1, 0), "mm"),
+        legend.position = "none",
+        panel.margin = unit(0.75, "lines"),
+        plot.title.position = "plot",
+        plot.title = element_text(family = "", size = 10, vjust = 0.5, hjust = 0, face = "bold"),
+        axis.text.y = element_text(family = "", colour = "black", face = "bold", size = 8, hjust = 1, lineheight = 0.9))
+
+FigureB3B <- ggplot(subset(G1, outcome == "Polarization" & treatment == "Treatment"),
+                    aes(x = coef, y = model_number)) +
+  my.theme(base_size = 8,
+           borderless = 2, remove.ticks.y = TRUE, remove.ticks.x = FALSE,
+           grid.x_colour = NA, grid.y_colour = "grey85") +
+  labs(x = "Coefficient", y = "", color = "", fill = "") +
+  coord_cartesian(ylim = c(0.35, max(G1$model_number, na.rm = TRUE) + 0.65),
+                  xlim = c(-0.501, 0.501), expand = FALSE) +
+  facet_wrap(~ iv) +
+  scale_x_continuous(breaks = seq(-0.4, 0.4, by = 0.1),
+                     labels = c("-.4", "-.3", "-.2", "-.1", "0", ".1", ".2", ".3", ".4")) +
+  scale_y_continuous(breaks = sort(unique(G1$model_number)),
+                     labels = levels(G1$dv)) +
+  geom_vline(xintercept = 0, size = 0.25, color = "grey80") +
+  geom_segment(aes(yend = model_number, x = lower95, xend = upper95),
+               size = 0.5, color = "black", fill = "white") +
+  geom_point(size = 2.25, color = "black", show.legend = FALSE) +
+  geom_vline(xintercept = c(-0.2, 0.2), size = 0.4, linetype = 3, color = "red") +
+  geom_vline(xintercept = c(-0.25, 0.25), size = 0.4, linetype = 5, color = "red") +
+  geom_vline(xintercept = c(-0.36, 0.36), size = 0.4, linetype = 1, color = "red") +
+  geom_hline(yintercept = c(0.35, max(G1$model_number, na.rm = TRUE) + 0.65), size = 1.5) +
+  theme(plot.margin = unit(c(0, 1, 1, 0), "mm"),
+        legend.position = "none",
+        panel.margin = unit(0.75, "lines"),
+        plot.title.position = "plot",
+        plot.title = element_text(family = "", size = 10, vjust = 0.5, hjust = 0, face = "bold"),
+        axis.text.y = element_text(family = "", colour = "black", face = "bold", size = 8, hjust = 1, lineheight = 0.9))
+```
+
+```{r Figure-B3, fig.height=5, fig.cap="Two One-Sided Test (TOST) 95\\% Intervals for the relationship between exposure to tweets from Russian foreign influence accounts and issue positions and polarization. Each point ($\\bullet$) represents the estimated relationships in standardized units; each horizontal line (\\textbf{---}) represents a 95\\% TOST interval: the range of the size of a relationship that cannot be rejected by a Two One-Sided Test. The vertical lines (in red) represent what the literature generally considers minimal relationships: the solid line, that defined by @Hartman2018 ($|\\epsilon| < 0.36$); the dashed line, that defined by @Ho2007 and @Imbens2015 ($|\\epsilon| < 0.25$); and the dotted line, that defined by @Cohen1969 ($|\\epsilon| < 0.2$). $n = 1,496$ survey respondents."}
+ggdraw() +
+  draw_plot(FigureB3A, x = 0, y = 0.5, width = 1, height = 0.47) +
+  draw_plot(FigureB3B, x = 0, y = 0, width = 1, height = 0.47) +
+  draw_plot_label(label = c("A.", "B."),
+                  x = c(0.005, 0.005),
+                  y = c(0.97, 0.48),
+                  size = 12, hjust = 0, vjust = 0) +
+  draw_plot_label(label = c("Issue positions", "Polarization"),
+                  x = c(0.05, 0.05),
+                  y = c(0.97, 0.48),
+                  size = 12, hjust = 0, vjust = 0,
+                  fontface = "plain")
+```
+
+To apply equivalence tests to investigate the strength of the evidence as it relates to negligible relationships, we standardize each of the outcome variables and calculate TOST intervals for the magnitude of the relationship between exposure to social media posts from Russian foreign influence accounts. We do so for each of the outcomes in Figures 4 of the main article, and examine these intervals in relation to values of $\epsilon_L$ and $\epsilon_H$ defined in the literature.
+
+The equivalence test results for estimates of the relationships between exposure to posts from Russian foreign influence accounts and each outcome in Figures 4 in the main article are presented in \autoref{fig:Figure-B3}. The values of $\epsilon_L$ and $\epsilon_H$ that define the range of minimal relationships are shown as defined by @Hartman2018 (solid line), @Ho2007 and @Imbens2015 (dashed line), and @Cohen1969 (dotted line). The first column of Panels A and B of \autoref{fig:Figure-B3} present estimates of the relationship between log(exposure + 1) and each issue position. Estimates appear exceptionally small primarily because exposure is measured on the log scale, thus indicating that the relationship between a one unit change in the (log) count of exposure to social media posts from Russian foreign influence accounts. The second column presents exposure measured as a binary variable, as is typically used in the literature on equivalence testing. By all definitions of minimal relationships (as defined by the vertical lines in each figure), estimates for all issues positions, and all but one measure of polarization are consist with negligible relations. We can also examine this differently, by averaging across all issue position outcomes, in which we find that the magnitude of the estimated relationship between exposure to posts from Russian influence accounts and issues positions is a mere 6\% of a standard deviation, and for polarization, 5\% of a standard deviation.
+
+
+\clearpage
+# Exposure to foreign influence accounts
+
+## Overall\label{section:exposure}
+
+We calculate exposure to foreign influence accounts by extracting all posts that contain tweets, retweets, and quote tweets from accounts that were identified by Twitter as belonging to state-backed foreign influence campaigns, and were in the collected feeds from respondents' friends.
+
+Overall, 1,042 respondents (64%) were exposed at least once to posts from accounts associated with foreign influence campaigns from Russia, China, Iran, or Venezuela. For overall exposure, we treat the presence of tweets, retweets, and quote tweets in the timelines of respondents' friends as indicators of potential exposure. Among respondents, 946 (63%) were exposed to at least one post from a Russian Internet Research Agency account, making it by far the most wide-reaching foreign influence campaign during the 2016 US presidential election.
+
+In terms of direct exposure to foreign influence accounts (i.e. following the identified accounts themselves), 112 (7% of our sample) respondents followed at least one account associated with a foreign influence campaign from Russia, China, Iran, or Venezuela. Among respondents, 51 (3.4%) followed an account associated with the Russian campaign specifically.
+
+
+\clearpage
+## Back-of-the-envelope calculation of aggregate US exposure to Russian foreign influence accounts on Twitter
+
+As a result of congressional hearings on the role of social media in the 2016 US presidential election, both Twitter and Facebook calculated and released aggregate-level estimates of user exposure to Russian foreign influence accounts on their platforms. However, each company did so differently, with statistics that are not comparable. Facebook, for example, stated that 126 million of its users had the potential to view content from the Russian foreign influence campaign over a two year period [@Stretch2017]. Twitter, however, states that the number of times that content from Russian foreign influence accounts was viewed within a brief two and a half months (September 1, 2016 to November 15, 2016) was 288 million [@Edgett2017],^[This is likely a large underestimate of the number of views, due to the fact that Twitter later added more accounts to its list of Russian foreign influence accounts [@Twitter2018], but without providing an updated number of views.] with 1.4 million direct interactions with that content (e.g. liking, retweeting, replying) [@Twitter2018]. The figure 288 million views, however, is an extreme upper bound on the number of potentially exposed users, because a single user can view multiple tweets from Russian foreign influence accounts. By contrast, 1.4 million interactions is an extreme lower bound on potential exposure, because the vast majority of users do not directly interact with each piece of content on the platform.
+
+Thus, to aid our understanding of the overall potential exposure of US Twitter users, we make a back-of-the-envelope calculation of the number of US users potentially exposed to posts from Russian foreign influence accounts during the 8 months leading up to election day. To do so, we use data on potential exposure to Internet Research Agency posts among users in our dataset, which we combine with data from PEW Research and US census data. PEW Research estimates that in 2016, Twitter penetration in the US was 21% [@Greenwood2016]. The US Census Bureau estimates that the US population in 2016, aged 18 and older, was 244,807,000 [@Census2016]. This puts a rough estimate of the number of American Twitter users at 51 million. Taking the estimate from our social media-linked survey data that 63% of US Twitter users were potentially exposed to at least one post from Russian foreign influence accounts during the 2016 presidential election (see Appendix \ref{section:exposure}), a back-of-the-envelope calculation ($0.63 \times 51$ million) suggests that 32 million Americans were potentially exposed to content from Internet Research Agency accounts.^[Note that this figure is not perfectly analogous to Facebook's to the extent that Facebook's estimate is across 2 years prior the the election.]
+
+
+\clearpage
+## Party ID
+
+In the main article, we examine the relationship between the self-identified party ID of respondents and their exposure of posts from Russian Internet Research Agency accounts. The model presented in Panel B of Figure 3, however, models a linear relationship between party ID and exposure to posts from Russian foreign influence accounts. Thus, although there is a clear and strong relationship between being a self-identified Republican and exposure to Russian foreign influence accounts, it may be the case that this relationship is U-shaped: that exposure was higher both among those who strongly identify as Republicans and Democrats. Theoretically, this might be expected if the goals of the Russian foreign influence campaign was to further alienate those who strongly identify with the Democratic Party (e.g. Bernie Sanders supporters) from their party's establishment nominee. If this were the goal, we might expect high levels of exposure to Russian electoral interference among strongly identifying Democrats. Descriptively, the data in Panel A of Figure 3 suggest that this is not the case. We test this more formally in a regression framework by fitting an equivalent model to that in Panel B of Figure 3, but including a squared party ID term in the model. This term captures the theoretical expectation that both those who strongly identify as Republicans and Democrats were similarly exposed to posts from Russia's foreign influence campaign.
+
+```{r}
+# Figure C4: Predicted exposure conditional on PID, hold all other variables
+#            at their observed values
+wb <- readRDS("../figures_source/Source Data.rds")
+openxlsx::addWorksheet(wb, sheetName = "figure_c4", gridLines = FALSE)
+openxlsx::writeDataTable(wb, sheet = "figure_c4", 
+                         x = subset(G3C, model %in% c("Linear", "Quadratic")))
+saveRDS(wb, "../figures_source/Source Data.rds")
+openxlsx::saveWorkbook(wb, "../figures_source/Source Data.xlsx", overwrite = TRUE)
+```
+
+```{r Figure-C4, fig.height=3, fig.cap="Relationship between party ID and exposure to posts from Russia Internet Research Agency (IRA) accounts"}
+ggplot(subset(G3C, model %in% c("Linear", "Quadratic")), aes(x = pid7, y = coef)) +
+  my.theme(base_size = 7,
+           borderless = 2, remove.ticks.y = TRUE, remove.ticks.x = FALSE,
+           grid.x_colour = "grey85", grid.y_colour = "grey85") +
+  facet_wrap(~ model) +
+  labs(x = "", y = "Predicted exposure (# of IRA tweets)") +
+  coord_cartesian(xlim = c(-0.002, 1.002), ylim = c(-0.02, 11.02), expand = FALSE) +
+  scale_x_continuous(breaks = seq(0, 1, by = 1/6),
+                     labels = c("Strong\nDemocrat", "", "",
+                                "Independent", "", "",
+                                "Strong\nRepublican")) +
+  scale_y_continuous(breaks = seq(0, 30, by = 2),
+                     labels = seq(0, 30, by = 2)) +
+  geom_ribbon(aes(ymin = lower95, ymax = upper95), fill = "grey75", alpha = 0.5) +
+  geom_line(size = 2, color = "#0D0887") +
+  #geom_vline(xintercept = -0.002, size = 1.5) +
+  geom_hline(yintercept = 0, size = 1.5) +
+  theme(plot.margin = unit(c(3, 8, 0, 2), "mm"),
+        panel.spacing = unit(5, "mm"))
+```
+
+Regression results from both the model in the main manuscript (Panel B of Figure 3), and the model with the squared term for party ID are presented in \autoref{tab:exposure_1}. We test whether the inclusion of the squared term increases model fit by conducting a likelihood ratio test that compares the model with the squared term to the model without it. It does not ($p = 0.09$). We nevertheless graph the predicted relationship between party ID and $log(exposure + 1)$ for both models to examine the shape of the relationship. Results are presented in \autoref{fig:Figure-C4}. As the figure shows, the relationship between party ID and respondents' level of exposure to posts from Russian foreign influence accounts is similarly increasing as one identifies more strongly as a Republican. Importantly, in the second panel of \autoref{fig:Figure-C4}, we do not observe a U-shape relationship to the extent that strongly identifying Democrats were not more likely to be exposed to more posts from the Russian foreign influence campaign than weakly identifying Democrats or independents. To test the sensitivity of these results to modelling assumptions we also fit a quasi-Poisson regression models with the indepedent variables. The results of theses models are shown in \autoref{tab:exposure_2}.
+
+```{r}
+# Highlight (in gray) rows in stargazer table defined by 'regex' + 'n_rows' after it  
+highlight_rows <- function(stargazer_tab, regex, n_rows, color = "\\rowcolor{gray!12!white}") {
+  row_ids <- grep(regex, stargazer_tab)
+  row_ids <- c(row_ids, row_ids + n_rows)
+  
+  stargazer_tab[row_ids] <- paste0(color, stargazer_tab[row_ids])
+  
+  stargazer_tab
+}
+```
+
+```{r}
+covariate_labels <- c(
+  "Party ID",
+  "Party ID$^2$",
+  "Age",
+  "Woman",
+  "College-educated",
+  "Income",
+  "Person of Color",
+  "Other/Hispanic",
+  "Black",
+  "Region: Northeast",
+  "Region: Midwest",
+  "Region: West",
+  "Freq. of social media use",
+  "log(Total Tweets)",
+  "Constant"
+)
+```
+
+```{r, results='asis'}
+total_exposure_1 <- capture.output(
+  stargazer(
+    total_exposure_russia_log,
+    total_exposure_russia_log_square,
+    total_exposure_russia_log_black,
+    total_exposure_russia_log_total_tweets,
+    title = "\\label{tab:exposure_1}Regression models for the relationship between party ID and (log) exposure to posts from Russian Internet Research Agency accounts",
+    order = c(7, 8, 4, 1, 6, 5, 9:14, 2, 3, 15),
+    column.sep.width = "0pt",
+    covariate.labels = covariate_labels,
+    dep.var.labels = "log(Exposure + 1)",
+    header = FALSE,
+    style = "apsr", keep.stat = c("n"),
+    model.names = FALSE,
+    table.placement = "p",
+    star.cutoffs = c(0.05, 0.01, 0.001)
+  )
+)
+
+total_exposure_1 <- highlight_rows(stargazer_tab = total_exposure_1,
+                                   regex = "Party ID",
+                                   n_rows = 1)
+
+# A hack to add a proper figure note that doesn't extend across the full page
+total_exposure_1 <- c(total_exposure_1[1:(length(total_exposure_1)-2)],
+                      "\\end{tabular}\\vspace{2mm}\\ \\begin{tabular}{p{\\textwidth}}Party ID is a 7-category variable, which is rescaled to range from 0 to 1, where 0 indicates ``Strong Democrat'', 1 indicates ``Strong Republican.'', and the mid-point, 0.5, indicates ``Independent.''",
+                      total_exposure_1[(length(total_exposure_1)-1):length(total_exposure_1)])
+
+cat(total_exposure_1)
+```
+
+```{r, results='asis'}
+total_exposure_2 <- capture.output(
+  stargazer(
+    total_exposure_russia_poisson,
+    total_exposure_russia_poisson_square,
+    total_exposure_russia_poisson_black,
+    total_exposure_russia_poisson_total_tweets,
+    title = "\\label{tab:exposure_2}Quasi-Poisson regression models for the relationship between party ID and (log) exposure to posts from Russian Internet Research Agency accounts",
+    order = c(7, 8, 4, 1, 6, 5, 9:14, 2, 3, 15),
+    column.sep.width = "0pt",
+    covariate.labels = covariate_labels,
+    dep.var.labels = "Exposure",
+    header = FALSE,
+    style = "apsr", keep.stat = c("n"),
+    model.names = FALSE,
+    table.placement = "p",
+    star.cutoffs = c(0.05, 0.01, 0.001)
+  )
+)
+
+total_exposure_2 <- highlight_rows(stargazer_tab = total_exposure_2,
+                                   regex = "Party ID",
+                                   n_rows = 1)
+
+# A hack to add a proper figure note that doesn't extend across the full page
+total_exposure_2 <- c(total_exposure_2[1:(length(total_exposure_2)-2)],
+                      "\\end{tabular}\\vspace{2mm}\\ \\begin{tabular}{p{\\textwidth}}Party ID is a 7-category variable, which is rescaled to range from 0 to 1, where 0 indicates ``Strong Democrat'', 1 indicates ``Strong Republican.'', and the mid-point, 0.5, indicates ``Independent.''",
+                      total_exposure_2[(length(total_exposure_2)-1):length(total_exposure_2)])
+
+cat(total_exposure_2)
+```
+
+\clearpage
+## Alternative model specification (Poisson)
+
+In Panel A of Figure 3 in the main article, we present the average of the number of exposures by respondents to Russian foreign influence account tweets throughout the campaign, broken down by the partisanship of the respondent. In Panel B of Figure 3, we present analogous results in a regression framework, including a number of respondent covariates. In Panel B of Figure 3, the regression outcome is defined as $log(exposure + 1)$, where exposure is the count of posts in a respondent's feed. Because the outcome is a count variable, we also model the relationship using a quasi-poisson regression. The results, shown in Figure \autoref{fig:Figure-C5} show similar results to those in Figure 3 of the main article.
+
+```{r}
+# Figure C5
+G3B <- data.frame(model = c(rep("OLS", length(coef(total_exposure_russia_log))),
+                            rep("OLS square", length(coef(total_exposure_russia_log_square))),
+                            rep("Poisson", length(coef(total_exposure_russia_poisson))),
+                            rep("Poisson square", length(coef(total_exposure_russia_poisson_square)))),
+                  variable = c(names(total_exposure_russia_log$coefficients),
+                               names(total_exposure_russia_log_square$coefficients),
+                               names(total_exposure_russia_poisson$coefficients),
+                               names(total_exposure_russia_poisson_square$coefficients)),
+                  coef = c(coef(total_exposure_russia_log),
+                           coef(total_exposure_russia_log_square),
+                           coef(total_exposure_russia_poisson),
+                           coef(total_exposure_russia_poisson_square)),
+                  lower95 = c(confint(total_exposure_russia_log, level = 0.95)[, 1],
+                              confint(total_exposure_russia_log_square, level = 0.95)[, 1],
+                              confint(total_exposure_russia_poisson, level = 0.95)[, 1],
+                              confint(total_exposure_russia_poisson_square, level = 0.95)[, 1]),
+                  upper95 = c(confint(total_exposure_russia_log, level = 0.95)[, 2],
+                              confint(total_exposure_russia_log_square, level = 0.95)[, 2],
+                              confint(total_exposure_russia_poisson, level = 0.95)[, 2],
+                              confint(total_exposure_russia_poisson_square, level = 0.95)[, 2]))
+
+G3B$variable[G3B$variable == ""] <- ""
+
+G3B$variable[G3B$variable == "(Intercept)"] <- "Constant"
+G3B$variable[G3B$variable == "genderFemale"] <- "Woman"
+G3B$variable[G3B$variable == "internet_social_media_w1"] <- "Social media use"
+G3B$variable[G3B$variable == "total_tweets_log"] <- "Total tweets in feed (log)"
+G3B$variable[G3B$variable == "age"] <- "Age"
+G3B$variable[G3B$variable == "income"] <- "Income"
+G3B$variable[G3B$variable == "educationCollege+"] <- "College degree"
+G3B$variable[G3B$variable == "pid7"] <- "Party ID\n(0 = Strong D.,\n1 = Strong R.)"
+G3B$variable[G3B$variable == "I(pid7^2)"] <- "Strength of partisanship\n(Party ID²)"
+G3B$variable[G3B$variable == "raceNon-White"] <- "Person of color"
+G3B$variable[G3B$variable == "race_other_hispanic"] <- "Race: Hispanic/Other"
+G3B$variable[G3B$variable == "race_black"] <- "Race: Black"
+G3B$variable[G3B$variable == "regionNortheast"] <- "Region: Northeast"
+G3B$variable[G3B$variable == "regionMidwest"] <- "Region: Midwest"
+G3B$variable[G3B$variable == "regionWest"] <- "Region: West"
+
+G3B$variable <- factor(G3B$variable, levels = rev(c("Woman",
+                                                    "Age",
+                                                    "College degree",
+                                                    "Income",
+                                                    "Person of color",
+                                                    #"Race: Hispanic/Other",
+                                                    #"Race: Black",
+                                                    "Region: Northeast",
+                                                    "Region: Midwest",
+                                                    "Region: West",
+                                                    "Social media use",
+                                                    #"Total tweets in feed (log)",
+                                                    "Party ID\n(0 = Strong D.,\n1 = Strong R.)",
+                                                    "Strength of partisanship\n(Party ID²)",
+                                                    "Constant")))
+
+G3B$model_number <- as.numeric(G3B$variable)
+G3B$model_number[G3B$model_number == 2] <- 1.5
+G3B$model_number[G3B$model_number == 3] <- 2.5
+
+G3B <- subset(G3B, variable != "Constant")
+
+wb <- readRDS("../figures_source/Source Data.rds")
+openxlsx::addWorksheet(wb, sheetName = "figure_c5a", gridLines = FALSE)
+openxlsx::writeDataTable(wb, sheet = "figure_c5a", x = subset(G3B, model == "OLS"))
+openxlsx::addWorksheet(wb, sheetName = "figure_c5b", gridLines = FALSE)
+openxlsx::writeDataTable(wb, sheet = "figure_c5b", x = subset(G3B, model == "Poisson"))
+saveRDS(wb, "../figures_source/Source Data.rds")
+openxlsx::saveWorkbook(wb, "../figures_source/Source Data.xlsx", overwrite = TRUE)
+```
+
+```{r}
+FigureC5A <- ggplot(subset(G3B, model == "OLS"),
+                   aes(x = coef, y = model_number)) +
+  my.theme(base_size = 7,
+           borderless = 2, remove.ticks.y = TRUE, remove.ticks.x = FALSE,
+           grid.y_colour = "grey85", grid.y_linetype = 3,
+           grid.x_colour = "grey85", grid.x_linetype = 1) +
+  coord_cartesian(xlim = c(-0.603, 1.03), ylim = c(1.75, max(G3B$model_number[G3B$model == "OLS"])+0.5), expand = FALSE) +
+  scale_y_continuous(breaks = sort(unique(G3B$model_number[G3B$model == "OLS"])),
+                     labels = unique(G3B$variable[G3B$model == "OLS"])[order(G3B$variable[G3B$model == "OLS"])]) +
+  scale_x_continuous(breaks = c(-0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8, 1, 1.2),
+                   labels = c("-.6", "-.4", "-.2", "0", ".2", ".4", ".6", ".8", "1", "1.2")) +
+  labs(x = "Coefficient", y = "") +
+  geom_vline(xintercept = 0, size = 0.25) +
+  geom_hline(yintercept = 3.25, size = 0.25, linetype = 5) +
+  geom_hline(yintercept = 1.75, size = 1.5, linetype = 1) +
+  geom_segment(aes(x = lower95, xend = upper95, y = model_number, yend = model_number),
+               size = 3, color = "grey85") +
+  geom_point(size = 2, color = "#0D0887") +
+  labs(y = "Predictor") +
+  theme(plot.margin = unit(c(1, 2, 1, -2), "mm"))
+
+FigureC5B <- ggplot(subset(G3B, model == "Poisson"),
+                           aes(x = coef, y = model_number)) +
+  my.theme(base_size = 8,
+           borderless = 2, remove.ticks.y = TRUE, remove.ticks.x = FALSE,
+           grid.y_colour = "grey85", grid.y_linetype = 3,
+           grid.x_colour = "grey85", grid.x_linetype = 1) +
+  coord_cartesian(ylim = c(1.75, max(G3B$model_number[G3B$model == "Poisson"])+0.5), expand = FALSE) +
+  scale_y_continuous(breaks = sort(unique(G3B$model_number[G3B$model == "Poisson"])),
+                     labels = unique(G3B$variable[G3B$model == "Poisson"])[order(G3B$variable[G3B$model == "OLS"])]) +
+  scale_x_continuous(breaks = c(-3, -2, -1, 0, 1, 2, 3)) +
+  labs(x = "Coefficient", y = "") +
+  geom_vline(xintercept = 0, size = 0.25) +
+  geom_hline(yintercept = 3.25, size = 0.25, linetype = 5) +
+  geom_hline(yintercept = 1.75, size = 1.5, linetype = 1) +
+  geom_segment(aes(x = lower95, xend = upper95, y = model_number, yend = model_number),
+               size = 3, color = "grey85") +
+  geom_point(size = 2, color = "#0D0887") +
+  theme(plot.margin = unit(c(1, 2, 1, -2), "mm"))
+```
+
+```{r Figure-C5, out.width="100%", out.height="60%", fig.align="center", fig.cap="Partisanship and exposure to posts from Russian Internet Research Agency accounts during the 2016 US election campaign (quasi-poisson regression). Error bars represent 95\\% confidence intervals around the point estimate of the regression coefficient. $n = 1,496$ survey respondents."}
+cowplot::ggdraw() +
+  cowplot::draw_plot(FigureC5A, x = 0.02, y = 0.01, width = 0.48, height = 0.95) +
+  cowplot::draw_plot(FigureC5B, x = 0.52, y = 0.01, width = 0.48, height = 0.95) +
+  cowplot::draw_plot_label(label = c("A. OLS", "B. Poisson"), size = 10,
+                           x = c(0.01, 0.52), y = c(0.97, 0.97), hjust = 0, vjust = 0)
+```
+
+
+\clearpage
+# Exposure to political actors
+
+Analogous to Panels B and C in Figure 1 in the main article, we calculate and visualize the empirical cumulative distributions of exposure to tweets by survey respondents from news media organizations (Panel A of \autoref{fig:Figure-D6}) and politicians (Panel C of \autoref{fig:Figure-D6}). Panels B and D present the empirical cumulative distributions of tweets sent by media and politicians' accounts, respectively. As the figure shows, exposure to politicians and news media is less concentrated among small groups of users compared to exposure to tweets from Russian foreign influence accounts. As noted in the article, just 1% of respondents account for 70% of exposures of Russian foreign influence accounts. Among news media organizations and politicians, 1% of respondents account of 24% and 37% of exposures.
+
+```{r}
+# Figure D6
+wb <- readRDS("../figures_source/Source Data.rds")
+openxlsx::addWorksheet(wb, sheetName = "figure_d6a", gridLines = FALSE)
+openxlsx::writeDataTable(wb, sheet = "figure_d6a",
+                         x = newsmedia_respondents_concentration[,c("cum_prop_respondents", "cum_prop_exposure")])
+openxlsx::addWorksheet(wb, sheetName = "figure_d6b", gridLines = FALSE)
+openxlsx::writeDataTable(wb, sheet = "figure_d6b",
+                         x = newsmedia_concentration[,c("cum_prop_newsmedia", "cum_prop_exposure")])
+openxlsx::addWorksheet(wb, sheetName = "figure_d6c", gridLines = FALSE)
+openxlsx::writeDataTable(wb, sheet = "figure_d6c",
+                         x = politicians_respondents_concentration[,c("cum_prop_respondents", "cum_prop_exposure")])
+openxlsx::addWorksheet(wb, sheetName = "figure_d6d", gridLines = FALSE)
+openxlsx::writeDataTable(wb, sheet = "figure_d6d",
+                         x = politicians_concentration[,c("cum_prop_politicians", "cum_prop_exposure")])
+saveRDS(wb, "../figures_source/Source Data.rds")
+openxlsx::saveWorkbook(wb, "../figures_source/Source Data.xlsx", overwrite = TRUE)
+```
+
+```{r}
+newsmedia_respondents_concentration_plot <-  
+  ggplot(newsmedia_respondents_concentration,
+         aes(x = cum_prop_respondents, y = cum_prop_exposure,
+             size = 1.5)) +
+  my.theme(base_size = 7,
+           borderless = 2, remove.ticks.y = TRUE, remove.ticks.x = TRUE,
+           grid.x_colour = "grey85", grid.y_colour = "grey85") +
+  labs(x = "% of survey respondents", y = "% of exposures") +
+  coord_cartesian(xlim = c(0.00001, 1), ylim = c(0, 1), expand = TRUE) +
+  scale_x_continuous(breaks = c(0.0001, 0.001, 0.01, 0.1, 1),
+                     labels = c(".01%", ".1%", "1%", "10%", "100%"),
+                     trans = "log10") +
+  scale_y_continuous(breaks = c(0, 0.25, 0.5, 0.75, 1),
+                     labels = c("0%", "25%", "50%", "75%", "100%")) +
+  geom_line(size = 1.5, color = "red") +
+  geom_hline(yintercept = 0, size = 0.75) +
+  geom_vline(xintercept = 0.01, size = 0.35, linetype = 3, color = "black") +
+  theme()
+
+newsmedia_concentration_plot <- 
+  ggplot(newsmedia_concentration,
+         aes(x = cum_prop_newsmedia, y = cum_prop_exposure)) +
+  my.theme(base_size = 7,
+           borderless = 2, remove.ticks.y = TRUE, remove.ticks.x = TRUE,
+           grid.x_colour = "grey85", grid.y_colour = "grey85") +
+  labs(x = "% of media organizations", y = "% of exposures") +
+  coord_cartesian(xlim = c(0.00001, 1), ylim = c(0, 1), expand = TRUE) +
+  scale_x_continuous(breaks = c(0.0001, 0.001, 0.01, 0.1, 1),
+                     labels = c(".01%", ".1%", "1%", "10%", "100%"),
+                     trans = "log10") +
+  scale_y_continuous(breaks = c(0, 0.25, 0.5, 0.75, 1),
+                     labels = c("0%", "25%", "50%", "75%", "100%")) +
+  geom_line(size = 1.5, color = "red") +
+  geom_hline(yintercept = 0, size = 0.75) +
+  geom_vline(xintercept = 0.01, size = 0.35, linetype = 3, color = "black") +
+  theme()
+
+politicians_respondents_concentration_plot <-  
+  ggplot(politicians_respondents_concentration,
+         aes(x = cum_prop_respondents, y = cum_prop_exposure,
+             size = 1.5)) +
+  my.theme(base_size = 7,
+           borderless = 2, remove.ticks.y = TRUE, remove.ticks.x = TRUE,
+           grid.x_colour = "grey85", grid.y_colour = "grey85") +
+  labs(x = "% of survey respondents", y = "% of exposures") +
+  coord_cartesian(xlim = c(0.00001, 1), ylim = c(0, 1), expand = TRUE) +
+  scale_x_continuous(breaks = c(0.0001, 0.001, 0.01, 0.1, 1),
+                     labels = c(".01%", ".1%", "1%", "10%", "100%"),
+                     trans = "log10") +
+  scale_y_continuous(breaks = c(0, 0.25, 0.5, 0.75, 1),
+                     labels = c("0%", "25%", "50%", "75%", "100%")) +
+  geom_line(size = 1.5, color = "#FFB335") +
+  geom_hline(yintercept = 0, size = 0.75) +
+  geom_vline(xintercept = 0.01, size = 0.35, linetype = 3, color = "black") +
+  theme()
+
+politicians_concentration_plot <- 
+  ggplot(politicians_concentration,
+         aes(x = cum_prop_politicians, y = cum_prop_exposure)) +
+  my.theme(base_size = 7,
+           borderless = 2, remove.ticks.y = TRUE, remove.ticks.x = TRUE,
+           grid.x_colour = "grey85", grid.y_colour = "grey85") +
+  labs(x = "% of politicians", y = "% of exposures") +
+  coord_cartesian(xlim = c(0.00001, 1), ylim = c(0, 1), expand = TRUE) +
+  scale_x_continuous(breaks = c(0.0001, 0.001, 0.01, 0.1, 1),
+                     labels = c(".01%", ".1%", "1%", "10%", "100%"),
+                     trans = "log10") +
+  scale_y_continuous(breaks = c(0, 0.25, 0.5, 0.75, 1),
+                     labels = c("0%", "25%", "50%", "75%", "100%")) +
+  geom_line(size = 1.5, color = "#FFB335") +
+  geom_hline(yintercept = 0, size = 0.75) +
+  geom_vline(xintercept = 0.01, size = 0.35, linetype = 3, color = "black") +
+  theme()
+```
+
+```{r Figure-D6, fig.height=5, fig.cap="Partisanship and exposure to posts from news media and politicians accounts during the 2016 US election campaign"}
+cowplot::ggdraw() +
+  cowplot::draw_plot(newsmedia_respondents_concentration_plot, x = 0.02, y = 0.49, width = 0.48, height = 0.51) +
+  cowplot::draw_plot(newsmedia_concentration_plot, x = 0.02, y = 0, width = 0.48, height = 0.505) +
+  cowplot::draw_plot(politicians_respondents_concentration_plot, x = 0.525, y = 0.49, width = 0.48, height = 0.51) +
+  cowplot::draw_plot(politicians_concentration_plot, x = 0.525, y = 0, width = 0.48, height = 0.505) +
+  cowplot::draw_plot_label(label = c("A.", "B.", "C.", "D."), size = 13,
+                           x = c(-0.005, -0.005, 0.4975, 0.4975), y = c(0.992, 0.502, 0.992, 0.502))
+```
+
+
+\clearpage
+# Vote change regression models
+
+## Details of response variables coding
+
+To measure changes in candidate preferences between the first and last waves of the survey, we construct three outcomes that use respondents' rankings of Hillary Clinton and Donald Trump in wave 1 as a baseline: 
+\begin{enumerate}[label=(\arabic*)]
+  \item vote choice (from baseline to voting for one of the two main candidates),
+  \item vote choice (from baseline to voting for one of the two main candidates, a 3rd party candidate or abstaining from voting),
+  \item rank (from baseline to rankings of Hillary Clinton and Donald Trump).
+\end{enumerate}
+
+All three outcome variables are constructed in such a way that positive values indicate changes in the direction favorable to Donald Trump. More formally, we measure the changes between the first wave $w_1$ and the last wave $w_j$: $\Delta preference_{{iw_{j}}-{iw_{1}}}$, such that:
+
+$$\Delta preference_{{iw_{j}}-{iw_{1}}} = Preference^{(.)}_{iw_{j}} - Preference_{iw_{1}}$$
+
+with the candidate preference in the first wave in each case measured as:
+
+$$Preference_{iw_{1}} = 1(TrumpRank_{iw_{1}} < ClintonRank_{iw_{1}})$$
+
+where $ClintonRank_{iw_{1}}$ and $TrumpRank_{iw_{1}}$ are respondent $i$'s ranks of Hillary Clinton and Donald Trump in the first wave. Note that the lower the assigned rank, the more preferred a given candidate is. In other words, $1(TrumpRank_{iw_{1}} < ClintonRank_{iw_{1}})$ is an indicator function that takes the value of 1 when Donald Trump is preferred to Hillary Clinton by respondent $i$ in wave 1, and 0 otherwise. The three comparison measures in the last wave $Preference^{(.)}_{iw_{j}}$ are calculated as follows:
+
+$$Preference^{(1)}_{iw_{4}} = 1(TrumpVote_{iw_{4}} = 1)$$
+
+$$Preference^{(2)}_{iw_{4}} = 1(Non-ClintonVote_{iw_{4}} = 1)$$
+
+$$Preference^{(3)}_{iw_{3}} = 1(TrumpRank_{iw_{3}} < ClintonRank_{iw_{3}})$$
+where $TrumpVote_{iw_{4}}$ is a post-election measure of voting for Donald Trump, $Non-ClintonVote_{iw_{4}}$ is a post-election measure of voting for Donald Trump, other candidates or abstaining from voting, $ClintonRank_{iw_{3}}$ and $TrumpRank_{iw_{3}}$ are the respondent $i$'s ranks of Hillary Clinton and Donald Trump in the third wave.
+
+\clearpage
+## Regression models using the count of exposures
+
+Tables \@ref(tab:tab1), \@ref(tab:tab2) and \@ref(tab:tab3) show the full output for linear models used in the main text of the article.
+
+```{r}
+# Specify control variables
+controls <- c(
+  "age",
+  "gender",
+  "education",
+  "income",
+  "race",
+  "region",
+  "internet_social_media_w1",
+  "pid7"
+)
+
+covariate.labels <- c(
+  "Age",
+  "Woman",
+  "College-educated",
+  "Income",
+  "Person of Color",
+  "Other/Hispanic",
+  "Black",
+  "Region: Northeast",
+  "Region: Midwest",
+  "Region: West",
+  "Freq. of social media use",
+  "log(Total Tweets)",
+  "Party ID"
+)
+
+```
+
+```{r, results='asis'}
+vote_stargazer_1 <- capture.output(
+  stargazer(
+    # vote_rank_total_russia_count_lm,
+    vote_rank_total_russia_count_lm_controls,
+    vote_rank_total_russia_count_lm_controls_black,
+    vote_rank_total_russia_count_lm_controls_total_tweets,
+    font.size = "footnotesize",
+    title = "\\label{tab:tab1}Regression models for the relationship between exposure to tweets from Russian Internet Research Agency accounts and a change in ranking a vote for Trump over that for Clinton",
+    column.sep.width = "0pt",
+    covariate.labels = c("log(Exposure + 1)", covariate.labels),
+    header = FALSE,
+    style = "apsr", keep.stat = c("n"),
+    model.names = FALSE,
+    ord.intercepts = TRUE,
+    table.placement = "hp",
+    star.cutoffs = c(0.05, 0.01, 0.001)
+  )
+)
+
+vote_stargazer_1 <- highlight_rows(
+  stargazer_tab = vote_stargazer_1,
+  regex = "log\\(Exposure \\+ 1\\)",
+  n_rows = 1
+)
+
+cat(vote_stargazer_1)
+```
+
+```{r, results='asis'}
+vote_stargazer_2 <- capture.output(
+  stargazer(
+    # vote_choice_total_russia_count_lm,
+    vote_choice_total_russia_count_lm_controls,
+    vote_choice_total_russia_count_lm_controls_black,
+    vote_choice_total_russia_count_lm_controls_total_tweets,
+    font.size = "footnotesize",
+    title = "\\label{tab:tab2}Regression models for the relationship between exposure to tweets from Russian Internet Research Agency accounts and change in election-day vote for Trump",
+    column.sep.width = "0pt",
+    covariate.labels = c("log(Exposure + 1)", covariate.labels),
+    header = FALSE,
+    style = "apsr", keep.stat = c("n"),
+    model.names = FALSE,
+    ord.intercepts = TRUE,
+    table.placement = "hp",
+    star.cutoffs = c(0.05, 0.01, 0.001)
+  )
+)
+
+vote_stargazer_2 <- highlight_rows(
+  stargazer_tab = vote_stargazer_2,
+  regex = "log\\(Exposure \\+ 1\\)",
+  n_rows = 1
+)
+
+cat(vote_stargazer_2)
+```
+
+```{r, results='asis'}
+vote_stargazer_3 <- capture.output(
+  stargazer(
+    # vote_choice_benefit_total_russia_count_lm,
+    vote_choice_benefit_total_russia_count_lm_controls,
+    vote_choice_benefit_total_russia_count_lm_controls_black,
+    vote_choice_benefit_total_russia_count_lm_controls_total_tweets,
+    font.size = "footnotesize",
+    title = "\\label{tab:tab3}Regression models for the relationship between exposure to tweets from Russian Internet Research Agency accounts and a change in election-day vote (Trump, 3rd party, did not vote) over a vote for Clinton",
+    column.sep.width = "0pt",
+    covariate.labels = c("log(Exposure + 1)", covariate.labels),
+    header = FALSE,
+    style = "apsr", keep.stat = c("n"),
+    model.names = FALSE,
+    ord.intercepts = TRUE,
+    table.placement = "hp",
+    star.cutoffs = c(0.05, 0.01, 0.001)
+  )
+)
+
+vote_stargazer_3 <- highlight_rows(
+  stargazer_tab = vote_stargazer_3,
+  regex = "log\\(Exposure \\+ 1\\)",
+  n_rows = 1
+)
+
+cat(vote_stargazer_3)
+```
+
+
+\clearpage
+## Regression models using a binary measure of exposure
+
+Tables \@ref(tab:tab4), \@ref(tab:tab5) and \@ref(tab:tab6) show the full output for linear models used in the main text of the article.
+
+
+```{r, results='asis'}
+vote_stargazer_4 <- capture.output(
+  stargazer(
+    # vote_rank_total_russia_binary_lm,
+    vote_rank_total_russia_binary_lm_controls,
+    vote_rank_total_russia_binary_lm_controls_black,
+    vote_rank_total_russia_binary_lm_controls_total_tweets,
+    font.size = "footnotesize",
+    title = "\\label{tab:tab4}Regression models for the relationship between exposure to at least 1 tweet from Russian Internet Research Agency accounts and a change in ranking a vote for Trump over that for Clinton",
+    column.sep.width = "0pt",
+    covariate.labels = c("1(Exposure $>$ 0)", covariate.labels),
+    header = FALSE,
+    style = "apsr", keep.stat = c("n"),
+    model.names = FALSE,
+    ord.intercepts = TRUE,
+    table.placement = "hp",
+    star.cutoffs = c(0.05, 0.01, 0.001)
+  )
+)
+
+vote_stargazer_4 <- highlight_rows(
+  stargazer_tab = vote_stargazer_4,
+  regex = "1\\(Exposure \\$>\\$ 0\\)",
+  n_rows = 1
+)
+
+cat(vote_stargazer_4)
+```
+
+```{r, results='asis'}
+vote_stargazer_5 <- capture.output(
+  stargazer(
+    # vote_choice_total_russia_binary_lm,
+    vote_choice_total_russia_binary_lm_controls,
+    vote_choice_total_russia_binary_lm_controls_black,
+    vote_choice_total_russia_binary_lm_controls_total_tweets,
+    font.size = "footnotesize",
+    title = "\\label{tab:tab5}Regression models for the relationship between exposure to at least 1 tweet from Russian Internet Research Agency accounts and change in election-day vote for Trump",
+    column.sep.width = "0pt",
+    covariate.labels = c("1(Exposure $>$ 0)", covariate.labels),
+    header = FALSE,
+    style = "apsr", keep.stat = c("n"),
+    model.names = FALSE,
+    ord.intercepts = TRUE,
+    table.placement = "hp",
+    star.cutoffs = c(0.05, 0.01, 0.001)
+  )
+)
+
+vote_stargazer_5 <- highlight_rows(
+  stargazer_tab = vote_stargazer_5,
+  regex = "1\\(Exposure \\$>\\$ 0\\)",
+  n_rows = 1
+)
+
+cat(vote_stargazer_5)
+```
+
+```{r, results='asis'}
+vote_stargazer_6 <- capture.output(
+  stargazer(
+    # vote_choice_benefit_total_russia_binary_lm,
+    vote_choice_benefit_total_russia_binary_lm_controls,
+    vote_choice_benefit_total_russia_binary_lm_controls_black,
+    vote_choice_benefit_total_russia_binary_lm_controls_total_tweets,  
+    font.size = "footnotesize",
+    title = "\\label{tab:tab6}Regression models for the relationship between exposure to at least 1 tweet from Russian Internet Research Agency accounts and a change in election-day vote (Trump, 3rd party, did not vote) over a vote for Clinton",
+    column.sep.width = "0pt",
+    covariate.labels = c("1(Exposure $>$ 0)", covariate.labels),
+    header = FALSE,
+    style = "apsr", keep.stat = c("n"),
+    model.names = FALSE,
+    ord.intercepts = TRUE,
+    table.placement = "hp",
+    star.cutoffs = c(0.05, 0.01, 0.001)
+  )
+)
+
+vote_stargazer_6 <- highlight_rows(
+  stargazer_tab = vote_stargazer_6,
+  regex = "1\\(Exposure \\$>\\$ 0\\)",
+  n_rows = 1
+)
+
+cat(vote_stargazer_6)
+```
+
+
+\clearpage
+## Regression models using following Russian Internet Research Agency accounts as a variable of interest
+
+In the article, we present results of models estimating the relationship between exposure to posts from Russian Internet Research Agency accounts and voting preferences and behavior, and similarly, the relationship between exposure to at least one such post on the same outcomes. In this section we also present results from a regression model examining the relationship between following a Russian Internet Research Agency account and these vote-based outcomes. Unlike exposure, which as we discuss in the Results section was primarily incidental, following an Internet Research Agency account is directly chosen by respondents. Nevertheless, it is useful to examine whether there is a relationship between following and voting behavior. Results analogous to those in Figure 5 of the main article for following a Russian Internet Research Agency account are presented in Figure \@ref(fig:Figure-E7). Similar to the results regarding exposure, we find no evidence that following a Russian Internet Research Agency account is associated with changes in any of the measured voting preferences and behavior. Tables \@ref(tab:tab7), \@ref(tab:tab8) and \@ref(tab:tab9) show the full output of these linear models.
+
+```{r}
+# Figure E7
+G5 <- rbind(get_coefs(vote_rank_total_russia_follow_lm_controls,
+                      dv = "Rank\n(Trump > Clinton)",
+                      iv = "1(follow > 0 accounts)"),
+            get_coefs(vote_choice_total_russia_follow_lm_controls,
+                      dv = "Vote choice\n(Clinton toward Trump)",
+                      iv = "1(follow > 0 accounts)"),
+            get_coefs(vote_choice_benefit_total_russia_follow_lm_controls,
+                      dv = "Vote choice\n(Clinton toward Trump,\n3rd party, or not voting)",
+                      iv = "1(follow > 0 accounts)"))
+
+G5$iv <- factor(G5$iv)
+
+G5$variable <- factor(G5$variable,
+                      levels = c("Vote choice\n(Clinton toward Trump,\n3rd party, or not voting)",
+                                 "Vote choice\n(Clinton toward Trump)",
+                                 "Rank\n(Trump > Clinton)"))
+
+blank_data <- data.frame(iv = rep(levels(G5$iv), each = 2),
+                         variable = rep(levels(G5$variable), each = 2),
+                         coef = c(-0.05, 0.05,
+                                  -0.25, 0.25,
+                                  -0.3, 0.3))
+
+blank_data$variable <- factor(blank_data$variable,
+                              levels = c("Vote choice\n(Clinton toward Trump,\n3rd party, or not voting)",
+                                         "Vote choice\n(Clinton toward Trump)",
+                                         "Rank\n(Trump > Clinton)"))
+
+count <- 0
+breaks_fun <- function(x) {
+  count <<- count + 1L
+  switch(
+    count,
+    seq(-0.2, 0.2, by = 0.1), seq(-0.2, 0.2, by = 0.1)
+  )
+}
+
+wb <- readRDS("../figures_source/Source Data.rds")
+openxlsx::addWorksheet(wb, sheetName = "figure_e7", gridLines = FALSE)
+openxlsx::writeDataTable(wb, sheet = "figure_e7", x = subset(G5, treatment == "Treatment"))
+saveRDS(wb, "../figures_source/Source Data.rds")
+openxlsx::saveWorkbook(wb, "../figures_source/Source Data.xlsx", overwrite = TRUE)
+```
+
+```{r Figure-E7, fig.height=3, fig.cap="Regression results of the relationship between following a Russian Internet Research Agency (IRA) account and voting behavior. Error bars represent 95\\% confidence intervals around point estimates of the regression coefficients. $n = 1,496$ survey respondents."}
+ggplot(subset(G5, treatment == "Treatment"),
+       aes(x = coef, y = variable)) +
+  my.theme(base_size = 8,
+           borderless = 2, remove.ticks.y = TRUE, remove.ticks.x = FALSE,
+           grid.x_colour = "grey85", grid.y_colour = "grey35",
+           grid.y_linetype = 3) +
+  labs(x = "Coefficient", y = "", color = "", fill = "") +
+  coord_cartesian(ylim = c(0.35, 3.65), expand = FALSE) +
+  facet_wrap(~ iv, ncol = 2, scale = "free_x") +
+  geom_blank(data = subset(blank_data, iv %in% c("1(follow > 0 accounts)"))) +
+  # geom_rect(data = subset(G5, iv == "log(Exposure + 1)" & treatment == "Treatment")[1, ],
+  #           fill = "black", xmin = -Inf, xmax = Inf,
+  #           ymin = -Inf, ymax = Inf, alpha = 0.02) +
+  scale_x_continuous(breaks = breaks_fun) +
+  geom_vline(xintercept = 0, size = 0.25) +
+  geom_hline(yintercept = c(0.35, 3.65), size = 1.5) +
+  geom_segment(aes(yend = variable, x = lower95, xend = upper95),
+               size = 3, color = "grey83") +
+  geom_point(size = 2, color = "#0D0887") +
+  theme(plot.margin = unit(c(0, 1, 1, -2), "mm"),
+        legend.position = "none",
+        axis.text.y = element_text(family = "", colour = "black", face = "bold", size = 8, hjust = 1, lineheight = 0.9))
+```
+
+```{r, results='asis'}
+# vote_stargazer_7
+vote_stargazer_7 <- capture.output(
+  stargazer(
+    # vote_rank_total_russia_follow_lm,
+    vote_rank_total_russia_follow_lm_controls,
+    vote_rank_total_russia_follow_lm_controls_black,
+    vote_rank_total_russia_follow_lm_controls_total_tweets,
+    font.size = "footnotesize",
+    title = "\\label{tab:tab7}Regression models of the relationship between following at least 1 Russian Internet Research Agency (IRA) account account and a change in ranking a vote for Trump over that for Clinton",
+    column.sep.width = "0pt",
+    covariate.labels = c("1(Follow $>$ 0 IRA account)", covariate.labels),
+    header = FALSE,
+    style = "apsr", keep.stat = c("n"),
+    model.names = FALSE,
+    ord.intercepts = TRUE,
+    table.placement = "hp",
+    star.cutoffs = c(0.05, 0.01, 0.001)
+  )
+)
+
+vote_stargazer_7 <- highlight_rows(
+  stargazer_tab = vote_stargazer_7,
+  regex = "1\\(Follow \\$>\\$ 0 IRA account\\)",
+  n_rows = 1
+)
+
+cat(vote_stargazer_7)
+```
+
+```{r, results='asis'}
+vote_stargazer_8 <- capture.output(
+  stargazer(
+    # vote_choice_total_russia_follow_lm,
+    vote_choice_total_russia_follow_lm_controls,
+    vote_choice_total_russia_follow_lm_controls_black,
+    vote_choice_total_russia_follow_lm_controls_total_tweets,
+    font.size = "footnotesize",
+    title = "\\label{tab:tab8}Regression models of the relationship between following at least 1 Russian Internet Research Agency (IRA) account and change in election-day vote for Trump",
+    column.sep.width = "0pt",
+    covariate.labels = c("1(Follow $>$ 0 IRA account)", covariate.labels),
+    header = FALSE,
+    style = "apsr", keep.stat = c("n"),
+    model.names = FALSE,
+    ord.intercepts = TRUE,
+    table.placement = "hp",
+    star.cutoffs = c(0.05, 0.01, 0.001)
+  )
+)
+
+vote_stargazer_8 <- highlight_rows(
+  stargazer_tab = vote_stargazer_8,
+  regex = "1\\(Follow \\$>\\$ 0 IRA account\\)",
+  n_rows = 1
+)
+
+cat(vote_stargazer_8)
+```
+
+```{r, results='asis'}
+vote_stargazer_9 <- capture.output(
+  stargazer(
+    # vote_choice_benefit_total_russia_follow_lm,
+    vote_choice_benefit_total_russia_follow_lm_controls,
+    vote_choice_benefit_total_russia_follow_lm_controls_black,
+    vote_choice_benefit_total_russia_follow_lm_controls_total_tweets,
+    font.size = "footnotesize",
+    title = "\\label{tab:tab9}Regression models of the relationship between following at least 1 Russian Internet Research Agency (IRA) account and a change in election-day vote (Trump, 3rd party, did not vote) over a vote for Clinton",
+    column.sep.width = "0pt",
+    covariate.labels = c("1(Follow $>$ 0 IRA account)", covariate.labels),
+    header = FALSE,
+    style = "apsr", keep.stat = c("n"),
+    model.names = FALSE,
+    ord.intercepts = TRUE,
+    table.placement = "hp",
+    star.cutoffs = c(0.05, 0.01, 0.001)
+  )
+)
+
+vote_stargazer_9 <- highlight_rows(
+  stargazer_tab = vote_stargazer_9,
+  regex = "1\\(Follow \\$>\\$ 0 IRA account\\)",
+  n_rows = 1
+)
+
+cat(vote_stargazer_9)
+```
+
+\clearpage
+## Alternative coding of race
+
+For ease of comparison in \autoref{fig:Figure-E8} we present a subset of the models from \@ref(tab:tab1)-\@ref(tab:tab6) above, which is analogous to Figure 5 of the main text, but has an alternative coding of control variable race. Here, rather than treating all respondents of color similarly, we break them further down into Black and Hispanic/Other groups. Consistent with the results in the main manuscript, we find no evidence of a relationship between exposure and switches in voting preferences.
+
+```{r}
+G5 <- rbind(get_coefs(vote_rank_total_russia_count_lm_controls,
+                      dv = "Rank\n(Trump > Clinton)",
+                      iv = "log(Exposure + 1)"),
+            get_coefs(vote_choice_total_russia_count_lm_controls,
+                      dv = "Vote choice\n(Clinton toward Trump)",
+                      iv = "log(Exposure + 1)"),
+            get_coefs(vote_choice_benefit_total_russia_count_lm_controls,
+                      dv = "Vote choice\n(Clinton toward Trump,\n3rd party, or not voting)",
+                      iv = "log(Exposure + 1)"),
+
+            get_coefs(vote_rank_total_russia_binary_lm_controls,
+                      dv = "Rank\n(Trump > Clinton)",
+                      iv = "Exposure (binary)"),
+            get_coefs(vote_choice_total_russia_binary_lm_controls,
+                      dv = "Vote choice\n(Clinton toward Trump)",
+                      iv = "Exposure (binary)"),
+            get_coefs(vote_choice_benefit_total_russia_binary_lm_controls,
+                      dv = "Vote choice\n(Clinton toward Trump,\n3rd party, or not voting)",
+                      iv = "Exposure (binary)"),
+
+            get_coefs(vote_rank_total_russia_follow_lm_controls,
+                      dv = "Rank\n(Trump > Clinton)",
+                      iv = "1(follow > 0 accounts)"),
+            get_coefs(vote_choice_total_russia_follow_lm_controls,
+                      dv = "Vote choice\n(Clinton toward Trump)",
+                      iv = "1(follow > 0 accounts)"),
+            get_coefs(vote_choice_benefit_total_russia_follow_lm_controls,
+                      dv = "Vote choice\n(Clinton toward Trump,\n3rd party, or not voting)",
+                      iv = "1(follow > 0 accounts)"))
+
+G5$iv <- factor(G5$iv, levels = c("log(Exposure + 1)",
+                                  "Exposure (binary)",
+                                  "1(follow > 0 accounts)"))
+
+G5$variable <- factor(G5$variable,
+                      levels = c("Vote choice\n(Clinton toward Trump,\n3rd party, or not voting)",
+                                 "Vote choice\n(Clinton toward Trump)",
+                                 "Rank\n(Trump > Clinton)"))
+
+G5_black <- rbind(get_coefs(vote_rank_total_russia_count_lm_controls_black,
+                            dv = "Rank\n(Trump > Clinton)",
+                            iv = "log(Exposure + 1)"),
+                  get_coefs(vote_choice_total_russia_count_lm_controls_black,
+                            dv = "Vote choice\n(Clinton toward Trump)",
+                            iv = "log(Exposure + 1)"),
+                  get_coefs(vote_choice_benefit_total_russia_count_lm_controls_black,
+                            dv = "Vote choice\n(Clinton toward Trump,\n3rd party, or not voting)",
+                            iv = "log(Exposure + 1)"),        
+
+                  get_coefs(vote_rank_total_russia_binary_lm_controls_black,
+                            dv = "Rank\n(Trump > Clinton)",
+                            iv = "Exposure (binary)"),
+                  get_coefs(vote_choice_total_russia_binary_lm_controls_black,
+                            dv = "Vote choice\n(Clinton toward Trump)",
+                            iv = "Exposure (binary)"),
+                  get_coefs(vote_choice_benefit_total_russia_binary_lm_controls_black,
+                            dv = "Vote choice\n(Clinton toward Trump,\n3rd party, or not voting)",
+                            iv = "Exposure (binary)"))
+
+G5_black$iv <- factor(G5_black$iv, levels = c("log(Exposure + 1)",
+                                              "Exposure (binary)"))
+
+G5_black$variable <- factor(G5_black$variable,
+                            levels = c("Vote choice\n(Clinton toward Trump,\n3rd party, or not voting)",
+                                       "Vote choice\n(Clinton toward Trump)",
+                                       "Rank\n(Trump > Clinton)"))
+
+blank_data <- data.frame(iv = rep(levels(G5$iv), each = 2),
+                         variable = rep(levels(G5$variable), each = 2),
+                         coef = c(-0.05, 0.05,
+                                  -0.25, 0.25,
+                                  -0.3, 0.3))
+
+blank_data$iv <- factor(blank_data$iv, levels = c("log(Exposure + 1)",
+                                                  "Exposure (binary)",
+                                                  "1(follow > 0 accounts)"))
+
+blank_data$variable <- factor(blank_data$variable,
+                              levels = c("Vote choice\n(Clinton toward Trump,\n3rd party, or not voting)",
+                                         "Vote choice\n(Clinton toward Trump)",
+                                         "Rank\n(Trump > Clinton)"))
+
+count <- 0
+breaks_fun <- function(x) {
+  count <<- count + 1L
+  switch(
+    count,
+    seq(-0.04, 0.04, by = 0.02), seq(-0.04, 0.04, by = 0.02),
+    seq(-0.2, 0.2, by = 0.1), seq(-0.2, 0.2, by = 0.1),
+    seq(-0.2, 0.2, by = 0.1), seq(-0.2, 0.2, by = 0.1)
+  )
+}
+
+wb <- readRDS("../figures_source/Source Data.rds")
+openxlsx::addWorksheet(wb, sheetName = "figure_e8", gridLines = FALSE)
+openxlsx::writeDataTable(
+  wb, sheet = "figure_e8",
+  x = subset(G5_black, treatment == "Treatment" &
+               iv %in% c("log(Exposure + 1)", "Exposure (binary)"))
+)
+saveRDS(wb, "../figures_source/Source Data.rds")
+openxlsx::saveWorkbook(wb, "../figures_source/Source Data.xlsx", overwrite = TRUE)
+```
+
+```{r Figure-E8, fig.height=3, fig.cap="Regression results of exposure to Russian Internet Research Agency accounts and changes in issue-based and ideological positioning with alternative race break-down. Error bars represent 95\\% confidence intervals around point estimates of the regression coefficients. $n = 1,496$ survey respondents."}
+count <- 0
+ggplot(subset(G5_black, treatment == "Treatment" & iv %in% c("log(Exposure + 1)", "Exposure (binary)")),
+       aes(x = coef, y = variable)) +
+  my.theme(base_size = 8,
+           borderless = 2, remove.ticks.y = TRUE, remove.ticks.x = FALSE,
+           grid.x_colour = "grey85", grid.y_colour = "grey35",
+           grid.y_linetype = 3) +
+  labs(x = "Coefficient", y = "", color = "", fill = "") +
+  coord_cartesian(ylim = c(0.35, 3.65), expand = FALSE) +
+  facet_wrap(~ iv, ncol = 2, scale = "free_x") +
+  geom_blank(data = subset(blank_data, iv %in% c("log(Exposure + 1)", "Exposure (binary)"))) +
+  # geom_rect(data = subset(G5_black, iv == "log(Exposure)" & treatment == "Treatment")[1, ],
+  #           fill = "black", xmin = -Inf, xmax = Inf,
+  #           ymin = -Inf, ymax = Inf, alpha = 0.02) +
+  scale_x_continuous(breaks = breaks_fun) +
+  geom_vline(xintercept = 0, size = 0.25) +
+  geom_hline(yintercept = c(0.35, 3.65), size = 1.5) +
+  geom_segment(aes(yend = variable, x = lower95, xend = upper95),
+               size = 3, color = "grey83") +
+  geom_point(size = 2, color = "#0D0887") +
+  theme(plot.margin = unit(c(0, 1, 1, -2), "mm"),
+        legend.position = "none",
+        axis.text.y = element_text(family = "", colour = "black", face = "bold", size = 8, hjust = 1, lineheight = 0.9))
+```
+
+
+\clearpage
+## Alternative measure of overall Twitter activity 
+
+As another robustness check, rather than relying on a self-reported measure of Twitter activity, that might make respondents less likely to be exposed to tweets from Russian foreign influence campaigns, we control for the total number of tweets posted by their friends. In constructing this measure we rely on our own collected data to estimate the number of potential exposures to other tweets (non-Internet Research Agency) in respondents' timelines. These models are also presented in \@ref(tab:tab1)-\@ref(tab:tab6) above, but for ease of comparison to Figure 5 of the main manuscript in \autoref{fig:Figure-E9} we present a subset of them that use log(Total Tweets) as one of control variables. Consistent with the results in the main manuscript, we find no evidence of a relationship between exposure and switches in voting preferences.
+
+```{r}
+G5_total_tweets <- rbind(get_coefs(vote_rank_total_russia_count_lm_controls_total_tweets,
+                                   dv = "Rank\n(Trump > Clinton)",
+                                   iv = "log(Exposure + 1)"),
+                         get_coefs(vote_choice_total_russia_count_lm_controls_total_tweets,
+                                   dv = "Vote choice\n(Clinton toward Trump)",
+                                   iv = "log(Exposure + 1)"),
+                         get_coefs(vote_choice_benefit_total_russia_count_lm_controls_total_tweets,
+                                   dv = "Vote choice\n(Clinton toward Trump,\n3rd party, or not voting)",
+                                   iv = "log(Exposure + 1)"),
+
+                         get_coefs(vote_rank_total_russia_binary_lm_controls_total_tweets,
+                                   dv = "Rank\n(Trump > Clinton)",
+                                   iv = "Exposure (binary)"),
+                         get_coefs(vote_choice_total_russia_binary_lm_controls_total_tweets,
+                                   dv = "Vote choice\n(Clinton toward Trump)",
+                                   iv = "Exposure (binary)"),
+                         get_coefs(vote_choice_benefit_total_russia_binary_lm_controls_total_tweets,
+                                   dv = "Vote choice\n(Clinton toward Trump,\n3rd party, or not voting)",
+                                   iv = "Exposure (binary)"))
+
+G5_total_tweets$iv <- factor(G5_total_tweets$iv, levels = c("log(Exposure + 1)",
+                                                            "Exposure (binary)"))
+
+G5_total_tweets$variable <- factor(G5_total_tweets$variable,
+                                   levels = c("Vote choice\n(Clinton toward Trump,\n3rd party, or not voting)",
+                                              "Vote choice\n(Clinton toward Trump)",
+                                              "Rank\n(Trump > Clinton)"))
+
+blank_data <- data.frame(iv = rep(levels(G5$iv), each = 2),
+                         variable = rep(levels(G5$variable), each = 2),
+                         coef = c(-0.05, 0.05,
+                                  -0.25, 0.25,
+                                  -0.3, 0.3))
+
+blank_data$iv <- factor(blank_data$iv, levels = c("log(Exposure + 1)",
+                                                  "Exposure (binary)",
+                                                  "1(follow > 0 accounts)"))
+
+blank_data$variable <- factor(blank_data$variable,
+                              levels = c("Vote choice\n(Clinton toward Trump,\n3rd party, or not voting)",
+                                         "Vote choice\n(Clinton toward Trump)",
+                                         "Rank\n(Trump > Clinton)"))
+
+count <- 0
+breaks_fun <- function(x) {
+  count <<- count + 1L
+  switch(
+    count,
+    seq(-0.04, 0.04, by = 0.02), seq(-0.04, 0.04, by = 0.02),
+    seq(-0.2, 0.2, by = 0.1), seq(-0.2, 0.2, by = 0.1),
+    seq(-0.2, 0.2, by = 0.1), seq(-0.2, 0.2, by = 0.1)
+  )
+}
+
+wb <- readRDS("../figures_source/Source Data.rds")
+openxlsx::addWorksheet(wb, sheetName = "figure_e9", gridLines = FALSE)
+openxlsx::writeDataTable(
+  wb, sheet = "figure_e9",
+  x = subset(G5_black, treatment == "Treatment" &
+               iv %in% c("log(Exposure + 1)", "Exposure (binary)"))
+)
+saveRDS(wb, "../figures_source/Source Data.rds")
+openxlsx::saveWorkbook(wb, "../figures_source/Source Data.xlsx", overwrite = TRUE)
+```
+
+```{r Figure-E9, fig.height=3, fig.cap="Regression results of exposure to Russian Internet Research Agency accounts and changes in issue-based and ideological positioning with alternative measure of overall potential exposures on Twitter. Error bars represent 95\\% confidence intervals around point estimates of the regression coefficients. $n = 1,496$ survey respondents."}
+count <- 0
+ggplot(subset(G5_total_tweets, treatment == "Treatment" & iv %in% c("log(Exposure + 1)", "Exposure (binary)")),
+       aes(x = coef, y = variable)) +
+  my.theme(base_size = 8,
+           borderless = 2, remove.ticks.y = TRUE, remove.ticks.x = FALSE,
+           grid.x_colour = "grey85", grid.y_colour = "grey35",
+           grid.y_linetype = 3) +
+  labs(x = "Coefficient", y = "", color = "", fill = "") +
+  coord_cartesian(ylim = c(0.35, 3.65), expand = FALSE) +
+  facet_wrap(~ iv, ncol = 2, scale = "free_x") +
+  geom_blank(data = subset(blank_data, iv %in% c("log(Exposure + 1)", "Exposure (binary)"))) +
+  # geom_rect(data = subset(G5_total_tweets, iv == "log(Exposure)" & treatment == "Treatment")[1, ],
+  #           fill = "black", xmin = -Inf, xmax = Inf,
+  #           ymin = -Inf, ymax = Inf, alpha = 0.02) +
+  scale_x_continuous(breaks = breaks_fun) +
+  geom_vline(xintercept = 0, size = 0.25) +
+  geom_hline(yintercept = c(0.35, 3.65), size = 1.5) +
+  geom_segment(aes(yend = variable, x = lower95, xend = upper95),
+               size = 3, color = "grey83") +
+  geom_point(size = 2, color = "#0D0887") +
+  theme(plot.margin = unit(c(0, 1, 1, -2), "mm"),
+        legend.position = "none",
+        axis.text.y = element_text(family = "", colour = "black", face = "bold", size = 8, hjust = 1, lineheight = 0.9))
+```
+
+
+\clearpage
+## Final vote preference as outcome
+
+In \autoref{tab:vote_rhs}, we provide results for models in which vote choice in the final wave of the survey is the outcome variable, and a respondent's wave 1 preference is used as a control. This differs from the approach in the main manuscript, in which the outcome variable is a change score (change in vote preference from wave 1 to the final wave). However, @Allison1990 shows that controlling for a previous measured outcome rather than using change scores can result in more biased estimates if the previous measured outcome is correlated with the error term.
+
+
+```{r}
+# Hack for generating different DV names for models 
+# where stargazer considers all as having the same DV
+replace_rows <- function(stargazer_tab, regex, replacement) {
+  row_ids <- grep(regex, stargazer_tab)
+  
+  stargazer_tab[row_ids] <- replacement
+  
+  stargazer_tab
+}
+
+rhs_covariate_labels <- c(
+  "log(Exposure $+$ 1)",
+  "1(Exposure $>$ 0)",
+  "1(Follow $>$ 0 IRA account)",
+  "Age",
+  "Woman",
+  "College-educated",
+  "Income",
+  "People of Color",
+  "Region: Northeast",
+  "Region: Midwest",
+  "Region: West",
+  "Freq. of social media use",
+  "Party ID",
+  "W1 Rank Trump over Clinton"
+)
+```
+
+\begin{landscape}
+```{r, results='asis'}
+vote_stargazer_rhs <- capture.output(
+  stargazer(
+    vote_rank_total_russia_count_lm_controls_rhs,
+    vote_rank_total_russia_binary_lm_controls_rhs,
+    vote_rank_total_russia_follow_lm_controls_rhs,
+    vote_choice_total_russia_count_lm_controls_rhs,
+    vote_choice_total_russia_binary_lm_controls_rhs,
+    vote_choice_total_russia_follow_lm_controls_rhs,
+    vote_choice_benefit_total_russia_count_lm_controls_rhs,
+    vote_choice_benefit_total_russia_binary_lm_controls_rhs,
+    vote_choice_benefit_total_russia_follow_lm_controls_rhs,
+    font.size = "footnotesize",
+    title = "\\label{tab:vote_rhs}Regression models for the relationship between exposure to tweets from Russian Internet Research Agency (IRA) accounts and ranking a vote for Trump over that for Clinton in W3",
+    column.sep.width = "0pt",
+    covariate.labels = rhs_covariate_labels,
+    header = FALSE,
+    style = "apsr", keep.stat = c("n"),
+    model.names = FALSE,
+    ord.intercepts = TRUE,
+    table.placement = "hp",
+    star.cutoffs = c(0.05, 0.01, 0.001)
+  )
+)
+
+vote_stargazer_rhs <- highlight_rows(
+  stargazer_tab = vote_stargazer_rhs,
+  regex = "(log\\(Exposure \\$\\+\\$ 1\\)|1\\(Exposure \\$>\\$ 0\\)|1\\(Follow \\$>\\$ 0 IRA account\\))",
+  n_rows = 1
+)
+
+vote_stargazer_rhs <- replace_rows(
+  stargazer_tab = vote_stargazer_rhs,
+  regex = "\\\\\\[-1.8ex\\] \\& \\\\multicolumn\\{9\\}\\{c\\}\\{ \\} \\\\\\\\ ",
+  replacement = "\\\\[-1.8ex] & \\multicolumn{3}{c}{Vote rank(Trump$>$Clinton)} & \\multicolumn{3}{c}{Vote choice(Clinton$\\rightarrow$Trump)} & \\multicolumn{3}{c}{Vote choice(Clinton$\\rightarrow$Trump/3rd/Not)} \\\\ "
+)
+
+cat(vote_stargazer_rhs)
+```
+\end{landscape}
+
+
+\clearpage
+# Linear models of ideological positioning
+
+```{r}
+issue_covariate_labels <- c(
+  "log(Exposure $+$ 1)",
+  "1(Exposure $>$ 0)",
+  "1(Follow $>$ 0 IRA account)",
+  "Age",
+  "Woman",
+  "College-educated",
+  "Income",
+  "People of Color",
+  "Other/Hispanic",
+  "Black",
+  "Region: Northeast",
+  "Region: Midwest",
+  "Region: West",
+  "Freq. of social media use",
+  "log(Total Tweets)",
+  "Party ID",
+  "Constant"
+)
+```
+
+
+## Details of outcome variable coding
+
+To measure changes in ideological positioning between the first and final waves of the survey, we create two types of outcome variables: relative issue position and perceived polariztion of the candidates on different policy issues (measured on a 0-100 scale).
+
+For the first measure we calculate how far from Hillary Clinton a respondent is relative to Donald Trump. In order to calculate this, we take the absolute difference between a respondent's own position on a given issue and the position that they perceive each of the two candidates holds, such that positive values indicate more proximity to Donald Trump and negative values indicate more proximity to Hillary Clinton. Afterwards, we take the difference between the last wave and the first wave such that positive values reflect moves towards Trump's position on a given issue and negative values indicate moves towards Clinton's position on a given issue. More precisely, for changes in relative issue position placement we measure $\Delta position_{{iw_{3}}-{iw_{1}}}$, such that:
+
+$$\Delta position_{{iw_{3}}-{iw_{1}}} = RelativePosition_{iw_{3}} - RelativePosition_{iw_{1}}$$
+
+The values of $RelativePosition_{iw_{1}}$ and $RelativePosition_{iw_{3}}$ are measured as follows:
+
+$$RelativePosition_{iw_{1}} = \lvert Position_{iw_{1}} - ClintonPosition_{iw_{1}} \rvert - \lvert Position_{iw_{1}} - TrumpPosition_{iw_{1}} \rvert $$
+
+$$RelativePosition_{iw_{3}} = \lvert Position_{iw_{3}} - ClintonPosition_{iw_{3}} \rvert - \lvert Position_{iw_{3}} - TrumpPosition_{iw_{3}} \rvert $$
+
+where $Position_{iw_{j}}$ is the self-placement of a respondent $i$ in wave $j$ and $ClintonPosition_{iw_{j}}$ and $TrumpPosition_{iw_{j}}$ are the respondent's placements of Hillary Clinton and Donald Trump on the same issue.
+
+In a similar way, we calculate the changes in perceived polarization between the two candidates from the first to last wave of the survey. However, rather than measuring how far away from a given candidate a respondent places herself, we measure how far she perceives Hillary Clinton to be from Donald Trump on a policy issue. More formally, for changes in perceived polarization we measure $\Delta polarization_{{iw_{3}}-{iw_{1}}}$, such that:
+
+$$\Delta polarization_{{iw_{3}}-{iw_{1}}} = Polarization_{iw_{3}} - Polarization_{iw_{1}}$$
+
+The values of $Polarization_{iw_{1}}$ and $Polarization_{iw_{3}}$ are measured as follows:
+
+$$Polarization_{iw_{1}} = \lvert ClintonPosition_{iw_{1}} - TrumpPosition_{iw_{1}} \rvert$$
+
+$$Polarization_{iw_{3}} = \lvert ClintonPosition_{iw_{3}} - TrumpPosition_{iw_{3}} \rvert$$
+
+where $ClintonPosition_{iw_{j}}$ and $TrumpPosition_{iw_{j}}$ are respondent $i$'s placements of Hillary Clinton and Donald Trump on the same issue scale in wave $j$.
+
+
+\clearpage
+## Relative self-placement
+
+Tables \@ref(tab:tab10)-\@ref(tab:tab18) show the complete output of issue-based and ideological positioning models presented in Figure 4A of the main text.
+
+\begin{landscape}
+```{r, results='asis'}
+issues_stargazer_1 <- capture.output(
+  stargazer(
+    # issue_distance_log_exposure_russia[[1]],
+    issue_distance_log_exposure_russia_controls[[1]],
+    issue_distance_log_exposure_russia_controls_black[[1]],
+    issue_distance_log_exposure_russia_controls_total_tweets[[1]],
+    # issue_distance_binary_exposure_russia[[1]],
+    issue_distance_binary_exposure_russia_controls[[1]],
+    issue_distance_binary_exposure_russia_controls_black[[1]],
+    issue_distance_binary_exposure_russia_controls_total_tweets[[1]],
+    # issue_distance_follow_troll_russia[[1]],
+    issue_distance_follow_troll_russia_controls[[1]],
+    issue_distance_follow_troll_russia_controls_black[[1]],
+    issue_distance_follow_troll_russia_controls_total_tweets[[1]],
+    # order = c(1, 15, 16, 2:14, 17),
+    font.size = "footnotesize",
+    title = "\\label{tab:tab10}Regression models of the relationship between exposure to Russian Internet Research Agency (IRA) accounts and political ideology",
+    column.sep.width = "0pt",
+    covariate.labels = issue_covariate_labels,
+    dep.var.labels = "\\textbf{Issue-based scale (political ideology)}",
+    header = FALSE,
+    style = "apsr", keep.stat = c("n"),
+    model.names = FALSE,
+    table.placement = "hp",
+    star.cutoffs = c(0.05, 0.01, 0.001)
+  )
+)
+
+issues_stargazer_1 <- highlight_rows(
+  stargazer_tab = issues_stargazer_1,
+  regex = "(log\\(Exposure \\$\\+\\$ 1\\)|1\\(Exposure \\$>\\$ 0\\)|1\\(Follow \\$>\\$ 0 IRA account\\))",
+  n_rows = 1
+)
+
+cat(issues_stargazer_1)
+```
+
+```{r, results='asis'}
+issues_stargazer_2 <- capture.output(
+  stargazer(
+    # issue_distance_log_exposure_russia[[2]],
+    issue_distance_log_exposure_russia_controls[[2]],
+    issue_distance_log_exposure_russia_controls_black[[2]],
+    issue_distance_log_exposure_russia_controls_total_tweets[[2]],
+    # issue_distance_binary_exposure_russia[[2]],
+    issue_distance_binary_exposure_russia_controls[[2]],
+    issue_distance_binary_exposure_russia_controls_black[[2]],
+    issue_distance_binary_exposure_russia_controls_total_tweets[[2]],
+    # issue_distance_follow_troll_russia[[2]],
+    issue_distance_follow_troll_russia_controls[[2]],
+    issue_distance_follow_troll_russia_controls_black[[2]],
+    issue_distance_follow_troll_russia_controls_total_tweets[[2]],
+    # order = c(1, 15, 16, 2:14, 17),
+    font.size = "footnotesize",
+    title = "\\label{tab:tab11}Regression models of the relationship between exposure to posts from Russian Internet Research Agency (IRA) accounts and support for immigration",
+    column.sep.width = "0pt",
+    covariate.labels = issue_covariate_labels,
+    dep.var.labels = "\\textbf{Immigration}",
+    header = FALSE,
+    style = "apsr", keep.stat = c("n"),
+    model.names = FALSE,
+    table.placement = "hp",
+    star.cutoffs = c(0.05, 0.01, 0.001)
+  )
+)
+
+issues_stargazer_2 <- highlight_rows(
+  stargazer_tab = issues_stargazer_2,
+  regex = "(log\\(Exposure \\$\\+\\$ 1\\)|1\\(Exposure \\$>\\$ 0\\)|1\\(Follow \\$>\\$ 0 IRA account\\))",
+  n_rows = 1
+)
+
+cat(issues_stargazer_2)
+```
+
+```{r, results='asis'}
+issues_stargazer_3 <- capture.output(
+  stargazer(
+    # issue_distance_log_exposure_russia[[3]],
+    issue_distance_log_exposure_russia_controls[[3]],
+    issue_distance_log_exposure_russia_controls_black[[3]],
+    issue_distance_log_exposure_russia_controls_total_tweets[[3]],
+    # issue_distance_binary_exposure_russia[[3]],
+    issue_distance_binary_exposure_russia_controls[[3]],
+    issue_distance_binary_exposure_russia_controls_black[[3]],
+    issue_distance_binary_exposure_russia_controls_total_tweets[[3]],
+    # issue_distance_follow_troll_russia[[3]],
+    issue_distance_follow_troll_russia_controls[[3]],
+    issue_distance_follow_troll_russia_controls_black[[3]],
+    issue_distance_follow_troll_russia_controls_total_tweets[[3]],
+    # order = c(1, 15, 16, 2:14, 17),
+    font.size = "footnotesize",
+    title = "\\label{tab:tab12}Regression models of the relationship between exposure to posts from Russian Internet Research Agency (IRA) accounts and support for banning Muslim immigrants",
+    column.sep.width = "0pt",
+    covariate.labels = issue_covariate_labels,
+    dep.var.labels = "\\textbf{Muslim ban}",
+    header = FALSE,
+    style = "apsr", keep.stat = c("n"),
+    model.names = FALSE,
+    table.placement = "hp",
+    star.cutoffs = c(0.05, 0.01, 0.001)
+  )
+)
+
+issues_stargazer_3 <- highlight_rows(
+  stargazer_tab = issues_stargazer_3,
+  regex = "(log\\(Exposure \\$\\+\\$ 1\\)|1\\(Exposure \\$>\\$ 0\\)|1\\(Follow \\$>\\$ 0 IRA account\\))",
+  n_rows = 1
+)
+
+cat(issues_stargazer_3)
+```
+
+```{r, results='asis'}
+issues_stargazer_4 <- capture.output(
+  stargazer(
+    # issue_distance_log_exposure_russia[[4]],
+    issue_distance_log_exposure_russia_controls[[4]],
+    issue_distance_log_exposure_russia_controls_black[[4]],
+    issue_distance_log_exposure_russia_controls_total_tweets[[4]],
+    # issue_distance_binary_exposure_russia[[4]],
+    issue_distance_binary_exposure_russia_controls[[4]],
+    issue_distance_binary_exposure_russia_controls_black[[4]],
+    issue_distance_binary_exposure_russia_controls_total_tweets[[4]],
+    # issue_distance_follow_troll_russia[[4]],
+    issue_distance_follow_troll_russia_controls[[4]],
+    issue_distance_follow_troll_russia_controls_black[[4]],
+    issue_distance_follow_troll_russia_controls_total_tweets[[4]],
+    # order = c(1, 15, 16, 2:14, 17),
+    font.size = "footnotesize",
+    title = "\\label{tab:tab13}Regression models of the relationship between exposure to posts from Russian Internet Research Agency (IRA) accounts and support for building a wall on the border with Mexico",
+    column.sep.width = "0pt",
+    covariate.labels = issue_covariate_labels,
+    dep.var.labels = "\\textbf{Building a wall}",
+    header = FALSE,
+    style = "apsr", keep.stat = c("n"),
+    model.names = FALSE,
+    table.placement = "hp",
+    star.cutoffs = c(0.05, 0.01, 0.001)
+  )
+)
+
+issues_stargazer_4 <- highlight_rows(
+  stargazer_tab = issues_stargazer_4,
+  regex = "(log\\(Exposure \\$\\+\\$ 1\\)|1\\(Exposure \\$>\\$ 0\\)|1\\(Follow \\$>\\$ 0 IRA account\\))",
+  n_rows = 1
+)
+
+cat(issues_stargazer_4)
+```
+
+```{r, results='asis'}
+issues_stargazer_5 <- capture.output(
+  stargazer(
+    # issue_distance_log_exposure_russia[[5]],
+    issue_distance_log_exposure_russia_controls[[5]],
+    issue_distance_log_exposure_russia_controls_black[[5]],
+    issue_distance_log_exposure_russia_controls_total_tweets[[5]],
+    # issue_distance_binary_exposure_russia[[5]],
+    issue_distance_binary_exposure_russia_controls[[5]],
+    issue_distance_binary_exposure_russia_controls_black[[5]],
+    issue_distance_binary_exposure_russia_controls_total_tweets[[5]],
+    # issue_distance_follow_troll_russia[[5]],
+    issue_distance_follow_troll_russia_controls[[5]],
+    issue_distance_follow_troll_russia_controls_black[[5]],
+    issue_distance_follow_troll_russia_controls_total_tweets[[5]],
+    # order = c(1, 15, 16, 2:14, 17),
+    font.size = "footnotesize",
+    title = "\\label{tab:tab14}Regression models of the relationship between exposure to posts from Russian Internet Research Agency (IRA) accounts and support for Obamacare",
+    column.sep.width = "0pt",
+    covariate.labels = issue_covariate_labels,
+    dep.var.labels = "\\textbf{Obamacare}",
+    header = FALSE,
+    style = "apsr", keep.stat = c("n"),
+    model.names = FALSE,
+    table.placement = "hp",
+    star.cutoffs = c(0.05, 0.01, 0.001)
+  )
+)
+
+issues_stargazer_5 <- highlight_rows(
+  stargazer_tab = issues_stargazer_5,
+  regex = "(log\\(Exposure \\$\\+\\$ 1\\)|1\\(Exposure \\$>\\$ 0\\)|1\\(Follow \\$>\\$ 0 IRA account\\))",
+  n_rows = 1
+)
+
+cat(issues_stargazer_5)
+```
+
+```{r, results='asis'}
+issues_stargazer_6 <- capture.output(
+  stargazer(
+    # issue_distance_log_exposure_russia[[6]],
+    issue_distance_log_exposure_russia_controls[[6]],
+    issue_distance_log_exposure_russia_controls_black[[6]],
+    issue_distance_log_exposure_russia_controls_total_tweets[[6]],
+    # issue_distance_binary_exposure_russia[[6]],
+    issue_distance_binary_exposure_russia_controls[[6]],
+    issue_distance_binary_exposure_russia_controls_black[[6]],
+    issue_distance_binary_exposure_russia_controls_total_tweets[[6]],
+    # issue_distance_follow_troll_russia[[6]],
+    issue_distance_follow_troll_russia_controls[[6]],
+    issue_distance_follow_troll_russia_controls_black[[6]],
+    issue_distance_follow_troll_russia_controls_total_tweets[[6]],
+    # order = c(1, 15, 16, 2:14, 17),
+    font.size = "footnotesize",
+    title = "\\label{tab:tab15}Regression models of the relationship between exposure to posts from Russian Internet Research Agency (IRA) accounts and support for expanding the Affordable Care Act",
+    column.sep.width = "0pt",
+    covariate.labels = issue_covariate_labels,
+    dep.var.labels = "\\textbf{Expanding the ACA}",
+    header = FALSE,
+    style = "apsr", keep.stat = c("n"),
+    model.names = FALSE,
+    table.placement = "hp",
+    star.cutoffs = c(0.05, 0.01, 0.001)
+  )
+)
+
+issues_stargazer_6 <- highlight_rows(
+  stargazer_tab = issues_stargazer_6,
+  regex = "(log\\(Exposure \\$\\+\\$ 1\\)|1\\(Exposure \\$>\\$ 0\\)|1\\(Follow \\$>\\$ 0 IRA account\\))",
+  n_rows = 1
+)
+
+cat(issues_stargazer_6)
+```
+
+```{r, results='asis'}
+issues_stargazer_7 <- capture.output(
+  stargazer(
+    # issue_distance_log_exposure_russia[[7]],
+    issue_distance_log_exposure_russia_controls[[7]],
+    issue_distance_log_exposure_russia_controls_black[[7]],
+    issue_distance_log_exposure_russia_controls_total_tweets[[7]],
+    # issue_distance_binary_exposure_russia[[7]],
+    issue_distance_binary_exposure_russia_controls[[7]],
+    issue_distance_binary_exposure_russia_controls_black[[7]],
+    issue_distance_binary_exposure_russia_controls_total_tweets[[7]],
+    # issue_distance_follow_troll_russia[[7]],
+    issue_distance_follow_troll_russia_controls[[7]],
+    issue_distance_follow_troll_russia_controls_black[[7]],
+    issue_distance_follow_troll_russia_controls_total_tweets[[7]],
+    # order = c(1, 15, 16, 2:14, 17),
+    font.size = "footnotesize",
+    title = "\\label{tab:tab16}Regression models of the relationship between exposure to posts from Russian Internet Research Agency (IRA) accounts and support for free trade",
+    column.sep.width = "0pt",
+    covariate.labels = issue_covariate_labels,
+    dep.var.labels = "\\textbf{Free trade}",
+    header = FALSE,
+    style = "apsr", keep.stat = c("n"),
+    model.names = FALSE,
+    table.placement = "hp",
+    star.cutoffs = c(0.05, 0.01, 0.001)
+  )
+)
+
+issues_stargazer_7 <- highlight_rows(
+  stargazer_tab = issues_stargazer_7,
+  regex = "(log\\(Exposure \\$\\+\\$ 1\\)|1\\(Exposure \\$>\\$ 0\\)|1\\(Follow \\$>\\$ 0 IRA account\\))",
+  n_rows = 1
+)
+
+cat(issues_stargazer_7)
+```
+
+```{r, results='asis'}
+issues_stargazer_8 <- capture.output(
+  stargazer(
+    # issue_distance_log_exposure_russia[[8]],
+    issue_distance_log_exposure_russia_controls[[8]],
+    issue_distance_log_exposure_russia_controls_black[[8]],
+    issue_distance_log_exposure_russia_controls_total_tweets[[8]],
+    # issue_distance_binary_exposure_russia[[8]],
+    issue_distance_binary_exposure_russia_controls[[8]],
+    issue_distance_binary_exposure_russia_controls_black[[8]],
+    issue_distance_binary_exposure_russia_controls_total_tweets[[8]],
+    # issue_distance_follow_troll_russia[[8]],
+    issue_distance_follow_troll_russia_controls[[8]],
+    issue_distance_follow_troll_russia_controls_black[[8]],
+    issue_distance_follow_troll_russia_controls_total_tweets[[8]],
+    # order = c(1, 15, 16, 2:14, 17),
+    font.size = "footnotesize",
+    title = "\\label{tab:tab17}Regression models of the relationship between exposure to posts from Russian Internet Research Agency (IRA) accounts and opposition to tariffs with China",
+    column.sep.width = "0pt",
+    covariate.labels = issue_covariate_labels,
+    dep.var.labels = "\\textbf{Tariffs}",
+    header = FALSE,
+    style = "apsr", keep.stat = c("n"),
+    model.names = FALSE,
+    table.placement = "hp",
+    star.cutoffs = c(0.05, 0.01, 0.001)
+  )
+)
+
+issues_stargazer_8 <- highlight_rows(
+  stargazer_tab = issues_stargazer_8,
+  regex = "(log\\(Exposure \\$\\+\\$ 1\\)|1\\(Exposure \\$>\\$ 0\\)|1\\(Follow \\$>\\$ 0 IRA account\\))",
+  n_rows = 1
+)
+
+cat(issues_stargazer_8)
+```
+
+```{r, results='asis'}
+issues_stargazer_9 <- capture.output(
+  stargazer(
+    # issue_distance_log_exposure_russia[[9]],
+    issue_distance_log_exposure_russia_controls[[9]],
+    issue_distance_log_exposure_russia_controls_black[[9]],
+    issue_distance_log_exposure_russia_controls_total_tweets[[9]],
+    # issue_distance_binary_exposure_russia[[9]],
+    issue_distance_binary_exposure_russia_controls[[9]],
+    issue_distance_binary_exposure_russia_controls_black[[9]],
+    issue_distance_binary_exposure_russia_controls_total_tweets[[9]],
+    # issue_distance_follow_troll_russia[[9]],
+    issue_distance_follow_troll_russia_controls[[9]],
+    issue_distance_follow_troll_russia_controls_black[[9]],
+    issue_distance_follow_troll_russia_controls_total_tweets[[9]],
+    # order = c(1, 15, 16, 2:14, 17),
+    font.size = "footnotesize",
+    title = "\\label{tab:tab18}Regression models of the relationship between exposure to posts from Russian Internet Research Agency (IRA) accounts and support for the use of military force",
+    column.sep.width = "0pt",
+    covariate.labels = issue_covariate_labels,
+    dep.var.labels = "\\textbf{Miltary force}",
+    header = FALSE,
+    style = "apsr", keep.stat = c("n"),
+    model.names = FALSE,
+    table.placement = "hp",
+    star.cutoffs = c(0.05, 0.01, 0.001)
+  )
+)
+
+issues_stargazer_9 <- highlight_rows(
+  stargazer_tab = issues_stargazer_9,
+  regex = "(log\\(Exposure \\$\\+\\$ 1\\)|1\\(Exposure \\$>\\$ 0\\)|1\\(Follow \\$>\\$ 0 IRA account\\))",
+  n_rows = 1
+)
+
+cat(issues_stargazer_9)
+```
+\end{landscape}
+
+\clearpage
+## Perceived candidate polarization
+
+Tables \@ref(tab:tab19)-\@ref(tab:tab27) show the complete output of issue-based and ideological positioning models presented in Figure 4B of the main text.
+
+\begin{landscape}
+```{r, results='asis'}
+candidate_stargazer_1 <- capture.output(
+  stargazer(
+    # candidate_distance_log_exposure_russia[[1]],
+    candidate_distance_log_exposure_russia_controls[[1]],
+    candidate_distance_log_exposure_russia_controls_black[[1]],
+    candidate_distance_log_exposure_russia_controls_total_tweets[[1]],
+    # candidate_distance_binary_exposure_russia[[1]],
+    candidate_distance_binary_exposure_russia_controls[[1]],
+    candidate_distance_binary_exposure_russia_controls_black[[1]],
+    candidate_distance_binary_exposure_russia_controls_total_tweets[[1]],
+    # candidate_distance_follow_troll_russia[[1]],
+    candidate_distance_follow_troll_russia_controls[[1]],
+    candidate_distance_follow_troll_russia_controls_black[[1]],
+    candidate_distance_follow_troll_russia_controls_total_tweets[[1]],
+    # order = c(1, 15, 16, 2:14, 17),
+    font.size = "footnotesize",
+    title = "\\label{tab:tab19}Regression models of the relationship between following a Russian Internet Research Agency (IRA) account and political ideology",
+    column.sep.width = "0pt",
+    covariate.labels = issue_covariate_labels,
+    dep.var.labels = "\\textbf{Issue-based scale (political ideology)}",
+    header = FALSE,
+    style = "apsr", keep.stat = c("n"),
+    model.names = FALSE,
+    table.placement = "hp",
+    star.cutoffs = c(0.05, 0.01, 0.001)
+  )
+)
+
+candidate_stargazer_1 <- highlight_rows(
+  stargazer_tab = candidate_stargazer_1,
+  regex = "(log\\(Exposure \\$\\+\\$ 1\\)|1\\(Exposure \\$>\\$ 0\\)|1\\(Follow \\$>\\$ 0 IRA account\\))",
+  n_rows = 1
+)
+
+cat(candidate_stargazer_1)
+```
+
+```{r, results='asis'}
+candidate_stargazer_2 <- capture.output(
+  stargazer(
+    # candidate_distance_log_exposure_russia[[2]],
+    candidate_distance_log_exposure_russia_controls[[2]],
+    candidate_distance_log_exposure_russia_controls_black[[2]],
+    candidate_distance_log_exposure_russia_controls_total_tweets[[2]],
+    # candidate_distance_binary_exposure_russia[[2]],
+    candidate_distance_binary_exposure_russia_controls[[2]],
+    candidate_distance_binary_exposure_russia_controls_black[[2]],
+    candidate_distance_binary_exposure_russia_controls_total_tweets[[2]],
+    # candidate_distance_follow_troll_russia[[2]],
+    candidate_distance_follow_troll_russia_controls[[2]],
+    candidate_distance_follow_troll_russia_controls_black[[2]],
+    candidate_distance_follow_troll_russia_controls_total_tweets[[2]],
+    # order = c(1, 15, 16, 2:14, 17),
+    font.size = "footnotesize",
+    title = "\\label{tab:tab20}Regression models of the relationship between following a Russian Internet Research Agency (IRA) account and support for immigration",
+    column.sep.width = "0pt",
+    covariate.labels = issue_covariate_labels,
+    dep.var.labels = "\\textbf{Immigration}",
+    header = FALSE,
+    style = "apsr", keep.stat = c("n"),
+    model.names = FALSE,
+    table.placement = "hp",
+    star.cutoffs = c(0.05, 0.01, 0.001)
+  )
+)
+
+candidate_stargazer_2 <- highlight_rows(
+  stargazer_tab = candidate_stargazer_2,
+  regex = "(log\\(Exposure \\$\\+\\$ 1\\)|1\\(Exposure \\$>\\$ 0\\)|1\\(Follow \\$>\\$ 0 IRA account\\))",
+  n_rows = 1
+)
+
+cat(candidate_stargazer_2)
+```
+
+```{r, results='asis'}
+candidate_stargazer_3 <- capture.output(
+  stargazer(
+    # candidate_distance_log_exposure_russia[[3]],
+    candidate_distance_log_exposure_russia_controls[[3]],
+    candidate_distance_log_exposure_russia_controls_black[[3]],
+    candidate_distance_log_exposure_russia_controls_total_tweets[[3]],
+    # candidate_distance_binary_exposure_russia[[3]],
+    candidate_distance_binary_exposure_russia_controls[[3]],
+    candidate_distance_binary_exposure_russia_controls_black[[3]],
+    candidate_distance_binary_exposure_russia_controls_total_tweets[[3]],
+    # candidate_distance_follow_troll_russia[[3]],
+    candidate_distance_follow_troll_russia_controls[[3]],
+    candidate_distance_follow_troll_russia_controls_black[[3]],
+    candidate_distance_follow_troll_russia_controls_total_tweets[[3]],
+    # order = c(1, 15, 16, 2:14, 17),
+    font.size = "footnotesize",
+    title = "\\label{tab:tab21}Regression models of the relationship between following a Russian Internet Research Agency (IRA) account and support for banning Muslim immigrants",
+    column.sep.width = "0pt",
+    covariate.labels = issue_covariate_labels,
+    dep.var.labels = "\\textbf{Muslim ban}",
+    header = FALSE,
+    style = "apsr", keep.stat = c("n"),
+    model.names = FALSE,
+    table.placement = "hp",
+    star.cutoffs = c(0.05, 0.01, 0.001)
+  )
+)
+
+candidate_stargazer_3 <- highlight_rows(
+  stargazer_tab = candidate_stargazer_3,
+  regex = "(log\\(Exposure \\$\\+\\$ 1\\)|1\\(Exposure \\$>\\$ 0\\)|1\\(Follow \\$>\\$ 0 IRA account\\))",
+  n_rows = 1
+)
+
+cat(candidate_stargazer_3)
+```
+
+```{r, results='asis'}
+candidate_stargazer_4 <- capture.output(
+  stargazer(
+    # candidate_distance_log_exposure_russia[[4]],
+    candidate_distance_log_exposure_russia_controls[[4]],
+    candidate_distance_log_exposure_russia_controls_black[[4]],
+    candidate_distance_log_exposure_russia_controls_total_tweets[[4]],
+    # candidate_distance_binary_exposure_russia[[4]],
+    candidate_distance_binary_exposure_russia_controls[[4]],
+    candidate_distance_binary_exposure_russia_controls_black[[4]],
+    candidate_distance_binary_exposure_russia_controls_total_tweets[[4]],
+    # candidate_distance_follow_troll_russia[[4]],
+    candidate_distance_follow_troll_russia_controls[[4]],
+    candidate_distance_follow_troll_russia_controls_black[[4]],
+    candidate_distance_follow_troll_russia_controls_total_tweets[[4]],
+    # order = c(1, 15, 16, 2:14, 17),
+    font.size = "footnotesize",
+    title = "\\label{tab:tab22}Regression models of the relationship between following a Russian Internet Research Agency (IRA) account and support for building a wall on the border with Mexico",
+    column.sep.width = "0pt",
+    covariate.labels = issue_covariate_labels,
+    dep.var.labels = "\\textbf{Building a wall}",
+    header = FALSE,
+    style = "apsr", keep.stat = c("n"),
+    model.names = FALSE,
+    table.placement = "hp",
+    star.cutoffs = c(0.05, 0.01, 0.001)
+  )
+)
+
+candidate_stargazer_4 <- highlight_rows(
+  stargazer_tab = candidate_stargazer_4,
+  regex = "(log\\(Exposure \\$\\+\\$ 1\\)|1\\(Exposure \\$>\\$ 0\\)|1\\(Follow \\$>\\$ 0 IRA account\\))",
+  n_rows = 1
+)
+
+cat(candidate_stargazer_4)
+```
+
+```{r, results='asis'}
+candidate_stargazer_5 <- capture.output(
+  stargazer(
+    # candidate_distance_log_exposure_russia[[5]],
+    candidate_distance_log_exposure_russia_controls[[5]],
+    candidate_distance_log_exposure_russia_controls_black[[5]],
+    candidate_distance_log_exposure_russia_controls_total_tweets[[5]],
+    # candidate_distance_binary_exposure_russia[[5]],
+    candidate_distance_binary_exposure_russia_controls[[5]],
+    candidate_distance_binary_exposure_russia_controls_black[[5]],
+    candidate_distance_binary_exposure_russia_controls_total_tweets[[5]],
+    # candidate_distance_follow_troll_russia[[5]],
+    candidate_distance_follow_troll_russia_controls[[5]],
+    candidate_distance_follow_troll_russia_controls_black[[5]],
+    candidate_distance_follow_troll_russia_controls_total_tweets[[5]],
+    # order = c(1, 15, 16, 2:14, 17),
+    font.size = "footnotesize",
+    title = "\\label{tab:tab23}Regression models of the relationship between following a Russian Internet Research Agency (IRA) account and support for Obamacare",
+    column.sep.width = "0pt",
+    covariate.labels = issue_covariate_labels,
+    dep.var.labels = "\\textbf{Obamacare}",
+    header = FALSE,
+    style = "apsr", keep.stat = c("n"),
+    model.names = FALSE,
+    table.placement = "hp",
+    star.cutoffs = c(0.05, 0.01, 0.001)
+  )
+)
+
+candidate_stargazer_5 <- highlight_rows(
+  stargazer_tab = candidate_stargazer_5,
+  regex = "(log\\(Exposure \\$\\+\\$ 1\\)|1\\(Exposure \\$>\\$ 0\\)|1\\(Follow \\$>\\$ 0 IRA account\\))",
+  n_rows = 1
+)
+
+cat(candidate_stargazer_5)
+```
+
+```{r, results='asis'}
+candidate_stargazer_6 <- capture.output(
+  stargazer(
+    # candidate_distance_log_exposure_russia[[6]],
+    candidate_distance_log_exposure_russia_controls[[6]],
+    candidate_distance_log_exposure_russia_controls_black[[6]],
+    candidate_distance_log_exposure_russia_controls_total_tweets[[6]],
+    # candidate_distance_binary_exposure_russia[[6]],
+    candidate_distance_binary_exposure_russia_controls[[6]],
+    candidate_distance_binary_exposure_russia_controls_black[[6]],
+    candidate_distance_binary_exposure_russia_controls_total_tweets[[6]],
+    # candidate_distance_follow_troll_russia[[6]],
+    candidate_distance_follow_troll_russia_controls[[6]],
+    candidate_distance_follow_troll_russia_controls_black[[6]],
+    candidate_distance_follow_troll_russia_controls_total_tweets[[6]],
+    # order = c(1, 15, 16, 2:14, 17),
+    font.size = "footnotesize",
+    title = "\\label{tab:tab24}Regression models of the relationship between following a Russian Internet Research Agency (IRA) account and support for expanding the Affordable Care Act",
+    column.sep.width = "0pt",
+    covariate.labels = issue_covariate_labels,
+    dep.var.labels = "\\textbf{Expanding the ACA}",
+    header = FALSE,
+    style = "apsr", keep.stat = c("n"),
+    model.names = FALSE,
+    table.placement = "hp",
+    star.cutoffs = c(0.05, 0.01, 0.001)
+  )
+)
+
+candidate_stargazer_6 <- highlight_rows(
+  stargazer_tab = candidate_stargazer_6,
+  regex = "(log\\(Exposure \\$\\+\\$ 1\\)|1\\(Exposure \\$>\\$ 0\\)|1\\(Follow \\$>\\$ 0 IRA account\\))",
+  n_rows = 1
+)
+
+cat(candidate_stargazer_6)
+```
+
+```{r, results='asis'}
+candidate_stargazer_7 <- capture.output(
+  stargazer(
+    # candidate_distance_log_exposure_russia[[7]],
+    candidate_distance_log_exposure_russia_controls[[7]],
+    candidate_distance_log_exposure_russia_controls_black[[7]],
+    candidate_distance_log_exposure_russia_controls_total_tweets[[7]],
+    # candidate_distance_binary_exposure_russia[[7]],
+    candidate_distance_binary_exposure_russia_controls[[7]],
+    candidate_distance_binary_exposure_russia_controls_black[[7]],
+    candidate_distance_binary_exposure_russia_controls_total_tweets[[7]],
+    # candidate_distance_follow_troll_russia[[7]],
+    candidate_distance_follow_troll_russia_controls[[7]],
+    candidate_distance_follow_troll_russia_controls_black[[7]],
+    candidate_distance_follow_troll_russia_controls_total_tweets[[7]],
+    # order = c(1, 15, 16, 2:14, 17),
+    font.size = "footnotesize",
+    title = "\\label{tab:tab25}Regression models of the relationship between following a Russian Internet Research Agency (IRA) account and support for free trade",
+    column.sep.width = "0pt",
+    covariate.labels = issue_covariate_labels,
+    dep.var.labels = "\\textbf{Free trade}",
+    header = FALSE,
+    style = "apsr", keep.stat = c("n"),
+    model.names = FALSE,
+    table.placement = "hp",
+    star.cutoffs = c(0.05, 0.01, 0.001)
+  )
+)
+
+candidate_stargazer_7 <- highlight_rows(
+  stargazer_tab = candidate_stargazer_7,
+  regex = "(log\\(Exposure \\$\\+\\$ 1\\)|1\\(Exposure \\$>\\$ 0\\)|1\\(Follow \\$>\\$ 0 IRA account\\))",
+  n_rows = 1
+)
+
+cat(candidate_stargazer_7)
+```
+
+```{r, results='asis'}
+candidate_stargazer_8 <- capture.output(
+  stargazer(
+    # candidate_distance_log_exposure_russia[[8]],
+    candidate_distance_log_exposure_russia_controls[[8]],
+    candidate_distance_log_exposure_russia_controls_black[[8]],
+    candidate_distance_log_exposure_russia_controls_total_tweets[[8]],
+    # candidate_distance_binary_exposure_russia[[8]],
+    candidate_distance_binary_exposure_russia_controls[[8]],
+    candidate_distance_binary_exposure_russia_controls_black[[8]],
+    candidate_distance_binary_exposure_russia_controls_total_tweets[[8]],
+    # candidate_distance_follow_troll_russia[[8]],
+    candidate_distance_follow_troll_russia_controls[[8]],
+    candidate_distance_follow_troll_russia_controls_black[[8]],
+    candidate_distance_follow_troll_russia_controls_total_tweets[[8]],
+    # order = c(1, 15, 16, 2:14, 17),
+    font.size = "footnotesize",
+    title = "\\label{tab:tab26}Regression models of the relationship between following a Russian Internet Research Agency (IRA) account and opposition to tariffs with China",
+    column.sep.width = "0pt",
+    covariate.labels = issue_covariate_labels,
+    dep.var.labels = "\\textbf{Tariffs}",
+    header = FALSE,
+    style = "apsr", keep.stat = c("n"),
+    model.names = FALSE,
+    table.placement = "hp",
+    star.cutoffs = c(0.05, 0.01, 0.001)
+  )
+)
+
+candidate_stargazer_8 <- highlight_rows(
+  stargazer_tab = candidate_stargazer_8,
+  regex = "(log\\(Exposure \\$\\+\\$ 1\\)|1\\(Exposure \\$>\\$ 0\\)|1\\(Follow \\$>\\$ 0 IRA account\\))",
+  n_rows = 1
+)
+
+cat(candidate_stargazer_8)
+```
+
+```{r, results='asis'}
+candidate_stargazer_9 <- capture.output(
+  stargazer(
+    # candidate_distance_log_exposure_russia[[9]],
+    candidate_distance_log_exposure_russia_controls[[9]],
+    candidate_distance_log_exposure_russia_controls_black[[9]],
+    candidate_distance_log_exposure_russia_controls_total_tweets[[9]],
+    # candidate_distance_binary_exposure_russia[[9]],
+    candidate_distance_binary_exposure_russia_controls[[9]],
+    candidate_distance_binary_exposure_russia_controls_black[[9]],
+    candidate_distance_binary_exposure_russia_controls_total_tweets[[9]],
+    # candidate_distance_follow_troll_russia[[9]],
+    candidate_distance_follow_troll_russia_controls[[9]],
+    candidate_distance_follow_troll_russia_controls_black[[9]],
+    candidate_distance_follow_troll_russia_controls_total_tweets[[9]],
+    # order = c(1, 15, 16, 2:14, 17),
+    font.size = "footnotesize",
+    title = "\\label{tab:tab27}Regression models of the relationship between following a Russian Internet Research Agency (IRA) account and support for the use of military force",
+    column.sep.width = "0pt",
+    covariate.labels = issue_covariate_labels,
+    dep.var.labels = "\\textbf{Miltary force}",
+    header = FALSE,
+    style = "apsr", keep.stat = c("n"),
+    model.names = FALSE,
+    table.placement = "hp",
+    star.cutoffs = c(0.05, 0.01, 0.001)
+  )
+)
+
+candidate_stargazer_9 <- highlight_rows(
+  stargazer_tab = candidate_stargazer_9,
+  regex = "(log\\(Exposure \\$\\+\\$ 1\\)|1\\(Exposure \\$>\\$ 0\\)|1\\(Follow \\$>\\$ 0 IRA account\\))",
+  n_rows = 1
+)
+
+cat(candidate_stargazer_9)
+```
+\end{landscape}
+
+\clearpage
+## Alternative coding of race
+
+For ease of comparison in \autoref{fig:Figure-F10} we present a subset of the models from \@ref(tab:tab10)-\@ref(tab:tab18) and \@ref(tab:tab19)-\@ref(tab:tab27) above, which is analogous to Figure 4 of the main text, but has an alternative coding of control variable race. Here, rather than treating all respondents of color similarly, we break them further down into Black and Hispanic/Other groups. Consistent with the results in the main manuscript, we find no evidence of a relationship between exposure to Internet Research Agency accounts and changes in issue-based or ideological positioning.
+
+```{r}
+dv_labels <- c("Political ideology\n(left-right scale)",
+               "Immigration",
+               "Ban on Muslims",
+               "Building a wall",
+               "Support for Obamacare",
+               "Expanding the ACA",
+               "Support for free trade",
+               "Oppose Chinese tariffs",
+               "Use of military force")
+
+G4A_log_exposure_black <- lapply(issue_distance_log_exposure_russia_controls_black, get_coefs,
+                          iv = "log(Exposure + 1)", dv = "Label me")
+for(i in 1:length(G4A_log_exposure_black)) G4A_log_exposure_black[[i]]$dv <- dv_labels[i]
+
+G4A_binary_exposure_black <- lapply(issue_distance_binary_exposure_russia_controls_black, get_coefs,
+                          iv = "Exposure (binary)", dv = "Label me")
+for(i in 1:length(G4A_binary_exposure_black)) G4A_binary_exposure_black[[i]]$dv <- dv_labels[i]
+
+G4A_black <- rbind(do.call(rbind, G4A_log_exposure_black),
+                   do.call(rbind, G4A_binary_exposure_black))
+
+G4A_black$outcome <- "Issues"
+
+G4B_log_exposure_black <- lapply(candidate_distance_log_exposure_russia_controls_black, get_coefs,
+                          iv = "log(Exposure + 1)", dv = "Label me")
+for(i in 1:length(G4B_log_exposure_black)) G4B_log_exposure_black[[i]]$dv <- dv_labels[i]
+
+G4B_binary_exposure_black <- lapply(candidate_distance_binary_exposure_russia_controls_black, get_coefs,
+                          iv = "Exposure (binary)", dv = "Label me")
+for(i in 1:length(G4B_binary_exposure_black)) G4B_binary_exposure_black[[i]]$dv <- dv_labels[i]
+
+G4B_black <- rbind(do.call(rbind, G4B_log_exposure_black),
+                   do.call(rbind, G4B_binary_exposure_black))
+
+G4B_black$outcome <- "Polarization"
+
+G4_black <- rbind(G4A_black, G4B_black)
+
+G4_black$iv <- factor(G4_black$iv, levels = c("log(Exposure + 1)",
+                                              "Exposure (binary)"))
+
+G4_black$dv <- factor(G4_black$dv, levels = c("Immigration",
+                                              "Building a wall",
+                                              "Support for Obamacare",
+                                              "Expanding the ACA",
+                                              "Ban on Muslims",
+                                              "Support for free trade",
+                                              "Oppose Chinese tariffs",
+                                              "Use of military force",
+                                              "Political ideology\n(left-right scale)"))
+
+G4_black$model_number <- as.numeric(G4_black$dv)
+G4_black$model_number[G4_black$model_number == max(G4_black$model_number)] <- max(G4_black$model_number) + 0.25
+
+blank_data <- data.frame(iv = rep(levels(G4_black$iv), each = 2),
+                         model_number = 1,
+                         coef = c(-4, 4, -27, 27))
+blank_data$iv <- factor(blank_data$iv, levels = c("log(Exposure + 1)",
+                                                  "Exposure (binary)"))
+
+count <- 0
+breaks_fun <- function(x) {
+  count <<- count + 1L
+  switch(
+    count,
+    seq(-3, 3, by = 1), seq(-3, 3, by = 1),
+    seq(-30, 30, by = 10), seq(-30, 30, by = 10),
+    seq(-30, 30, by = 10), seq(-30, 30, by = 10),
+    seq(-10, 10, by = 5), seq(-10, 10, by = 5)
+  )
+}
+
+wb <- readRDS("../figures_source/Source Data.rds")
+openxlsx::addWorksheet(wb, sheetName = "figure_f10a", gridLines = FALSE)
+openxlsx::writeDataTable(
+  wb, sheet = "figure_f10a",
+  x = subset(G4_black, outcome == "Issues" & treatment == "Treatment" &
+               iv %in% c("log(Exposure + 1)", "Exposure (binary)"))
+)
+openxlsx::addWorksheet(wb, sheetName = "figure_f10b", gridLines = FALSE)
+openxlsx::writeDataTable(
+  wb, sheet = "figure_f10b",
+  x = subset(G4_black, treatment == "Polarization" &
+               iv %in% c("log(Exposure + 1)", "Exposure (binary)"))
+)
+saveRDS(wb, "../figures_source/Source Data.rds")
+openxlsx::saveWorkbook(wb, "../figures_source/Source Data.xlsx", overwrite = TRUE)
+```
+
+```{r}
+count <- 0
+FigureF10A <- ggplot(subset(G4_black, outcome == "Issues" & treatment == "Treatment" &
+                              iv %in% c("log(Exposure + 1)", "Exposure (binary)")),
+                    aes(x = coef, y = model_number)) +
+  my.theme(base_size = 8,
+           borderless = 2, remove.ticks.y = TRUE, remove.ticks.x = FALSE,
+           grid.x_colour = "grey85", grid.y_colour = "grey35",
+           grid.y_linetype = 3) +
+  labs(x = "Coefficient", y = "Outcome variable", color = "", fill = "") +
+  geom_blank(data = subset(blank_data, iv %in% c("log(Exposure + 1)", "Exposure (binary)"))) +
+  coord_cartesian(ylim = c(0.35, max(G4_black$model_number[G4_black$iv %in% c("log(Exposure + 1)", "Exposure (binary)")], na.rm = TRUE) + 0.65), expand = FALSE) +
+  facet_wrap(~ iv, ncol = 3, scale = "free_x") +
+  scale_x_continuous(breaks = breaks_fun) +
+  scale_y_continuous(breaks = sort(unique(G4_black$model_number[G4_black$iv %in% c("log(Exposure + 1)", "Exposure (binary)")])),
+                     labels = levels(G4_black$dv[G4_black$iv %in% c("log(Exposure + 1)", "Exposure (binary)")])) +
+  geom_vline(xintercept = 0, size = 0.25) +
+  geom_hline(yintercept = max(G4_black$model_number[G4_black$iv %in% c("log(Exposure + 1)", "Exposure (binary)")], na.rm = TRUE) - 0.65, size = 0.25, linetype = 1) +
+  geom_hline(yintercept = c(0.35, max(G4_black$model_number[G4_black$iv %in% c("log(Exposure + 1)", "Exposure (binary)")], na.rm = TRUE) + 0.65), size = 1.5) +
+  geom_segment(aes(yend = model_number, x = lower95, xend = upper95),
+               size = 3, color = "grey80") +
+  geom_point(data = subset(G4_black, outcome == "Issues" & treatment == "Treatment" &
+                               dv != "Political ideology\n(left-right scale)" &
+                               iv %in% c("log(Exposure + 1)", "Exposure (binary)")),
+             size = 2.25, color = "#0D0887", show.legend = FALSE) +
+  geom_point(data = subset(G4_black, outcome == "Issues" & treatment == "Treatment" &
+                               dv == "Political ideology\n(left-right scale)" &
+                               iv %in% c("log(Exposure + 1)", "Exposure (binary)")),
+             size = 3, shape = 21, fill = "white", stroke = 0.5,
+             color = "#0D0887", show.legend = FALSE) +
+  theme(plot.margin = unit(c(0, 1, 1, 0), "mm"),
+        legend.position = "none",
+        panel.margin = unit(0.75, "lines"),
+        plot.title.position = "plot",
+        plot.title = element_text(family = "", size = 10, vjust = 0.5, hjust = 0, face = "bold"),
+        axis.text.y = element_text(family = "", colour = "black", face = "bold", size = 8, hjust = 1, lineheight = 0.9),
+        axis.title.y = element_text(family = "", colour = "black", face = "bold", size = 10))
+
+# Polarization graph
+count <- 0
+FigureF10B <- ggplot(subset(G4_black, outcome == "Polarization" & treatment == "Treatment" &
+                              iv %in% c("log(Exposure + 1)", "Exposure (binary)")),
+                    aes(x = coef, y = model_number)) +
+  my.theme(base_size = 8,
+           borderless = 2, remove.ticks.y = TRUE, remove.ticks.x = FALSE,
+           grid.x_colour = "grey85", grid.y_colour = "grey35",
+           grid.y_linetype = 3) +
+  labs(x = "Coefficient", y = "Outcome variable", color = "", fill = "") +
+  geom_blank(data = subset(blank_data, iv %in% c("log(Exposure + 1)", "Exposure (binary)"))) +
+  coord_cartesian(ylim = c(0.35, max(G4_black$model_number[G4_black$iv %in% c("log(Exposure + 1)", "Exposure (binary)")], na.rm = TRUE) + 0.65), expand = FALSE) +
+  facet_wrap(~ iv, ncol = 3, scale = "free_x") +
+  scale_x_continuous(breaks = breaks_fun) +
+  scale_y_continuous(breaks = sort(unique(G4_black$model_number[G4_black$iv %in% c("log(Exposure + 1)", "Exposure (binary)")])),
+                     labels = levels(G4_black$dv[G4_black$iv %in% c("log(Exposure + 1)", "Exposure (binary)")])) +
+  geom_vline(xintercept = 0, size = 0.25) +
+  geom_hline(yintercept = max(G4_black$model_number[G4_black$iv %in% c("log(Exposure + 1)", "Exposure (binary)")], na.rm = TRUE) - 0.65, size = 0.25, linetype = 1) +
+  geom_hline(yintercept = c(0.35, max(G4_black$model_number[G4_black$iv %in% c("log(Exposure + 1)", "Exposure (binary)")], na.rm = TRUE) + 0.65), size = 1.5) +
+  geom_segment(aes(yend = model_number, x = lower95, xend = upper95),
+               size = 3, color = "grey80") +
+  geom_point(data = subset(G4_black, outcome == "Polarization" & treatment == "Treatment" &
+                               dv != "Political ideology\n(left-right scale)" &
+                               iv %in% c("log(Exposure + 1)", "Exposure (binary)")),
+             size = 2.25, color = "#0D0887", show.legend = FALSE) +
+  geom_point(data = subset(G4_black, outcome == "Polarization" & treatment == "Treatment" &
+                               dv == "Political ideology\n(left-right scale)" &
+                               iv %in% c("log(Exposure + 1)", "Exposure (binary)")),
+             size = 3, shape = 21, fill = "white", stroke = 0.5,
+             color = "#0D0887", show.legend = FALSE) +
+  theme(plot.margin = unit(c(0, 1, 1, 0), "mm"),
+        legend.position = "none",
+        panel.margin = unit(0.75, "lines"),
+        plot.title.position = "plot",
+        plot.title = element_text(family = "", size = 10, vjust = 0.5, hjust = 0, face = "bold"),
+        axis.text.y = element_text(family = "", colour = "black", face = "bold", size = 8, hjust = 1, lineheight = 0.9),
+        axis.title.y = element_text(family = "", colour = "black", face = "bold", size = 10))
+```
+
+```{r Figure-F10, fig.height=5, fig.cap="Regression results of exposure to Russian Internet Research Agency accounts and changes in issue-based and ideological positioning with alternative race break-down. Error bars represent 95\\% confidence intervals around point estimates of the regression coefficients. $n = 1,496$ survey respondents."}
+count <- 0
+FigureF10 <- ggdraw() +
+           draw_plot(FigureF10A, x = 0, y = 0.5, width = 1, height = 0.47)
+count <- 0
+FigureF10 <- FigureF10 +
+           draw_plot(FigureF10B, x = 0, y = 0, width = 1, height = 0.47) +
+           draw_plot_label(label = c("a", "b"),
+                           x = c(0.005, 0.005),
+                           y = c(0.97, 0.48),
+                           size = 12, hjust = 0, vjust = 0) +
+           draw_plot_label(label = c("Issue positions", "Polarization"),
+                           x = c(0.05, 0.05),
+                           y = c(0.97, 0.48),
+                           size = 12, hjust = 0, vjust = 0,
+                           fontface = "plain")
+FigureF10
+```
+
+
+\clearpage
+## Alternative measure of overall Twitter activity
+
+As another robustness check, rather than relying on self-reported measure of social media activity, that might make respondents less likely to be exposed to tweets from foreign influence campaigns, we control for the total number of tweets posted by their friends. In constructing this measure we rely on our own collected data to estimate the number of potential exposures to other tweets (non-Internet Research Agency) in respondents' timelines. These models are also presented in \@ref(tab:tab10)-\@ref(tab:tab18) and \@ref(tab:tab19)-\@ref(tab:tab27) above, but for ease of comparison to Figure 4 of the main manuscript in \autoref{fig:Figure-F11} we present a subset of them that use log(Total Tweets) as one of control variables. Consistent with the results in the main manuscript, we find no evidence of a relationship between exposure to Internet Research Agency accounts and changes in issue-based or ideological positioning.
+
+```{r}
+dv_labels <- c("Political ideology\n(left-right scale)",
+               "Immigration",
+               "Ban on Muslims",
+               "Building a wall",
+               "Support for Obamacare",
+               "Expanding the ACA",
+               "Support for free trade",
+               "Oppose Chinese tariffs",
+               "Use of military force")
+
+G4A_log_exposure_total_tweets <- lapply(issue_distance_log_exposure_russia_controls_total_tweets, get_coefs,
+                          iv = "log(Exposure + 1)", dv = "Label me")
+for(i in 1:length(G4A_log_exposure_total_tweets)) G4A_log_exposure_total_tweets[[i]]$dv <- dv_labels[i]
+
+G4A_binary_exposure_total_tweets <- lapply(issue_distance_binary_exposure_russia_controls_total_tweets, get_coefs,
+                          iv = "Exposure (binary)", dv = "Label me")
+for(i in 1:length(G4A_binary_exposure_total_tweets)) G4A_binary_exposure_total_tweets[[i]]$dv <- dv_labels[i]
+
+G4A_total_tweets <- rbind(do.call(rbind, G4A_log_exposure_total_tweets),
+                          do.call(rbind, G4A_binary_exposure_total_tweets))
+
+G4A_total_tweets$outcome <- "Issues"
+
+G4B_log_exposure_total_tweets <- lapply(candidate_distance_log_exposure_russia_controls_total_tweets, get_coefs,
+                          iv = "log(Exposure + 1)", dv = "Label me")
+for(i in 1:length(G4B_log_exposure_total_tweets)) G4B_log_exposure_total_tweets[[i]]$dv <- dv_labels[i]
+
+G4B_binary_exposure_total_tweets <- lapply(candidate_distance_binary_exposure_russia_controls_total_tweets, get_coefs,
+                          iv = "Exposure (binary)", dv = "Label me")
+for(i in 1:length(G4B_binary_exposure_total_tweets)) G4B_binary_exposure_total_tweets[[i]]$dv <- dv_labels[i]
+
+G4B_total_tweets <- rbind(do.call(rbind, G4B_log_exposure_total_tweets),
+                          do.call(rbind, G4B_binary_exposure_total_tweets))
+
+G4B_total_tweets$outcome <- "Polarization"
+
+G4_total_tweets <- rbind(G4A_total_tweets, G4B_total_tweets)
+
+G4_total_tweets$iv <- factor(G4_total_tweets$iv, levels = c("log(Exposure + 1)",
+                                                            "Exposure (binary)"))
+
+G4_total_tweets$dv <- factor(G4_total_tweets$dv, levels = c("Immigration",
+                                                            "Building a wall",
+                                                            "Support for Obamacare",
+                                                            "Expanding the ACA",
+                                                            "Ban on Muslims",
+                                                            "Support for free trade",
+                                                            "Oppose Chinese tariffs",
+                                                            "Use of military force",
+                                                            "Political ideology\n(left-right scale)"))
+
+G4_total_tweets$model_number <- as.numeric(G4_total_tweets$dv)
+G4_total_tweets$model_number[G4_total_tweets$model_number == max(G4_total_tweets$model_number)] <- max(G4_total_tweets$model_number) + 0.25
+
+blank_data <- data.frame(iv = rep(levels(G4_total_tweets$iv), each = 2),
+                         model_number = 1,
+                         coef = c(-4, 4, -27, 27))
+blank_data$iv <- factor(blank_data$iv, levels = c("log(Exposure + 1)",
+                                                  "Exposure (binary)"))
+
+count <- 0
+breaks_fun <- function(x) {
+  count <<- count + 1L
+  switch(
+    count,
+    seq(-3, 3, by = 1), seq(-3, 3, by = 1),
+    seq(-30, 30, by = 10), seq(-30, 30, by = 10),
+    seq(-30, 30, by = 10), seq(-30, 30, by = 10),
+    seq(-10, 10, by = 5), seq(-10, 10, by = 5)
+  )
+}
+
+wb <- readRDS("../figures_source/Source Data.rds")
+openxlsx::addWorksheet(wb, sheetName = "figure_f11a", gridLines = FALSE)
+openxlsx::writeDataTable(
+  wb, sheet = "figure_f11a",
+  x = subset(G4_total_tweets, outcome == "Issues" & treatment == "Treatment" &
+               iv %in% c("log(Exposure + 1)", "Exposure (binary)"))
+)
+openxlsx::addWorksheet(wb, sheetName = "figure_f11b", gridLines = FALSE)
+openxlsx::writeDataTable(
+  wb, sheet = "figure_f11b",
+  x = subset(G4_total_tweets, treatment == "Polarization" &
+               iv %in% c("log(Exposure + 1)", "Exposure (binary)"))
+)
+saveRDS(wb, "../figures_source/Source Data.rds")
+openxlsx::saveWorkbook(wb, "../figures_source/Source Data.xlsx", overwrite = TRUE)
+```
+
+```{r}
+count <- 0
+FigureF11A <- ggplot(subset(G4_total_tweets, outcome == "Issues" & treatment == "Treatment" &
+                              iv %in% c("log(Exposure + 1)", "Exposure (binary)")),
+                    aes(x = coef, y = model_number)) +
+  my.theme(base_size = 8,
+           borderless = 2, remove.ticks.y = TRUE, remove.ticks.x = FALSE,
+           grid.x_colour = "grey85", grid.y_colour = "grey35",
+           grid.y_linetype = 3) +
+  labs(x = "Coefficient", y = "Outcome variable", color = "", fill = "") +
+  geom_blank(data = subset(blank_data, iv %in% c("log(Exposure + 1)", "Exposure (binary)"))) +
+  coord_cartesian(ylim = c(0.35, max(G4_total_tweets$model_number[G4_total_tweets$iv %in% c("log(Exposure + 1)", "Exposure (binary)")], na.rm = TRUE) + 0.65), expand = FALSE) +
+  facet_wrap(~ iv, ncol = 3, scale = "free_x") +
+  scale_x_continuous(breaks = breaks_fun) +
+  scale_y_continuous(breaks = sort(unique(G4_total_tweets$model_number[G4_total_tweets$iv %in% c("log(Exposure + 1)", "Exposure (binary)")])),
+                     labels = levels(G4_total_tweets$dv[G4_total_tweets$iv %in% c("log(Exposure + 1)", "Exposure (binary)")])) +
+  geom_vline(xintercept = 0, size = 0.25) +
+  geom_hline(yintercept = max(G4_total_tweets$model_number[G4_total_tweets$iv %in% c("log(Exposure + 1)", "Exposure (binary)")], na.rm = TRUE) - 0.65, size = 0.25, linetype = 1) +
+  geom_hline(yintercept = c(0.35, max(G4_total_tweets$model_number[G4_total_tweets$iv %in% c("log(Exposure + 1)", "Exposure (binary)")], na.rm = TRUE) + 0.65), size = 1.5) +
+  geom_segment(aes(yend = model_number, x = lower95, xend = upper95),
+               size = 3, color = "grey80") +
+  geom_point(data = subset(G4_total_tweets, outcome == "Issues" & treatment == "Treatment" &
+                               dv != "Political ideology\n(left-right scale)" &
+                               iv %in% c("log(Exposure + 1)", "Exposure (binary)")),
+             size = 2.25, color = "#0D0887", show.legend = FALSE) +
+  geom_point(data = subset(G4_total_tweets, outcome == "Issues" & treatment == "Treatment" &
+                               dv == "Political ideology\n(left-right scale)" &
+                               iv %in% c("log(Exposure + 1)", "Exposure (binary)")),
+             size = 3, shape = 21, fill = "white", stroke = 0.5,
+             color = "#0D0887", show.legend = FALSE) +
+  theme(plot.margin = unit(c(0, 1, 1, 0), "mm"),
+        legend.position = "none",
+        panel.margin = unit(0.75, "lines"),
+        plot.title.position = "plot",
+        plot.title = element_text(family = "", size = 10, vjust = 0.5, hjust = 0, face = "bold"),
+        axis.text.y = element_text(family = "", colour = "black", face = "bold", size = 8, hjust = 1, lineheight = 0.9),
+        axis.title.y = element_text(family = "", colour = "black", face = "bold", size = 10))
+
+# Polarization graph
+count <- 0
+FigureF11B <- ggplot(subset(G4_total_tweets, outcome == "Polarization" & treatment == "Treatment" &
+                              iv %in% c("log(Exposure + 1)", "Exposure (binary)")),
+                    aes(x = coef, y = model_number)) +
+  my.theme(base_size = 8,
+           borderless = 2, remove.ticks.y = TRUE, remove.ticks.x = FALSE,
+           grid.x_colour = "grey85", grid.y_colour = "grey35",
+           grid.y_linetype = 3) +
+  labs(x = "Coefficient", y = "Outcome variable", color = "", fill = "") +
+  geom_blank(data = subset(blank_data, iv %in% c("log(Exposure + 1)", "Exposure (binary)"))) +
+  coord_cartesian(ylim = c(0.35, max(G4_total_tweets$model_number[G4_total_tweets$iv %in% c("log(Exposure + 1)", "Exposure (binary)")], na.rm = TRUE) + 0.65), expand = FALSE) +
+  facet_wrap(~ iv, ncol = 3, scale = "free_x") +
+  scale_x_continuous(breaks = breaks_fun) +
+  scale_y_continuous(breaks = sort(unique(G4_total_tweets$model_number[G4_total_tweets$iv %in% c("log(Exposure + 1)", "Exposure (binary)")])),
+                     labels = levels(G4_total_tweets$dv[G4_total_tweets$iv %in% c("log(Exposure + 1)", "Exposure (binary)")])) +
+  geom_vline(xintercept = 0, size = 0.25) +
+  geom_hline(yintercept = max(G4_total_tweets$model_number[G4_total_tweets$iv %in% c("log(Exposure + 1)", "Exposure (binary)")], na.rm = TRUE) - 0.65, size = 0.25, linetype = 1) +
+  geom_hline(yintercept = c(0.35, max(G4_total_tweets$model_number[G4_total_tweets$iv %in% c("log(Exposure + 1)", "Exposure (binary)")], na.rm = TRUE) + 0.65), size = 1.5) +
+  geom_segment(aes(yend = model_number, x = lower95, xend = upper95),
+               size = 3, color = "grey80") +
+  geom_point(data = subset(G4_total_tweets, outcome == "Polarization" & treatment == "Treatment" &
+                               dv != "Political ideology\n(left-right scale)" &
+                               iv %in% c("log(Exposure + 1)", "Exposure (binary)")),
+             size = 2.25, color = "#0D0887", show.legend = FALSE) +
+  geom_point(data = subset(G4_total_tweets, outcome == "Polarization" & treatment == "Treatment" &
+                               dv == "Political ideology\n(left-right scale)" &
+                               iv %in% c("log(Exposure + 1)", "Exposure (binary)")),
+             size = 3, shape = 21, fill = "white", stroke = 0.5,
+             color = "#0D0887", show.legend = FALSE) +
+  theme(plot.margin = unit(c(0, 1, 1, 0), "mm"),
+        legend.position = "none",
+        panel.margin = unit(0.75, "lines"),
+        plot.title.position = "plot",
+        plot.title = element_text(family = "", size = 10, vjust = 0.5, hjust = 0, face = "bold"),
+        axis.text.y = element_text(family = "", colour = "black", face = "bold", size = 8, hjust = 1, lineheight = 0.9),
+        axis.title.y = element_text(family = "", colour = "black", face = "bold", size = 10))
+```
+
+```{r Figure-F11, fig.height=5, fig.cap="Regression results of exposure to Russian Internet Research Agency accounts and changes in issue-based and ideological positioning with alternative measure of overall potential exposures on Twitter. Error bars represent 95\\% confidence intervals around point estimates of the regression coefficients. $n = 1,496$ survey respondents."}
+count <- 0
+FigureF11 <- ggdraw() +
+           draw_plot(FigureF11A, x = 0, y = 0.5, width = 1, height = 0.47)
+count <- 0
+FigureF11 <- FigureF11 +
+           draw_plot(FigureF11B, x = 0, y = 0, width = 1, height = 0.47) +
+           draw_plot_label(label = c("a", "b"),
+                           x = c(0.005, 0.005),
+                           y = c(0.97, 0.48),
+                           size = 12, hjust = 0, vjust = 0) +
+           draw_plot_label(label = c("Issue positions", "Polarization"),
+                           x = c(0.05, 0.05),
+                           y = c(0.97, 0.48),
+                           size = 12, hjust = 0, vjust = 0,
+                           fontface = "plain")
+FigureF11
+```
+
+
+\clearpage
+# Adjustment for multiple hypothesis testing
+
+\autoref{fig:Figure-G12} presents the results of the OLS models showing the relationship between exposure on issue positions and polarization with Bonferroni corrections applied to address multiple comparisons. \autoref{fig:Figure-G13} shows corresponding results of the OLS models from Figure 5 of the main manuscript after adjusting for multiple comparisons with Bonferroni correction.
+
+```{r}
+# Must match up with names(issue_distance_log_exposure_russia_controls) and
+# names(candidate_distance_log_exposure_russia_controls)
+dv_labels <- c("Political ideology\n(left-right scale)",
+               "Immigration",
+               "Ban on Muslims",
+               "Building a wall",
+               "Support for Obamacare",
+               "Expanding the ACA",
+               "Support for free trade",
+               "Oppose Chinese tariffs",
+               "Use of military force")
+# ISSUE POSITIONS
+G4A_log_exposure <- lapply(issue_distance_log_exposure_russia_controls, get_coefs,
+                          iv = "log(Exposure + 1)", dv = "Label me", multiple_comparisons = 9 * 2)
+for(i in 1:length(G4A_log_exposure)) G4A_log_exposure[[i]]$dv <- dv_labels[i]
+G4A_binary_exposure <- lapply(issue_distance_binary_exposure_russia_controls, get_coefs,
+                          iv = "Exposure (binary)", dv = "Label me", multiple_comparisons = 9 * 2)
+for(i in 1:length(G4A_binary_exposure)) G4A_binary_exposure[[i]]$dv <- dv_labels[i]
+G4A_follow_troll <- lapply(issue_distance_follow_troll_russia_controls, get_coefs,
+                          iv = "1(Follow > 0 IRA accounts)", dv = "Label me", multiple_comparisons = 9 * 2)
+for(i in 1:length(G4A_follow_troll)) G4A_follow_troll[[i]]$dv <- dv_labels[i]
+G4A <- rbind(do.call(rbind, G4A_log_exposure),
+             do.call(rbind, G4A_binary_exposure),
+             do.call(rbind, G4A_follow_troll))
+G4A$outcome <- "Issues"
+# POLARIZATION
+G4B_log_exposure <- lapply(candidate_distance_log_exposure_russia_controls, get_coefs,
+                          iv = "log(Exposure + 1)", dv = "Label me", multiple_comparisons = 9 * 2)
+for(i in 1:length(G4B_log_exposure)) G4B_log_exposure[[i]]$dv <- dv_labels[i]
+G4B_binary_exposure <- lapply(candidate_distance_binary_exposure_russia_controls, get_coefs,
+                          iv = "Exposure (binary)", dv = "Label me", multiple_comparisons = 9 * 2)
+for(i in 1:length(G4B_binary_exposure)) G4B_binary_exposure[[i]]$dv <- dv_labels[i]
+G4B_follow_troll <- lapply(candidate_distance_follow_troll_russia_controls, get_coefs,
+                          iv = "1(Follow > 0 IRA accounts)", dv = "Label me", multiple_comparisons = 9 * 2)
+for(i in 1:length(G4B_follow_troll)) G4B_follow_troll[[i]]$dv <- dv_labels[i]
+G4B <- rbind(do.call(rbind, G4B_log_exposure),
+             do.call(rbind, G4B_binary_exposure),
+             do.call(rbind, G4B_follow_troll))
+G4B$outcome <- "Polarization"
+# Reorder labels and prep for graphing
+G4 <- rbind(G4A, G4B)
+G4$iv <- factor(G4$iv, levels = c("log(Exposure + 1)",
+                                  "Exposure (binary)",
+                                  "1(Follow > 0 IRA accounts)"))
+G4$dv <- factor(G4$dv, levels = c("Immigration",
+                                  "Building a wall",
+                                  "Support for Obamacare",
+                                  "Expanding the ACA",
+                                  "Ban on Muslims",
+                                  "Support for free trade",
+                                  "Oppose Chinese tariffs",
+                                  "Use of military force",
+                                  "Political ideology\n(left-right scale)"))
+G4$model_number <- as.numeric(G4$dv)
+G4$model_number[G4$model_number == max(G4$model_number)] <- max(G4$model_number) + 0.25
+blank_data <- data.frame(iv = rep(levels(G4$iv), each = 2),
+                         model_number = 1,
+                         coef = c(-4, 4, -27, 27, -27, 27))
+blank_data$iv <- factor(blank_data$iv, levels = c("log(Exposure + 1)",
+                                                  "Exposure (binary)",
+                                                  "1(Follow > 0 IRA accounts)"))
+count <- 0
+breaks_fun <- function(x) {
+  count <<- count + 1L
+  switch(
+    count,
+    seq(-3, 3, by = 1), seq(-3, 3, by = 1),
+    seq(-30, 30, by = 10), seq(-30, 30, by = 10),
+    seq(-30, 30, by = 10), seq(-30, 30, by = 10)
+  )
+}
+
+wb <- readRDS("../figures_source/Source Data.rds")
+openxlsx::addWorksheet(wb, sheetName = "figure_g12a", gridLines = FALSE)
+openxlsx::writeDataTable(
+  wb, sheet = "figure_g12a",
+  x = subset(G4, outcome == "Issues" & treatment == "Treatment" &
+               iv %in% c("log(Exposure + 1)", "Exposure (binary)"))
+)
+openxlsx::addWorksheet(wb, sheetName = "figure_g12b", gridLines = FALSE)
+openxlsx::writeDataTable(
+  wb, sheet = "figure_g12b",
+  x = subset(G4, outcome == "Polarization" & treatment == "Treatment" &
+               iv %in% c("log(Exposure + 1)", "Exposure (binary)"))
+)
+saveRDS(wb, "../figures_source/Source Data.rds")
+openxlsx::saveWorkbook(wb, "../figures_source/Source Data.xlsx", overwrite = TRUE)
+```
+
+```{r}
+# Issue-placement graph
+count <- 0
+FigureG12A <- ggplot(subset(G4, outcome == "Issues" & treatment == "Treatment" &
+                              iv %in% c("log(Exposure + 1)", "Exposure (binary)")),
+                    aes(x = coef, y = model_number)) +
+  my.theme(base_size = 8,
+           borderless = 2, remove.ticks.y = TRUE, remove.ticks.x = FALSE,
+           grid.x_colour = "grey85", grid.y_colour = "grey35",
+           grid.y_linetype = 3) +
+  labs(x = "Coefficient", y = "", color = "", fill = "") +
+  geom_blank(data = subset(blank_data, iv %in% c("log(Exposure + 1)", "Exposure (binary)"))) +
+  # geom_rect(data = subset(G4, iv == "log(Exposure + 1)" & treatment == "Treatment" &
+  #                             iv %in% c("log(Exposure + 1)", "Exposure (binary)"))[1, ],
+  #           fill = "black", xmin = -Inf, xmax = Inf,
+  #           ymin = -Inf, ymax = Inf, alpha = 0.02) +
+  coord_cartesian(ylim = c(0.35, max(G4$model_number, na.rm = TRUE) + 0.65), expand = FALSE) +
+  facet_wrap(~ iv, ncol = 3, scale = "free_x") +
+  scale_x_continuous(breaks = breaks_fun) +
+  scale_y_continuous(breaks = sort(unique(G4$model_number)),
+                     labels = levels(G4$dv)) +
+  geom_vline(xintercept = 0, size = 0.25) +
+  geom_hline(yintercept = max(G4$model_number, na.rm = TRUE) - 0.65, size = 0.25, linetype = 1) +
+  geom_hline(yintercept = c(0.35, max(G4$model_number, na.rm = TRUE) + 0.65), size = 1.5) +
+  geom_segment(aes(yend = model_number, x = lower95, xend = upper95),
+               size = 3, color = "grey80") +
+  geom_point(data = subset(G4, outcome == "Issues" & treatment == "Treatment" &
+                               dv != "Political ideology\n(left-right scale)" &
+                               iv %in% c("log(Exposure + 1)", "Exposure (binary)")),
+             size = 2.25, color = "#0D0887", show.legend = FALSE) +
+  geom_point(data = subset(G4, outcome == "Issues" & treatment == "Treatment" &
+                               dv == "Political ideology\n(left-right scale)" &
+                               iv %in% c("log(Exposure + 1)", "Exposure (binary)")),
+             size = 3, shape = 21, fill = "white", stroke = 0.5,
+             color = "#0D0887", show.legend = FALSE) +
+  theme(plot.margin = unit(c(0, 1, 1, 0), "mm"),
+        legend.position = "none",
+        panel.margin = unit(0.75, "lines"),
+        plot.title.position = "plot",
+        plot.title = element_text(family = "", size = 10, vjust = 0.5, hjust = 0, face = "bold"),
+        axis.text.y = element_text(family = "", colour = "black", face = "bold", size = 8, hjust = 1, lineheight = 0.9))
+
+# Polarization graph
+count <- 0
+FigureG12B <- ggplot(subset(G4, outcome == "Polarization" & treatment == "Treatment" &
+                              iv %in% c("log(Exposure + 1)", "Exposure (binary)")),
+                    aes(x = coef, y = model_number)) +
+  my.theme(base_size = 8,
+           borderless = 2, remove.ticks.y = TRUE, remove.ticks.x = FALSE,
+           grid.x_colour = "grey85", grid.y_colour = "grey35",
+           grid.y_linetype = 3) +
+  labs(x = "Coefficient", y = "", color = "", fill = "") +
+  geom_blank(data = subset(blank_data, iv %in% c("log(Exposure + 1)", "Exposure (binary)"))) +
+  # geom_rect(data = subset(G4, iv == "log(Exposure + 1)" & treatment == "Treatment")[1, ],
+  #           fill = "black", xmin = -Inf, xmax = Inf,
+  #           ymin = -Inf, ymax = Inf, alpha = 0.02) +
+  coord_cartesian(ylim = c(0.35, max(G4$model_number, na.rm = TRUE) + 0.65), expand = FALSE) +
+  facet_wrap(~ iv, ncol = 3, scale = "free_x") +
+  scale_x_continuous(breaks = breaks_fun) +
+  scale_y_continuous(breaks = sort(unique(G4$model_number)),
+                     labels = levels(G4$dv)) +
+  geom_vline(xintercept = 0, size = 0.25) +
+  geom_hline(yintercept = max(G4$model_number, na.rm = TRUE) - 0.65, size = 0.25, linetype = 1) +
+  geom_hline(yintercept = c(0.35, max(G4$model_number, na.rm = TRUE) + 0.65), size = 1.5) +
+  geom_segment(aes(yend = model_number, x = lower95, xend = upper95),
+               size = 3, color = "grey80") +
+  geom_point(data = subset(G4, outcome == "Polarization" & treatment == "Treatment" &
+                               dv != "Political ideology\n(left-right scale)" &
+                               iv %in% c("log(Exposure + 1)", "Exposure (binary)")),
+             size = 2.25, color = "#0D0887", show.legend = FALSE) +
+  geom_point(data = subset(G4, outcome == "Polarization" & treatment == "Treatment" &
+                               dv == "Political ideology\n(left-right scale)" &
+                               iv %in% c("log(Exposure + 1)", "Exposure (binary)")),
+             size = 3, shape = 21, fill = "white", stroke = 0.5,
+             color = "#0D0887", show.legend = FALSE) +
+  theme(plot.margin = unit(c(0, 1, 1, 0), "mm"),
+        legend.position = "none",
+        panel.margin = unit(0.75, "lines"),
+        plot.title.position = "plot",
+        plot.title = element_text(family = "", size = 10, vjust = 0.5, hjust = 0, face = "bold"),
+        axis.text.y = element_text(family = "", colour = "black", face = "bold", size = 8, hjust = 1, lineheight = 0.9))
+```
+
+```{r Figure-G12, fig.height=5, fig.cap="Regression results of exposure to Russian Internet Research Agency accounts and changes in issue-based and ideological positionin. Point estimates from OLS models with 95\\% CIs adjusted for multiple comparisons using Bonferroni correction. $n = 1,496$ survey respondents."}
+# Count is needed to specify the x-axis labels
+# using the hack break_fun()
+# Thus we graph the top panel first, reset the count to 0 and then add on
+# the second panel
+count <- 0
+FigureG12 <- ggdraw() +
+           draw_plot(FigureG12A, x = 0, y = 0.5, width = 1, height = 0.47)
+count <- 0
+FigureG12 <- FigureG12 +
+           draw_plot(FigureG12B, x = 0, y = 0, width = 1, height = 0.47) +
+           draw_plot_label(label = c("A.", "B."),
+                           x = c(0.005, 0.005),
+                           y = c(0.97, 0.48),
+                           size = 12, hjust = 0, vjust = 0) +
+           draw_plot_label(label = c("Issue positions", "Polarization"),
+                           x = c(0.05, 0.05),
+                           y = c(0.97, 0.48),
+                           size = 12, hjust = 0, vjust = 0,
+                           fontface = "plain")
+FigureG12
+```
+
+```{r}
+G5 <- rbind(get_coefs(vote_rank_total_russia_count_lm_controls,
+                      dv = "Rank\n(Trump > Clinton)",
+                      iv = "log(Exposure + 1)",
+                      multiple_comparisons = 3 * 2),
+            get_coefs(vote_choice_total_russia_count_lm_controls,
+                      dv = "Vote choice\n(Clinton toward Trump)",
+                      iv = "log(Exposure + 1)",
+                      multiple_comparisons = 3 * 2),
+            get_coefs(vote_choice_benefit_total_russia_count_lm_controls,
+                      dv = "Vote choice\n(Clinton toward Trump,\n3rd party, or not voting)",
+                      iv = "log(Exposure + 1)",
+                      multiple_comparisons = 3 * 2),
+            
+            get_coefs(vote_rank_total_russia_binary_lm_controls,
+                      dv = "Rank\n(Trump > Clinton)",
+                      iv = "Exposure (binary)",
+                      multiple_comparisons = 3 * 2),
+            get_coefs(vote_choice_total_russia_binary_lm_controls,
+                      dv = "Vote choice\n(Clinton toward Trump)",
+                      iv = "Exposure (binary)",
+                      multiple_comparisons = 3 * 2),
+            get_coefs(vote_choice_benefit_total_russia_binary_lm_controls,
+                      dv = "Vote choice\n(Clinton toward Trump,\n3rd party, or not voting)",
+                      iv = "Exposure (binary)",
+                      multiple_comparisons = 3 * 2),
+
+            get_coefs(vote_rank_total_russia_follow_lm_controls,
+                      dv = "Rank\n(Trump > Clinton)",
+                      iv = "1(follow > 0 accounts)",
+                      multiple_comparisons = 3 * 2),
+            get_coefs(vote_choice_total_russia_follow_lm_controls,
+                      dv = "Vote choice\n(Clinton toward Trump)",
+                      iv = "1(follow > 0 accounts)",
+                      multiple_comparisons = 3 * 2),
+            get_coefs(vote_choice_benefit_total_russia_follow_lm_controls,
+                      dv = "Vote choice\n(Clinton toward Trump,\n3rd party, or not voting)",
+                      iv = "1(follow > 0 accounts)",
+                      multiple_comparisons = 3 * 2))
+
+G5$iv <- factor(G5$iv, levels = c("log(Exposure + 1)",
+                                  "Exposure (binary)",
+                                  "1(follow > 0 accounts)"))
+
+G5$variable <- factor(G5$variable,
+                      levels = c("Vote choice\n(Clinton toward Trump,\n3rd party, or not voting)",
+                                 "Vote choice\n(Clinton toward Trump)",
+                                 "Rank\n(Trump > Clinton)"))
+
+blank_data <- data.frame(iv = rep(levels(G5$iv), each = 2),
+                         variable = rep(levels(G5$variable), each = 2),
+                         coef = c(-0.05, 0.05,
+                                  -0.25, 0.25,
+                                  -0.3, 0.3))
+
+blank_data$iv <- factor(blank_data$iv, levels = c("log(Exposure + 1)",
+                                                  "Exposure (binary)",
+                                                  "1(follow > 0 accounts)"))
+
+blank_data$variable <- factor(blank_data$variable,
+                              levels = c("Vote choice\n(Clinton toward Trump,\n3rd party, or not voting)",
+                                         "Vote choice\n(Clinton toward Trump)",
+                                         "Rank\n(Trump > Clinton)"))
+
+
+count <- 0
+breaks_fun <- function(x) {
+  count <<- count + 1L
+  switch(
+    count,
+    seq(-0.04, 0.04, by = 0.02), seq(-0.04, 0.04, by = 0.02),
+    seq(-0.2, 0.2, by = 0.1), seq(-0.2, 0.2, by = 0.1),
+    seq(-0.2, 0.2, by = 0.1), seq(-0.2, 0.2, by = 0.1)
+  )
+}
+
+wb <- readRDS("../figures_source/Source Data.rds")
+openxlsx::addWorksheet(wb, sheetName = "figure_g13", gridLines = FALSE)
+openxlsx::writeDataTable(
+  wb, sheet = "figure_g13",
+  x = subset(G5, treatment == "Treatment" &
+               iv %in% c("log(Exposure + 1)", "Exposure (binary)"))
+)
+saveRDS(wb, "../figures_source/Source Data.rds")
+openxlsx::saveWorkbook(wb, "../figures_source/Source Data.xlsx", overwrite = TRUE)
+```
+
+```{r Figure-G13,  fig.height=3, fig.cap="Regression results of the relationship between exposure to posts from Russian Internet Research Agency accounts and voting behavior. Point estimates from OLS models with 95\\% CIs adjusted for multiple comparisons using Bonferroni correction. $n = 1,496$ survey respondents."}
+ggplot(subset(G5, treatment == "Treatment" & iv %in% c("log(Exposure + 1)", "Exposure (binary)")),
+       aes(x = coef, y = variable)) +
+  my.theme(base_size = 8,
+           borderless = 2, remove.ticks.y = TRUE, remove.ticks.x = FALSE,
+           grid.x_colour = "grey85", grid.y_colour = "grey35",
+           grid.y_linetype = 3) +
+  labs(x = "Coefficient", y = "", color = "", fill = "") +
+  coord_cartesian(ylim = c(0.35, 3.65), expand = FALSE) +
+  facet_wrap(~ iv, ncol = 2, scale = "free_x") +
+  geom_blank(data = subset(blank_data, iv %in% c("log(Exposure + 1)", "Exposure (binary)"))) +
+  # geom_rect(data = subset(G5, iv == "log(Exposure + 1)" & treatment == "Treatment")[1, ],
+  #           fill = "black", xmin = -Inf, xmax = Inf,
+  #           ymin = -Inf, ymax = Inf, alpha = 0.02) +
+  scale_x_continuous(breaks = breaks_fun) +
+  geom_vline(xintercept = 0, size = 0.25) +
+  geom_hline(yintercept = c(0.35, 3.65), size = 1.5) +
+  geom_segment(aes(yend = variable, x = lower95, xend = upper95),
+               size = 3, color = "grey83") +
+  geom_point(size = 2, color = "#0D0887") +
+  theme(plot.margin = unit(c(0, 1, 1, -2), "mm"),
+        legend.position = "none",
+        axis.text.y = element_text(family = "", colour = "black", face = "bold", size = 8, hjust = 1, lineheight = 0.9))
+```
+
+
+\clearpage
+# Software statement
+
+We relied on R [@R2020] and Python [@VanRossum2009] programming languages, as well as the following R packages in our empirical analysis and write-up:
+
+`cowplot` [@Wilke2020]
+
+`dplyr` [@Wickham2020a]
+
+`estimatr` [@Blair2021]
+
+`ggplot2` [@Wickham2016]
+
+`haven` [@Wickham2020c]
+
+`kableExtra` [@Zhu2020]
+
+`knitr` [@Xie2020]
+
+`lmtest` [@Zeileis2002]
+
+`lubridate` [@Grolemund2011]
+
+`magrittr` [@Bache2014]
+
+`MASS` [@Venables2002]
+
+`mvtnorm` [@Genz2009]
+
+`readr` [@Wickham2018]
+
+`stargazer` [@Hlavac2018]
+
+`stringi` [@Gagolewski2018]
+
+`stringr` [@Wickham2019]
+
+`tibble` [@Muller2018]
+
+`tidyr` [@Wickham2020b]
+
+
+\clearpage
+# References
