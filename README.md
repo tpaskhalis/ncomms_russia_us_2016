@@ -18,7 +18,7 @@ This repository is organized as follows:
 
 * [figures](https://github.com/tpaskhalis/ncomms_russia_us_2016/tree/main/figures) (`./figures/`) is a directory for writing out figures for publication.
 
-* [figures_source](https://github.com/tpaskhalis/ncomms_russia_us_2016/tree/main/figures_source) (`./figures/`) contains source file for figures in the main manuscript.
+* [figures_source](https://github.com/tpaskhalis/ncomms_russia_us_2016/tree/main/figures_source) (`./figures_source/`) contains source file for figures in the main manuscript.
 
 * [logs](https://github.com/tpaskhalis/ncomms_russia_us_2016/tree/main/logs) (`./logs/`) contains log files.
 
