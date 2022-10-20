@@ -26,6 +26,8 @@ library("openxlsx")
 source("./code/helper_functions.R")
 source("./code/ggplot_theme.R")
 
+sessionInfo()
+
 
 # FIGURE 1 (GENERAL DESCRIPTIVES) -----------------------------------------
 

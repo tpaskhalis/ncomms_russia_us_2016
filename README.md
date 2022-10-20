@@ -12,6 +12,7 @@ There is widespread concern that malicious foreign actors are using social media
 
 Log files are produced by running `R CMD BATCH` on scripts located in `code` folder from the root of the project directory. E.g.:
 
+    R CMD BATCH code/05_regression_analysis.R logs/05_regression_analysis.Rlog
     R CMD BATCH code/30_write_up_results.R logs/30_write_up_results.Rlog
 
 ------------------------------------------------------------------------
