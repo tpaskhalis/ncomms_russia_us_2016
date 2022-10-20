@@ -15,6 +15,10 @@ library("readr")
 library("dplyr")
 library("tidyr")
 
+sessionInfo()
+
+# Read In Data ------------------------------------------------------------
+
 # # SMaPP/YouGov Panel
 # # Original survey
 # us2016 <- haven::read_dta("~/Dropbox/SMaPP_US2016B/survey_data/SMaPP_US2016_waves123_idist_ideo_B.dta")
