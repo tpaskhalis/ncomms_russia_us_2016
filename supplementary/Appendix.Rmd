@@ -3243,4 +3243,4 @@ We relied on R [@R2020] and Python [@VanRossum2009] programming languages, as we
 
 
 \clearpage
-# References
+# Supplementary References

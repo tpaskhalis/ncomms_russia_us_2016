@@ -118,7 +118,6 @@
 \maketitle
 
 {
-\hypersetup{linkcolor=}
 \setcounter{tocdepth}{2}
 \tableofcontents
 }
@@ -765,8 +764,8 @@ We relied on R \citep{R2020} and Python \citep{VanRossum2009} programming langua
 \texttt{tidyr} \citep{Wickham2020b}
 
 \clearpage
-
-\renewcommand\refname{References}
+\addcontentsline{toc}{section}{Supplementary References}
+\renewcommand\refname{Supplementary References}
   \bibliography{bibliography.bib,software.bib}
 
 \end{document}
