@@ -69,6 +69,9 @@
 \usepackage{lscape}
 \usepackage{changepage}
 \usepackage{enumitem}
+\usepackage[nottoc]{tocbibind}
+\renewcommand{\figurename}{Supplementary Figure}
+\renewcommand{\tablename}{Supplementary Table}
 \renewcommand{\thefigure}{\thesection\arabic{figure}}
 \renewcommand{\thetable}{\thesection\arabic{table}}
 \renewcommand{\thesection}{\Alph{section}}
@@ -121,19 +124,25 @@
 \setcounter{tocdepth}{2}
 \tableofcontents
 }
+\renewcommand{\figureautorefname}{Supplementary Figure}
+\renewcommand{\tableautorefname}{Supplementary Table}
+
 \clearpage
 
+\hypertarget{supplementary-methods}{%
+\section{Supplementary Methods}\label{supplementary-methods}}
+
 \hypertarget{data}{%
-\section{Data}\label{data}}
+\subsection{Data}\label{data}}
 
 \hypertarget{twitter-elections-integrity-releases}{%
-\subsection{Twitter Elections Integrity releases}\label{twitter-elections-integrity-releases}}
+\subsubsection{Twitter Elections Integrity releases}\label{twitter-elections-integrity-releases}}
 
-In the run-up to the 2018 US midterm elections, Twitter announced a new initiative designed to combat foreign-backed information campaigns.\footnote{\url{https://blog.twitter.com/en_us/topics/company/2018/2016-election-update.html}, \url{https://blog.twitter.com/en_us/topics/company/2018/an-update-on-our-elections-integrity-work.html}} As part of this initiative, the company continuously identified and blocked accounts of suspected foreign influence accounts. Fortunately, Twitter also released data that included the account IDs of those accounts identified as foreign influence accounts and from where they originated.
+In the run-up to the 2018 US midterm elections, Twitter announced a new initiative designed to combat foreign-backed information campaigns.\footnote{\url{https://blog.twitter.com/en_us/topics/company/2018/2016-election-update.html}, \url{https://blog.twitter.com/en_us/topics/company/2018/an-update-on-our-elections-integrity-work.html}} As part of this initiative, the company continuously identified and blocked accounts of suspected foreign influence accounts. In addition to this, Twitter also released data that included the unique IDs of those accounts identified as foreign influence accounts and their country of origin.
 
 To date, Twitter has released 27 Elections Integrity datasets that include the user profiles, tweets, and associated media from accounts that it classified as belonging to state-backed foreign influence campaigns. Overall, these datasets cover a wide range of national, political, and temporal contexts. Of those released to date, 17 of these datasets include at least one tweet from 2016 or earlier. In \autoref{tab:tab28}, we present a summary of these releases covering the time period relevant to our research (2016 and earlier).
 
-In \autoref{fig:Figure-A1}, we also show the daily prevalence of tweets from different campaigns in the Elections Integrity data. Analogous to Panel A of Figure 1 in the main article, \autoref{fig:Figure-A1} demonstrates that the over-representation of tweets from accounts linked to Russia in our respondents' feeds is not a function of higher prevalence of this content in the datasets released by Twitter, but instead likely to result from a coordinated effort to target voters in the US prior to the 2016 election. Furthermore, \autoref{fig:Figure-A2} shows the potential daily outreach of foreign influence accounts' messages by aggregating the number of the original tweets as well as the number of times they were retweeted or quote-tweeted. As can be seen from the figure and table below, the Russian campaign had a noticeably higher virality than the rest of the foreign influence campaigns in that period. Some of the posted tweets received especially high traction, resulting in clear visible spikes in October and November of 2016.
+In \autoref{fig:Supplementary-Figure-A1}, we also show the daily prevalence of tweets from different campaigns in the Elections Integrity data. Analogous to Panel A of Figure 1 in the main article, \autoref{fig:Supplementary-Figure-A1} demonstrates that the over-representation of tweets from accounts linked to Russia in our respondents' feeds is not a function of higher prevalence of this content in the datasets released by Twitter, but instead likely to result from a coordinated effort to target voters in the US prior to the 2016 election. Furthermore, \autoref{fig:Supplementary-Figure-A2} shows the potential daily outreach of foreign influence accounts' messages by aggregating the number of the original tweets as well as the number of times they were retweeted or quote-tweeted. As can be seen from the figure and table below, the Russian campaign had a noticeably higher virality than the rest of the foreign influence campaigns in that period. Some of the posted tweets received especially high traction, resulting in clear visible spikes in October and November of 2016.
 
 The precise process by which Twitter identifies foreign influence accounts is not publicly detailed by Twitter. However, because Twitter has additional internal data about each account's behavior, and has an overall corporate interest in discovering these accounts, we assume that the company's identification is generally robust, unbiased, and of higher accuracy than could be done externally, especially considering that many these accounts are routinely suspended.
 
@@ -141,20 +150,20 @@ The precise process by which Twitter identifies foreign influence accounts is no
 
 \begin{figure}[h]
 
-{\centering \includegraphics[width=1\linewidth,height=0.6\textheight]{Appendix_files/figure-latex/Figure-A1-1} 
+{\centering \includegraphics[width=1\linewidth,height=0.6\textheight]{Supplementary_Information_files/figure-latex/Supplementary-Figure-A1-1} 
 
 }
 
-\caption{Prevalence of tweets among surveyed respondents' Twitter feeds for each campaign in the Twitter Elections Integrity dataset (tweets only)}\label{fig:Figure-A1}
+\caption{Prevalence of tweets among surveyed respondents' Twitter feeds for each campaign in the Twitter Elections Integrity dataset (tweets only)}\label{fig:Supplementary-Figure-A1}
 \end{figure}
 
 \begin{figure}[h]
 
-{\centering \includegraphics[width=1\linewidth,height=0.65\textheight]{Appendix_files/figure-latex/Figure-A2-1} 
+{\centering \includegraphics[width=1\linewidth,height=0.65\textheight]{Supplementary_Information_files/figure-latex/Supplementary-Figure-A2-1} 
 
 }
 
-\caption{Prevalence of tweets, retweets, and quote tweets among surveyed respondents' Twitter feeds for each campaign in the Twitter Elections Integrity dataset}\label{fig:Figure-A2}
+\caption{Prevalence of tweets, retweets, and quote tweets among surveyed respondents' Twitter feeds for each campaign in the Twitter Elections Integrity dataset}\label{fig:Supplementary-Figure-A2}
 \end{figure}
 
 \begin{landscape}
@@ -199,7 +208,7 @@ Venezuela & 2019\_06 & 187,408 & 17 & 2012-04-25 & 2016-12-31 & 523,982 & 2.7964
 \clearpage
 
 \hypertarget{survey}{%
-\subsection{Survey}\label{survey}}
+\subsubsection{Survey}\label{survey}}
 
 The YouGov survey waves took place between April 2016 and November 2016. However, the survey question asking who respondents voted for was obtained in a post-election questionaire that was collected by YouGov separately after the election. The fielding dates of each survey wave were as follows:
 
@@ -252,7 +261,7 @@ Variable & Category & YouGov (2016) & Pew Twitter Survey (2018) & US Population 
 \hline
  & white & 77.4 & 60 & 72.6\\
 
-\multirow{-2}{*}{\centering\arraybackslash race} & non-white & 22.6 & 28 & 27.4\\
+\multirow{-2}{*}{\centering\arraybackslash race} & poc & 22.6 & NA & 27.4\\
 \hline
 \end{tabular}
 \end{table}
@@ -291,7 +300,7 @@ N & 1496.0 & 2004.0\\
 \clearpage
 
 \hypertarget{survey-questions}{%
-\subsection{Survey questions}\label{survey-questions}}
+\subsubsection{Survey questions}\label{survey-questions}}
 
 In Figure 4 of the main article, we estimate the relationship between exposure to posts from Russian foreign influence accounts and respondents' political ideology and issues positions. Below we present the question wording for each outcome that is presented in Figure 4. We then present the question text for the question that asks respondents how they rank the presidential comparisons, as used in Figure 5.\vspace{6mm}
 
@@ -363,7 +372,7 @@ would be your next favorite choice to be president, and so on.}}\newline
 \clearpage
 
 \hypertarget{twitter-data-collection-for-yougov-survey}{%
-\subsection{Twitter data collection for YouGov survey}\label{twitter-data-collection-for-yougov-survey}}
+\subsubsection{Twitter data collection for YouGov survey}\label{twitter-data-collection-for-yougov-survey}}
 
 The lists of friends for all YouGov respondents who provided their Twitter profiles were retrieved in April 2016. After the election, in December 2016, we further collected the posts of YouGov respondents and their friends. In total we collected 1,244,124,493 tweets from the timelines of our respondents' friends. These tweets represent the corpus of posts that potentially appeared in respondents' timelines.
 
@@ -372,16 +381,16 @@ We then matched the posts appearing in the timelines of respondents' friends to 
 Overall, we identified 786,634 posts from foreign influence campaign accounts that had the potential to appear in respondents' timelines. These posts could appear and be viewed by respondents, although given the black-box of the Twitter's timeline algorithm, this cannot be known with certainty for any specific post. As we note in the article, we follow the literature \citep[e.g.][]{Grinberg2019} in referring to these posts as ``exposures.'\,'
 
 \hypertarget{accounts-of-politicians-and-national-news-media-organizations}{%
-\subsection{Accounts of politicians and national news media organizations}\label{accounts-of-politicians-and-national-news-media-organizations}}
+\subsubsection{Accounts of politicians and national news media organizations}\label{accounts-of-politicians-and-national-news-media-organizations}}
 
 In the Results section of the main article, we compare the number of exposures from Russian Internet Research Agency accounts to those from politicians and national news media. The list of politicians includes all Members of Congress and political candidates in the 2016 race. National news media include all major national news organizations, including their politics-related specialized accounts (e.g.~ABC This Week, CBS 60 Minutes, New York Times The Upshot). Lists of these sets of actors are available on request.
 
 \clearpage
 
 \hypertarget{equivalence-testing-for-minimal-relationships}{%
-\section{Equivalence testing for minimal relationships}\label{equivalence-testing-for-minimal-relationships}}
+\subsection{Equivalence testing for minimal relationships}\label{equivalence-testing-for-minimal-relationships}}
 
-In the article, we present a series of regression results in Figure 4 to examine the relationship between exposure to posts from Russian Internet Research Agency accounts and political attitudes and polarization. In general, we find no meaningful relationship between exposure and these outcomes. Theoretically, this is consistent with the descriptive data, which demonstrates that exposure to posts from Russian foreign influence accounts was dwarfed by posts from politicians and news media, and was heavily concentrated among those who identify as Republican partisans.
+In the article, we present a series of regression results in Figure 4 to examine the relationship between exposure to posts from Russian Internet Research Agency accounts and political attitudes and polarization. In general, we find no meaningful relationship between exposure and these outcomes. Theoretically, this is consistent with the descriptive data, which demonstrates that exposure to posts from Russian foreign influence accounts was overshadowed by posts from politicians and news media, and was heavily concentrated among those who identify as Republican partisans.
 
 However, because the absence of statistically significant results is not necessarily strong evidence of a minimal relationship \citep{Rainey2014}, in this section we examine these results in an equivalence testing framework \citep{Rainey2014, Hartman2018, Lakens2017}. This framework addresses the problem that the absence of statistically significant differences is not necessarily itself strong evidence of a negligible relationship. If a study is heavily underpowered, meaningful relationships will be difficult to detect---for lack of sufficient data---under the null hypothesis of no difference. We first briefly explain the use of equivalence testing, after which we present the results.
 
@@ -393,21 +402,21 @@ In political science research, defining the values of \(\epsilon_L\) and \(\epsi
 
 \begin{figure}
 \centering
-\includegraphics{Appendix_files/figure-latex/Figure-B3-1.pdf}
-\caption{\label{fig:Figure-B3}Two One-Sided Test (TOST) 95\% Intervals for the relationship between exposure to tweets from Russian foreign influence accounts and issue positions and polarization. Each point (\(\bullet\)) represents the estimated relationships in standardized units; each horizontal line (\textbf{---}) represents a 95\% TOST interval: the range of the size of a relationship that cannot be rejected by a Two One-Sided Test. The vertical lines (in red) represent what the literature generally considers minimal relationships: the solid line, that defined by \citet{Hartman2018} (\(|\epsilon| < 0.36\)); the dashed line, that defined by \citet{Ho2007} and \citet{Imbens2015} (\(|\epsilon| < 0.25\)); and the dotted line, that defined by \citet{Cohen1969} (\(|\epsilon| < 0.2\)). \(n = 1,496\) survey respondents}
+\includegraphics{Supplementary_Information_files/figure-latex/Supplementary-Figure-B3-1.pdf}
+\caption{\label{fig:Supplementary-Figure-B3}Two One-Sided Test (TOST) 95\% Intervals for the relationship between exposure to tweets from Russian foreign influence accounts and issue positions and polarization. Each point (\(\bullet\)) represents the estimated relationships in standardized units; each horizontal line (\textbf{---}) represents a 95\% TOST interval: the range of the size of a relationship that cannot be rejected by a Two One-Sided Test. The vertical lines (in red) represent what the literature generally considers minimal relationships: the solid line, that defined by \citet{Hartman2018} (\(|\epsilon| < 0.36\)); the dashed line, that defined by \citet{Ho2007} and \citet{Imbens2015} (\(|\epsilon| < 0.25\)); and the dotted line, that defined by \citet{Cohen1969} (\(|\epsilon| < 0.2\)). \(n = 1,496\) survey respondents}
 \end{figure}
 
 To apply equivalence tests to investigate the strength of the evidence as it relates to negligible relationships, we standardize each of the outcome variables and calculate TOST intervals for the magnitude of the relationship between exposure to social media posts from Russian foreign influence accounts. We do so for each of the outcomes in Figures 4 of the main article, and examine these intervals in relation to values of \(\epsilon_L\) and \(\epsilon_H\) defined in the literature.
 
-The equivalence test results for estimates of the relationships between exposure to posts from Russian foreign influence accounts and each outcome in Figures 4 in the main article are presented in \autoref{fig:Figure-B3}. The values of \(\epsilon_L\) and \(\epsilon_H\) that define the range of minimal relationships are shown as defined by \citet{Hartman2018} (solid line), \citet{Ho2007} and \citet{Imbens2015} (dashed line), and \citet{Cohen1969} (dotted line). The first column of Panels A and B of \autoref{fig:Figure-B3} present estimates of the relationship between log(exposure + 1) and each issue position. Estimates appear exceptionally small primarily because exposure is measured on the log scale, thus indicating that the relationship between a one unit change in the (log) count of exposure to social media posts from Russian foreign influence accounts. The second column presents exposure measured as a binary variable, as is typically used in the literature on equivalence testing. By all definitions of minimal relationships (as defined by the vertical lines in each figure), estimates for all issues positions, and all but one measure of polarization are consist with negligible relations. We can also examine this differently, by averaging across all issue position outcomes, in which we find that the magnitude of the estimated relationship between exposure to posts from Russian influence accounts and issues positions is a mere 6\% of a standard deviation, and for polarization, 5\% of a standard deviation.
+The equivalence test results for estimates of the relationships between exposure to posts from Russian foreign influence accounts and each outcome in Figures 4 in the main article are presented in \autoref{fig:Supplementary-Figure-B3}. The values of \(\epsilon_L\) and \(\epsilon_H\) that define the range of minimal relationships are shown as defined by \citet{Hartman2018} (solid line), \citet{Ho2007} and \citet{Imbens2015} (dashed line), and \citet{Cohen1969} (dotted line). The first column of Panels A and B of \autoref{fig:Supplementary-Figure-B3} present estimates of the relationship between log(exposure + 1) and each issue position. Estimates appear relatively small primarily because exposure is measured on the log scale, thus indicating that the relationship between a one unit change in the (log) count of exposure to social media posts from Russian foreign influence accounts. The second column presents exposure measured as a binary variable, as is typically used in the literature on equivalence testing. By all definitions of minimal relationships (as defined by the vertical lines in each figure), estimates for all issues positions, and all but one measure of polarization are consist with negligible relations. We can also examine this differently, by averaging across all issue position outcomes, in which we find that the magnitude of the estimated relationship between exposure to posts from Russian influence accounts and issues positions is a mere 6\% of a standard deviation, and for polarization, 5\% of a standard deviation.
 
 \clearpage
 
 \hypertarget{exposure-to-foreign-influence-accounts}{%
-\section{Exposure to foreign influence accounts}\label{exposure-to-foreign-influence-accounts}}
+\subsection{Exposure to foreign influence accounts}\label{exposure-to-foreign-influence-accounts}}
 
 \hypertarget{overall}{%
-\subsection{\texorpdfstring{Overall\label{section:exposure}}{Overall}}\label{overall}}
+\subsubsection{\texorpdfstring{Overall\label{section:exposure}}{Overall}}\label{overall}}
 
 We calculate exposure to foreign influence accounts by extracting all posts that contain tweets, retweets, and quote tweets from accounts that were identified by Twitter as belonging to state-backed foreign influence campaigns, and were in the collected feeds from respondents' friends.
 
@@ -415,29 +424,26 @@ Overall, 1,042 respondents (64\%) were exposed at least once to posts from accou
 
 In terms of direct exposure to foreign influence accounts (i.e.~following the identified accounts themselves), 112 (7\% of our sample) respondents followed at least one account associated with a foreign influence campaign from Russia, China, Iran, or Venezuela. Among respondents, 51 (3.4\%) followed an account associated with the Russian campaign specifically.
 
-\clearpage
-
-\hypertarget{back-of-the-envelope-calculation-of-aggregate-us-exposure-to-russian-foreign-influence-accounts-on-twitter}{%
-\subsection{Back-of-the-envelope calculation of aggregate US exposure to Russian foreign influence accounts on Twitter}\label{back-of-the-envelope-calculation-of-aggregate-us-exposure-to-russian-foreign-influence-accounts-on-twitter}}
-
-As a result of congressional hearings on the role of social media in the 2016 US presidential election, both Twitter and Facebook calculated and released aggregate-level estimates of user exposure to Russian foreign influence accounts on their platforms. However, each company did so differently, with statistics that are not comparable. Facebook, for example, stated that 126 million of its users had the potential to view content from the Russian foreign influence campaign over a two year period \citep{Stretch2017}. Twitter, however, states that the number of times that content from Russian foreign influence accounts was viewed within a brief two and a half months (September 1, 2016 to November 15, 2016) was 288 million \citep{Edgett2017},\footnote{This is likely a large underestimate of the number of views, due to the fact that Twitter later added more accounts to its list of Russian foreign influence accounts \citep{Twitter2018}, but without providing an updated number of views.} with 1.4 million direct interactions with that content (e.g.~liking, retweeting, replying) \citep{Twitter2018}. The figure 288 million views, however, is an extreme upper bound on the number of potentially exposed users, because a single user can view multiple tweets from Russian foreign influence accounts. By contrast, 1.4 million interactions is an extreme lower bound on potential exposure, because the vast majority of users do not directly interact with each piece of content on the platform.
-
-Thus, to aid our understanding of the overall potential exposure of US Twitter users, we make a back-of-the-envelope calculation of the number of US users potentially exposed to posts from Russian foreign influence accounts during the 8 months leading up to election day. To do so, we use data on potential exposure to Internet Research Agency posts among users in our dataset, which we combine with data from PEW Research and US census data. PEW Research estimates that in 2016, Twitter penetration in the US was 21\% \citep{Greenwood2016}. The US Census Bureau estimates that the US population in 2016, aged 18 and older, was 244,807,000 \citep{Census2016}. This puts a rough estimate of the number of American Twitter users at 51 million. Taking the estimate from our social media-linked survey data that 63\% of US Twitter users were potentially exposed to at least one post from Russian foreign influence accounts during the 2016 presidential election (see Appendix \ref{section:exposure}), a back-of-the-envelope calculation (\(0.63 \times 51\) million) suggests that 32 million Americans were potentially exposed to content from Internet Research Agency accounts.\footnote{Note that this figure is not perfectly analogous to Facebook's to the extent that Facebook's estimate is across 2 years prior the the election.}
+\begin{figure}
+\centering
+\includegraphics{Supplementary_Information_files/figure-latex/Supplementary-Figure-C4-1.pdf}
+\caption{\label{fig:Supplementary-Figure-C4}Percentage of exposures to retweets from the Russian disinformation campaign}
+\end{figure}
 
 \clearpage
 
 \hypertarget{party-id}{%
-\subsection{Party ID}\label{party-id}}
+\subsubsection{Party ID}\label{party-id}}
 
 In the main article, we examine the relationship between the self-identified party ID of respondents and their exposure of posts from Russian Internet Research Agency accounts. The model presented in Panel B of Figure 3, however, models a linear relationship between party ID and exposure to posts from Russian foreign influence accounts. Thus, although there is a clear and strong relationship between being a self-identified Republican and exposure to Russian foreign influence accounts, it may be the case that this relationship is U-shaped: that exposure was higher both among those who strongly identify as Republicans and Democrats. Theoretically, this might be expected if the goals of the Russian foreign influence campaign was to further alienate those who strongly identify with the Democratic Party (e.g.~Bernie Sanders supporters) from their party's establishment nominee. If this were the goal, we might expect high levels of exposure to Russian electoral interference among strongly identifying Democrats. Descriptively, the data in Panel A of Figure 3 suggest that this is not the case. We test this more formally in a regression framework by fitting an equivalent model to that in Panel B of Figure 3, but including a squared party ID term in the model. This term captures the theoretical expectation that both those who strongly identify as Republicans and Democrats were similarly exposed to posts from Russia's foreign influence campaign.
 
 \begin{figure}
 \centering
-\includegraphics{Appendix_files/figure-latex/Figure-C4-1.pdf}
-\caption{\label{fig:Figure-C4}Relationship between party ID and exposure to posts from Russian Internet Research Agency (IRA) accounts. Predicted values with 95\% prediction intervals are shown}
+\includegraphics{Supplementary_Information_files/figure-latex/Supplementary-Figure-C5-1.pdf}
+\caption{\label{fig:Supplementary-Figure-C5}Relationship between party ID and exposure to posts from Russian Internet Research Agency (IRA) accounts. Predicted values with 95\% prediction intervals are shown}
 \end{figure}
 
-Regression results from both the model in the main manuscript (Panel B of Figure 3), and the model with the squared term for party ID are presented in \autoref{tab:exposure_1}. We test whether the inclusion of the squared term increases model fit by conducting a likelihood ratio test that compares the model with the squared term to the model without it. It does not (\(p = 0.09\)). We nevertheless graph the predicted relationship between party ID and \(log(exposure + 1)\) for both models to examine the shape of the relationship. Results are presented in \autoref{fig:Figure-C4}. As the figure shows, the relationship between party ID and respondents' level of exposure to posts from Russian foreign influence accounts is similarly increasing as one identifies more strongly as a Republican. Importantly, in the second panel of \autoref{fig:Figure-C4}, we do not observe a U-shape relationship to the extent that strongly identifying Democrats were not more likely to be exposed to more posts from the Russian foreign influence campaign than weakly identifying Democrats or independents. To test the sensitivity of these results to modelling assumptions we also fit a quasi-Poisson regression models with the indepedent variables. The results of theses models are shown in \autoref{tab:exposure_2}.
+Regression results from both the model in the main manuscript (Panel B of Figure 3), and the model with the squared term for party ID are presented in \autoref{tab:exposure_1}. We test whether the inclusion of the squared term increases model fit by conducting a likelihood ratio test that compares the model with the squared term to the model without it. It does not (\(p = 0.09\)). We nevertheless graph the predicted relationship between party ID and \(log(exposure + 1)\) for both models to examine the shape of the relationship. Results are presented in \autoref{fig:Supplementary-Figure-C5}. As the figure shows, the relationship between party ID and respondents' level of exposure to posts from Russian foreign influence accounts is similarly increasing as one identifies more strongly as a Republican. Importantly, in the second panel of \autoref{fig:Supplementary-Figure-C5}, we do not observe a U-shape relationship to the extent that strongly identifying Democrats were not more likely to be exposed to more posts from the Russian foreign influence campaign than weakly identifying Democrats or independents. To test the sensitivity of these results to modelling assumptions we also fit a quasi-Poisson regression models with the indepedent variables. The results of theses models are shown in \autoref{tab:exposure_2}.
 
 \begin{table}[p] \centering    \caption{\label{tab:exposure_1}Regression models for the relationship between party ID and (log) exposure to posts from Russian Internet Research Agency accounts}    \label{}  \begin{tabular}{@{\extracolsep{0pt}}lcccc}  \\[-1.8ex]\hline \\[-1.8ex]  \\[-1.8ex] & \multicolumn{4}{c}{log(Exposure + 1)} \\  \\[-1.8ex] & (1) & (2) & (3) & (4)\\  \hline \\[-1.8ex]  \rowcolor{gray!12!white} Party ID & 0.616$^{***}$ & $-$0.300 & 0.673$^{***}$ & 0.771$^{***}$ \\  \rowcolor{gray!12!white}  & (0.169) & (0.574) & (0.170) & (0.128) \\  \rowcolor{gray!12!white}  Party ID$^2$ &  & 1.001 &  &  \\  \rowcolor{gray!12!white}  &  & (0.599) &  &  \\    Age & 0.011$^{**}$ & 0.010$^{*}$ & 0.011$^{*}$ & 0.023$^{***}$ \\    & (0.004) & (0.004) & (0.004) & (0.003) \\    Woman & $-$0.350$^{**}$ & $-$0.349$^{**}$ & $-$0.349$^{**}$ & $-$0.302$^{***}$ \\    & (0.121) & (0.121) & (0.121) & (0.091) \\    College-educated & $-$0.159 & $-$0.155 & $-$0.150 & $-$0.004 \\    & (0.125) & (0.125) & (0.125) & (0.094) \\    Income & $-$0.077 & $-$0.084 & $-$0.076 & $-$0.077 \\    & (0.066) & (0.066) & (0.065) & (0.049) \\    Person of Color & 0.054 & 0.053 &  &  \\    & (0.147) & (0.147) &  &  \\    Other/Hispanic &  &  & $-$0.217 & $-$0.030 \\    &  &  & (0.184) & (0.139) \\    Black &  &  & 0.400 & 0.398$^{**}$ \\    &  &  & (0.204) & (0.153) \\    Region: Northeast & $-$0.030 & $-$0.031 & $-$0.016 & $-$0.022 \\    & (0.168) & (0.168) & (0.168) & (0.126) \\    Region: Midwest & $-$0.033 & $-$0.027 & $-$0.028 & $-$0.136 \\    & (0.153) & (0.153) & (0.152) & (0.114) \\    Region: West & 0.087 & 0.094 & 0.136 & 0.008 \\    & (0.162) & (0.162) & (0.163) & (0.123) \\    Freq. of social media use & 0.184$^{***}$ & 0.180$^{**}$ & 0.183$^{***}$ & 0.048 \\    & (0.056) & (0.056) & (0.055) & (0.042) \\    log(Total Tweets) &  &  &  & 0.701$^{***}$ \\    &  &  &  & (0.021) \\    Constant & 0.319 & 0.473 & 0.309 & $-$6.112$^{***}$ \\    & (0.479) & (0.488) & (0.479) & (0.409) \\   N & 1,400 & 1,400 & 1,400 & 1,400 \\  \hline \\[-1.8ex]  \multicolumn{5}{l}{$^{*}$p $<$ .05; $^{**}$p $<$ .01; $^{***}$p $<$ .001} \\  \end{tabular}\vspace{2mm}\ \begin{tabular}{p{\textwidth}}Party ID is a 7-category variable, which is rescaled to range from 0 to 1, where 0 indicates ``Strong Democrat'', 1 indicates ``Strong Republican.'', and the mid-point, 0.5, indicates ``Independent.'' \end{tabular}  \end{table}
 
@@ -446,39 +452,39 @@ Regression results from both the model in the main manuscript (Panel B of Figure
 \clearpage
 
 \hypertarget{alternative-model-specification-poisson}{%
-\subsection{Alternative model specification (Poisson)}\label{alternative-model-specification-poisson}}
+\subsubsection{Alternative model specification (Poisson)}\label{alternative-model-specification-poisson}}
 
-In Panel A of Figure 3 in the main article, we present the average of the number of exposures by respondents to Russian foreign influence account tweets throughout the campaign, broken down by the partisanship of the respondent. In Panel B of Figure 3, we present analogous results in a regression framework, including a number of respondent covariates. In Panel B of Figure 3, the regression outcome is defined as \(log(exposure + 1)\), where exposure is the count of posts in a respondent's feed. Because the outcome is a count variable, we also model the relationship using a quasi-poisson regression. The results, shown in Figure \autoref{fig:Figure-C5} show similar results to those in Figure 3 of the main article.
+In Panel A of Figure 3 in the main article, we present the average of the number of exposures by respondents to Russian foreign influence account tweets throughout the campaign, broken down by the partisanship of the respondent. In Panel B of Figure 3, we present analogous results in a regression framework, including a number of respondent covariates. In Panel B of Figure 3, the regression outcome is defined as \(log(exposure + 1)\), where exposure is the count of posts in a respondent's feed. Because the outcome is a count variable, we also model the relationship using a quasi-poisson regression. The results, shown in Figure \autoref{fig:Supplementary-Figure-C6} show similar results to those in Figure 3 of the main article.
 
 \begin{figure}[h]
 
-{\centering \includegraphics[width=1\linewidth,height=0.6\textheight]{Appendix_files/figure-latex/Figure-C5-1} 
+{\centering \includegraphics[width=1\linewidth,height=0.6\textheight]{Supplementary_Information_files/figure-latex/Supplementary-Figure-C6-1} 
 
 }
 
-\caption{Partisanship and exposure to posts from Russian Internet Research Agency accounts during the 2016 US election campaign (quasi-poisson regression). Error bars represent 95\% confidence intervals around the point estimate of the regression coefficient. $n = 1,496$ survey respondents}\label{fig:Figure-C5}
+\caption{Partisanship and exposure to posts from Russian Internet Research Agency accounts during the 2016 US election campaign (quasi-poisson regression). Error bars represent 95\% confidence intervals around the point estimate of the regression coefficient. $n = 1,496$ survey respondents}\label{fig:Supplementary-Figure-C6}
 \end{figure}
 
 \clearpage
 
 \hypertarget{exposure-to-political-actors}{%
-\section{Exposure to political actors}\label{exposure-to-political-actors}}
+\subsection{Exposure to political actors}\label{exposure-to-political-actors}}
 
-Analogous to Panels B and C in Figure 1 in the main article, we calculate and visualize the empirical cumulative distributions of exposure to tweets by survey respondents from news media organizations (Panel A of \autoref{fig:Figure-D6}) and politicians (Panel C of \autoref{fig:Figure-D6}). Panels B and D present the empirical cumulative distributions of tweets sent by media and politicians' accounts, respectively. As the figure shows, exposure to politicians and news media is less concentrated among small groups of users compared to exposure to tweets from Russian foreign influence accounts. As noted in the article, just 1\% of respondents account for 70\% of exposures of Russian foreign influence accounts. Among news media organizations and politicians, 1\% of respondents account of 24\% and 37\% of exposures.
+Analogous to Panels B and C in Figure 1 in the main article, we calculate and visualize the empirical cumulative distributions of exposure to tweets by survey respondents from news media organizations (Panel A of \autoref{fig:Supplementary-Figure-D7}) and politicians (Panel C of \autoref{fig:Supplementary-Figure-D7}). Panels B and D present the empirical cumulative distributions of tweets sent by media and politicians' accounts, respectively. As the figure shows, exposure to politicians and news media is less concentrated among small groups of users compared to exposure to tweets from Russian foreign influence accounts. As noted in the article, just 1\% of respondents account for 70\% of exposures of Russian foreign influence accounts. Among news media organizations and politicians, 1\% of respondents account of 24\% and 37\% of exposures.
 
 \begin{figure}
 \centering
-\includegraphics{Appendix_files/figure-latex/Figure-D6-1.pdf}
-\caption{\label{fig:Figure-D6}Partisanship and exposure to posts from news media and politicians accounts during the 2016 US election campaign}
+\includegraphics{Supplementary_Information_files/figure-latex/Supplementary-Figure-D7-1.pdf}
+\caption{\label{fig:Supplementary-Figure-D7}Partisanship and exposure to posts from news media and politicians accounts during the 2016 US election campaign}
 \end{figure}
 
 \clearpage
 
 \hypertarget{vote-change-regression-models}{%
-\section{Vote change regression models}\label{vote-change-regression-models}}
+\subsection{Vote change regression models}\label{vote-change-regression-models}}
 
 \hypertarget{details-of-response-variables-coding}{%
-\subsection{Details of response variables coding}\label{details-of-response-variables-coding}}
+\subsubsection{Details of response variables coding}\label{details-of-response-variables-coding}}
 
 To measure changes in candidate preferences between the first and last waves of the survey, we construct three outcomes that use respondents' rankings of Hillary Clinton and Donald Trump in wave 1 as a baseline:
 
@@ -508,9 +514,9 @@ where \(TrumpVote_{iw_{4}}\) is a post-election measure of voting for Donald Tru
 \clearpage
 
 \hypertarget{regression-models-using-the-count-of-exposures}{%
-\subsection{Regression models using the count of exposures}\label{regression-models-using-the-count-of-exposures}}
+\subsubsection{Regression models using the count of exposures}\label{regression-models-using-the-count-of-exposures}}
 
-Tables \ref{tab:tab1}, \ref{tab:tab2} and \ref{tab:tab3} show the full output for linear models used in the main text of the article.
+Supplementary Tables \ref{tab:tab1}, \ref{tab:tab2} and \ref{tab:tab3} show the full output for linear models used in the main text of the article.
 
 \begin{table}[hp] \centering    \caption{\label{tab:tab1}Regression models for the relationship between exposure to tweets from Russian Internet Research Agency accounts and a change in ranking a vote for Trump over that for Clinton}    \label{}  \footnotesize  \begin{tabular}{@{\extracolsep{0pt}}lccc}  \\[-1.8ex]\hline \\[-1.8ex]  \\[-1.8ex] & \multicolumn{3}{c}{ } \\  \\[-1.8ex] & (1) & (2) & (3)\\  \hline \\[-1.8ex]  \rowcolor{gray!12!white} log(Exposure + 1) & $-$0.002 & $-$0.003 & $-$0.003 \\  \rowcolor{gray!12!white}  & (0.004) & (0.004) & (0.005) \\    Age & 0.0002 & 0.0001 & 0.0001 \\    & (0.001) & (0.001) & (0.001) \\    Woman & 0.035 & 0.035 & 0.035 \\    & (0.018) & (0.018) & (0.018) \\    College-educated & 0.007 & 0.008 & 0.008 \\    & (0.019) & (0.019) & (0.019) \\    Income & $-$0.011 & $-$0.012 & $-$0.012 \\    & (0.010) & (0.010) & (0.010) \\    Person of Color & $-$0.013 &  &  \\    & (0.021) &  &  \\    Other/Hispanic &  & $-$0.044 & $-$0.044 \\    &  & (0.026) & (0.026) \\    Black &  & 0.023 & 0.023 \\    &  & (0.030) & (0.030) \\    Region: Northeast & 0.001 & 0.004 & 0.004 \\    & (0.028) & (0.028) & (0.028) \\    Region: Midwest & $-$0.022 & $-$0.021 & $-$0.021 \\    & (0.021) & (0.021) & (0.021) \\    Region: West & $-$0.012 & $-$0.007 & $-$0.007 \\    & (0.026) & (0.026) & (0.026) \\    Freq. of social media use & $-$0.004 & $-$0.004 & $-$0.004 \\    & (0.007) & (0.007) & (0.008) \\    log(Total Tweets) &  &  & $-$0.0001 \\    &  &  & (0.005) \\    Party ID & $-$0.002 & 0.005 & 0.005 \\    & (0.024) & (0.024) & (0.024) \\    Constant & 0.052 & 0.051 & 0.052 \\    & (0.065) & (0.065) & (0.075) \\   \hline \\[-1.8ex]  \multicolumn{4}{l}{$^{*}$p $<$ .05; $^{**}$p $<$ .01; $^{***}$p $<$ .001} \\  \end{tabular}  \end{table}
 
@@ -521,9 +527,9 @@ Tables \ref{tab:tab1}, \ref{tab:tab2} and \ref{tab:tab3} show the full output fo
 \clearpage
 
 \hypertarget{regression-models-using-a-binary-measure-of-exposure}{%
-\subsection{Regression models using a binary measure of exposure}\label{regression-models-using-a-binary-measure-of-exposure}}
+\subsubsection{Regression models using a binary measure of exposure}\label{regression-models-using-a-binary-measure-of-exposure}}
 
-Tables \ref{tab:tab4}, \ref{tab:tab5} and \ref{tab:tab6} show the full output for linear models used in the main text of the article.
+Supplementary Tables \ref{tab:tab4}, \ref{tab:tab5} and \ref{tab:tab6} show the full output for linear models used in the main text of the article.
 
 \begin{table}[hp] \centering    \caption{\label{tab:tab4}Regression models for the relationship between exposure to at least 1 tweet from Russian Internet Research Agency accounts and a change in ranking a vote for Trump over that for Clinton}    \label{}  \footnotesize  \begin{tabular}{@{\extracolsep{0pt}}lccc}  \\[-1.8ex]\hline \\[-1.8ex]  \\[-1.8ex] & \multicolumn{3}{c}{ } \\  \\[-1.8ex] & (1) & (2) & (3)\\  \hline \\[-1.8ex]  \rowcolor{gray!12!white} 1(Exposure $>$ 0) & $-$0.034 & $-$0.034 & $-$0.046 \\  \rowcolor{gray!12!white}  & (0.020) & (0.020) & (0.025) \\    Age & 0.0001 & 0.00002 & 0.0001 \\    & (0.001) & (0.001) & (0.001) \\    Woman & 0.034 & 0.034 & 0.034 \\    & (0.018) & (0.018) & (0.018) \\    College-educated & 0.007 & 0.008 & 0.009 \\    & (0.019) & (0.019) & (0.019) \\    Income & $-$0.011 & $-$0.011 & $-$0.011 \\    & (0.009) & (0.009) & (0.009) \\    Person of Color & $-$0.013 &  &  \\    & (0.021) &  &  \\    Other/Hispanic &  & $-$0.043 & $-$0.043 \\    &  & (0.026) & (0.026) \\    Black &  & 0.022 & 0.023 \\    &  & (0.030) & (0.030) \\    Region: Northeast & $-$0.002 & 0.0001 & $-$0.001 \\    & (0.028) & (0.028) & (0.029) \\    Region: Midwest & $-$0.022 & $-$0.020 & $-$0.021 \\    & (0.021) & (0.021) & (0.021) \\    Region: West & $-$0.013 & $-$0.008 & $-$0.009 \\    & (0.025) & (0.025) & (0.026) \\    Freq. of social media use & $-$0.002 & $-$0.002 & $-$0.003 \\    & (0.007) & (0.007) & (0.007) \\    log(Total Tweets) &  &  & 0.004 \\    &  &  & (0.005) \\    Party ID & $-$0.006 & 0.001 & 0.002 \\    & (0.023) & (0.023) & (0.023) \\    Constant & 0.067 & 0.066 & 0.031 \\    & (0.066) & (0.066) & (0.072) \\   \hline \\[-1.8ex]  \multicolumn{4}{l}{$^{*}$p $<$ .05; $^{**}$p $<$ .01; $^{***}$p $<$ .001} \\  \end{tabular}  \end{table}
 
@@ -534,14 +540,14 @@ Tables \ref{tab:tab4}, \ref{tab:tab5} and \ref{tab:tab6} show the full output fo
 \clearpage
 
 \hypertarget{regression-models-using-following-russian-internet-research-agency-accounts-as-a-variable-of-interest}{%
-\subsection{Regression models using following Russian Internet Research Agency accounts as a variable of interest}\label{regression-models-using-following-russian-internet-research-agency-accounts-as-a-variable-of-interest}}
+\subsubsection{Regression models using following Russian Internet Research Agency accounts as a variable of interest}\label{regression-models-using-following-russian-internet-research-agency-accounts-as-a-variable-of-interest}}
 
-In the article, we present results of models estimating the relationship between exposure to posts from Russian Internet Research Agency accounts and voting preferences and behavior, and similarly, the relationship between exposure to at least one such post on the same outcomes. In this section we also present results from a regression model examining the relationship between following a Russian Internet Research Agency account and these vote-based outcomes. Unlike exposure, which as we discuss in the Results section was primarily incidental, following an Internet Research Agency account is directly chosen by respondents. Nevertheless, it is useful to examine whether there is a relationship between following and voting behavior. Results analogous to those in Figure 5 of the main article for following a Russian Internet Research Agency account are presented in Figure \ref{fig:Figure-E7}. Similar to the results regarding exposure, we find no evidence that following a Russian Internet Research Agency account is associated with changes in any of the measured voting preferences and behavior. Tables \ref{tab:tab7}, \ref{tab:tab8} and \ref{tab:tab9} show the full output of these linear models.
+In the article, we present results of models estimating the relationship between exposure to posts from Russian Internet Research Agency accounts and voting preferences and behavior, and similarly, the relationship between exposure to at least one such post on the same outcomes. In this section we also present results from a regression model examining the relationship between following a Russian Internet Research Agency account and these vote-based outcomes. Unlike exposure, which as we discuss in the Results section was primarily incidental, following an Internet Research Agency account is directly chosen by respondents. Nevertheless, it is useful to examine whether there is a relationship between following and voting behavior. Results analogous to those in Figure 5 of the main article for following a Russian Internet Research Agency account are presented in Figure \ref{fig:Supplementary-Figure-E8}. Similar to the results regarding exposure, we find no evidence that following a Russian Internet Research Agency account is associated with changes in any of the measured voting preferences and behavior. Supplementary Tables \ref{tab:tab7}, \ref{tab:tab8} and \ref{tab:tab9} show the full output of these linear models.
 
 \begin{figure}
 \centering
-\includegraphics{Appendix_files/figure-latex/Figure-E7-1.pdf}
-\caption{\label{fig:Figure-E7}Regression results of the relationship between following a Russian Internet Research Agency (IRA) account and voting behavior. Error bars represent 95\% confidence intervals around point estimates of the regression coefficients. \(n = 1,496\) survey respondents}
+\includegraphics{Supplementary_Information_files/figure-latex/Supplementary-Figure-E8-1.pdf}
+\caption{\label{fig:Supplementary-Figure-E8}Regression results of the relationship between following a Russian Internet Research Agency (IRA) account and voting behavior. Error bars represent 95\% confidence intervals around point estimates of the regression coefficients. \(n = 1,496\) survey respondents}
 \end{figure}
 
 \begin{table}[hp] \centering    \caption{\label{tab:tab7}Regression models of the relationship between following at least 1 Russian Internet Research Agency (IRA) account account and a change in ranking a vote for Trump over that for Clinton}    \label{}  \footnotesize  \begin{tabular}{@{\extracolsep{0pt}}lccc}  \\[-1.8ex]\hline \\[-1.8ex]  \\[-1.8ex] & \multicolumn{3}{c}{ } \\  \\[-1.8ex] & (1) & (2) & (3)\\  \hline \\[-1.8ex]  \rowcolor{gray!12!white} 1(Follow $>$ 0 IRA account) & 0.050 & 0.052 & 0.059 \\  \rowcolor{gray!12!white}  & (0.064) & (0.064) & (0.063) \\    Age & 0.0002 & 0.0001 & 0.00005 \\    & (0.001) & (0.001) & (0.001) \\    Woman & 0.036$^{*}$ & 0.036$^{*}$ & 0.036$^{*}$ \\    & (0.018) & (0.018) & (0.018) \\    College-educated & 0.009 & 0.010 & 0.009 \\    & (0.019) & (0.019) & (0.019) \\    Income & $-$0.012 & $-$0.012 & $-$0.012 \\    & (0.009) & (0.009) & (0.009) \\    Person of Color & $-$0.013 &  &  \\    & (0.021) &  &  \\    Other/Hispanic &  & $-$0.043 & $-$0.044 \\    &  & (0.026) & (0.026) \\    Black &  & 0.023 & 0.023 \\    &  & (0.030) & (0.030) \\    Region: Northeast & 0.0001 & 0.002 & 0.002 \\    & (0.028) & (0.028) & (0.028) \\    Region: Midwest & $-$0.022 & $-$0.021 & $-$0.020 \\    & (0.021) & (0.021) & (0.021) \\    Region: West & $-$0.012 & $-$0.007 & $-$0.006 \\    & (0.025) & (0.025) & (0.026) \\    Freq. of social media use & $-$0.004 & $-$0.005 & $-$0.004 \\    & (0.007) & (0.007) & (0.008) \\    log(Total Tweets) &  &  & $-$0.003 \\    &  &  & (0.004) \\    Party ID & $-$0.005 & 0.002 & 0.001 \\    & (0.023) & (0.023) & (0.023) \\    Constant & 0.052 & 0.051 & 0.079 \\    & (0.065) & (0.065) & (0.074) \\   \hline \\[-1.8ex]  \multicolumn{4}{l}{$^{*}$p $<$ .05; $^{**}$p $<$ .01; $^{***}$p $<$ .001} \\  \end{tabular}  \end{table}
@@ -553,33 +559,33 @@ In the article, we present results of models estimating the relationship between
 \clearpage
 
 \hypertarget{alternative-coding-of-race}{%
-\subsection{Alternative coding of race}\label{alternative-coding-of-race}}
+\subsubsection{Alternative coding of race}\label{alternative-coding-of-race}}
 
-For ease of comparison in \autoref{fig:Figure-E8} we present a subset of the models from \ref{tab:tab1}-\ref{tab:tab6} above, which is analogous to Figure 5 of the main text, but has an alternative coding of control variable race. Here, rather than treating all respondents of color similarly, we break them further down into Black and Hispanic/Other groups. Consistent with the results in the main manuscript, we find no evidence of a relationship between exposure and switches in voting preferences.
+For ease of comparison in \autoref{fig:Supplementary-Figure-E9} we present a subset of the models from \ref{tab:tab1}-\ref{tab:tab6} above, which is analogous to Figure 5 of the main text, but has an alternative coding of control variable race. Here, rather than treating all respondents of color similarly, we break them further down into Black and Hispanic/Other groups. Consistent with the results in the main manuscript, we find no evidence of a relationship between exposure and switches in voting preferences.
 
 \begin{figure}
 \centering
-\includegraphics{Appendix_files/figure-latex/Figure-E8-1.pdf}
-\caption{\label{fig:Figure-E8}Regression results of exposure to Russian Internet Research Agency accounts and changes in issue-based and ideological positioning with alternative race break-down. Error bars represent 95\% confidence intervals around point estimates of the regression coefficients. \(n = 1,496\) survey respondents}
+\includegraphics{Supplementary_Information_files/figure-latex/Supplementary-Figure-E9-1.pdf}
+\caption{\label{fig:Supplementary-Figure-E9}Regression results of exposure to Russian Internet Research Agency accounts and changes in issue-based and ideological positioning with alternative race break-down. Error bars represent 95\% confidence intervals around point estimates of the regression coefficients. \(n = 1,496\) survey respondents}
 \end{figure}
 
 \clearpage
 
 \hypertarget{alternative-measure-of-overall-twitter-activity}{%
-\subsection{Alternative measure of overall Twitter activity}\label{alternative-measure-of-overall-twitter-activity}}
+\subsubsection{Alternative measure of overall Twitter activity}\label{alternative-measure-of-overall-twitter-activity}}
 
-As another robustness check, rather than relying on a self-reported measure of Twitter activity, that might make respondents less likely to be exposed to tweets from Russian foreign influence campaigns, we control for the total number of tweets posted by their friends. In constructing this measure we rely on our own collected data to estimate the number of potential exposures to other tweets (non-Internet Research Agency) in respondents' timelines. These models are also presented in \ref{tab:tab1}-\ref{tab:tab6} above, but for ease of comparison to Figure 5 of the main manuscript in \autoref{fig:Figure-E9} we present a subset of them that use log(Total Tweets) as one of control variables. Consistent with the results in the main manuscript, we find no evidence of a relationship between exposure and switches in voting preferences.
+As another robustness check, rather than relying on a self-reported measure of Twitter activity, that might make respondents less likely to be exposed to tweets from Russian foreign influence campaigns, we control for the total number of tweets posted by their friends. In constructing this measure we rely on our own collected data to estimate the number of potential exposures to other tweets (non-Internet Research Agency) in respondents' timelines. These models are also presented in \ref{tab:tab1}-\ref{tab:tab6} above, but for ease of comparison to Figure 5 of the main manuscript in \autoref{fig:Supplementary-Figure-E10} we present a subset of them that use log(Total Tweets) as one of control variables. Consistent with the results in the main manuscript, we find no evidence of a relationship between exposure and switches in voting preferences.
 
 \begin{figure}
 \centering
-\includegraphics{Appendix_files/figure-latex/Figure-E9-1.pdf}
-\caption{\label{fig:Figure-E9}Regression results of exposure to Russian Internet Research Agency accounts and changes in issue-based and ideological positioning with alternative measure of overall potential exposures on Twitter. Error bars represent 95\% confidence intervals around point estimates of the regression coefficients. \(n = 1,496\) survey respondents}
+\includegraphics{Supplementary_Information_files/figure-latex/Supplementary-Figure-E10-1.pdf}
+\caption{\label{fig:Supplementary-Figure-E10}Regression results of exposure to Russian Internet Research Agency accounts and changes in issue-based and ideological positioning with alternative measure of overall potential exposures on Twitter. Error bars represent 95\% confidence intervals around point estimates of the regression coefficients. \(n = 1,496\) survey respondents}
 \end{figure}
 
 \clearpage
 
 \hypertarget{final-vote-preference-as-outcome}{%
-\subsection{Final vote preference as outcome}\label{final-vote-preference-as-outcome}}
+\subsubsection{Final vote preference as outcome}\label{final-vote-preference-as-outcome}}
 
 In \autoref{tab:vote_rhs}, we provide results for models in which vote choice in the final wave of the survey is the outcome variable, and a respondent's wave 1 preference is used as a control. This differs from the approach in the main manuscript, in which the outcome variable is a change score (change in vote preference from wave 1 to the final wave). However, \citet{Allison1990} shows that controlling for a previous measured outcome rather than using change scores can result in more biased estimates if the previous measured outcome is correlated with the error term.
 
@@ -590,10 +596,10 @@ In \autoref{tab:vote_rhs}, we provide results for models in which vote choice in
 \clearpage
 
 \hypertarget{linear-models-of-ideological-positioning}{%
-\section{Linear models of ideological positioning}\label{linear-models-of-ideological-positioning}}
+\subsection{Linear models of ideological positioning}\label{linear-models-of-ideological-positioning}}
 
 \hypertarget{details-of-outcome-variable-coding}{%
-\subsection{Details of outcome variable coding}\label{details-of-outcome-variable-coding}}
+\subsubsection{Details of outcome variable coding}\label{details-of-outcome-variable-coding}}
 
 To measure changes in ideological positioning between the first and final waves of the survey, we create two types of outcome variables: relative issue position and perceived polariztion of the candidates on different policy issues (measured on a 0-100 scale).
 
@@ -624,9 +630,9 @@ where \(ClintonPosition_{iw_{j}}\) and \(TrumpPosition_{iw_{j}}\) are respondent
 \clearpage
 
 \hypertarget{relative-self-placement}{%
-\subsection{Relative self-placement}\label{relative-self-placement}}
+\subsubsection{Relative self-placement}\label{relative-self-placement}}
 
-Tables \ref{tab:tab10}-\ref{tab:tab18} show the complete output of issue-based and ideological positioning models presented in Figure 4A of the main text.
+Supplementary Tables \ref{tab:tab10}-\ref{tab:tab18} show the complete output of issue-based and ideological positioning models presented in Figure 4A of the main text.
 
 \begin{landscape}
  \begin{table}[hp] \centering    \caption{\label{tab:tab10}Regression models of the relationship between exposure to Russian Internet Research Agency (IRA) accounts and political ideology}    \label{}  \footnotesize  \begin{tabular}{@{\extracolsep{0pt}}lccccccccc}  \\[-1.8ex]\hline \\[-1.8ex]  \\[-1.8ex] & \multicolumn{9}{c}{\textbf{Issue-based scale (political ideology)}} \\  \\[-1.8ex] & (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8) & (9)\\  \hline \\[-1.8ex]  \rowcolor{gray!12!white} log(Exposure $+$ 1) & $-$0.224 & $-$0.239 & 0.264 &  &  &  &  &  &  \\  \rowcolor{gray!12!white}  & (0.376) & (0.374) & (0.513) &  &  &  &  &  &  \\  \rowcolor{gray!12!white}  1(Exposure $>$ 0) &  &  &  & $-$1.244 & $-$1.257 & 0.724 &  &  &  \\  \rowcolor{gray!12!white}  &  &  &  & (2.078) & (2.074) & (2.331) &  &  &  \\  \rowcolor{gray!12!white}  1(Follow $>$ 0 IRA account) &  &  &  &  &  &  & $-$1.163 & $-$1.008 & 0.483 \\  \rowcolor{gray!12!white}  &  &  &  &  &  &  & (3.355) & (3.344) & (3.473) \\    Age & 0.052 & 0.049 & 0.028 & 0.047 & 0.043 & 0.033 & 0.052 & 0.048 & 0.033 \\    & (0.061) & (0.061) & (0.065) & (0.062) & (0.062) & (0.062) & (0.061) & (0.061) & (0.063) \\    Woman & $-$1.535 & $-$1.555 & $-$1.490 & $-$1.532 & $-$1.546 & $-$1.529 & $-$1.474 & $-$1.485 & $-$1.553 \\    & (1.863) & (1.857) & (1.854) & (1.866) & (1.861) & (1.858) & (1.848) & (1.843) & (1.842) \\    College-educated & $-$0.126 & $-$0.068 & $-$0.180 & $-$0.100 & $-$0.040 & $-$0.195 & $-$0.111 & $-$0.049 & $-$0.171 \\    & (1.949) & (1.946) & (1.953) & (1.941) & (1.938) & (1.949) & (1.947) & (1.944) & (1.955) \\    Income & 0.038 & 0.050 & 0.076 & 0.051 & 0.064 & 0.061 & 0.053 & 0.066 & 0.061 \\    & (1.037) & (1.035) & (1.037) & (1.037) & (1.035) & (1.035) & (1.038) & (1.036) & (1.036) \\    People of Color & 0.020 &  &  & 0.023 &  &  & 0.002 &  &  \\    & (2.716) &  &  & (2.714) &  &  & (2.718) &  &  \\    Other/Hispanic &  & $-$2.545 & $-$2.653 &  & $-$2.522 & $-$2.660 &  & $-$2.528 & $-$2.641 \\    &  & (3.013) & (3.027) &  & (3.012) & (3.024) &  & (3.014) & (3.023) \\    Black &  & 3.514 & 3.350 &  & 3.489 & 3.395 &  & 3.450 & 3.423 \\    &  & (4.567) & (4.610) &  & (4.568) & (4.593) &  & (4.581) & (4.587) \\    Region: Northeast & 3.539 & 3.741 & 3.807 & 3.450 & 3.652 & 3.838 & 3.604 & 3.804 & 3.755 \\    & (2.952) & (2.936) & (2.929) & (2.935) & (2.920) & (2.908) & (2.970) & (2.952) & (2.948) \\    Region: Midwest & 3.265 & 3.417 & 3.631 & 3.304 & 3.458 & 3.576 & 3.283 & 3.437 & 3.570 \\    & (2.166) & (2.177) & (2.170) & (2.162) & (2.173) & (2.166) & (2.167) & (2.178) & (2.169) \\    Region: West & $-$1.724 & $-$1.210 & $-$1.043 & $-$1.771 & $-$1.264 & $-$1.014 & $-$1.774 & $-$1.268 & $-$1.042 \\    & (2.419) & (2.443) & (2.450) & (2.423) & (2.449) & (2.448) & (2.425) & (2.452) & (2.455) \\    Freq. of social media use & 0.783 & 0.788 & 0.851 & 0.816 & 0.819 & 0.839 & 0.755 & 0.756 & 0.860 \\    & (0.784) & (0.786) & (0.790) & (0.797) & (0.799) & (0.797) & (0.776) & (0.778) & (0.791) \\    log(Total Tweets) &  &  & $-$0.794 &  &  & $-$0.713 &  &  & $-$0.624 \\    &  &  & (0.705) &  &  & (0.606) &  &  & (0.537) \\    Party ID & 12.815$^{***}$ & 13.430$^{***}$ & 12.948$^{***}$ & 12.607$^{***}$ & 13.205$^{***}$ & 13.185$^{***}$ & 12.682$^{***}$ & 13.273$^{***}$ & 13.159$^{***}$ \\    & (2.611) & (2.589) & (2.613) & (2.562) & (2.548) & (2.542) & (2.578) & (2.562) & (2.553) \\    Constant & $-$13.249 & $-$13.550$^{*}$ & $-$6.358 & $-$12.767 & $-$13.069 & $-$7.321 & $-$13.453$^{*}$ & $-$13.753$^{*}$ & $-$7.775 \\    & (6.782) & (6.828) & (9.283) & (6.853) & (6.898) & (8.379) & (6.805) & (6.849) & (8.396) \\   \hline \\[-1.8ex]  \multicolumn{10}{l}{$^{*}$p $<$ .05; $^{**}$p $<$ .01; $^{***}$p $<$ .001} \\  \end{tabular}  \end{table} 
@@ -651,9 +657,9 @@ Tables \ref{tab:tab10}-\ref{tab:tab18} show the complete output of issue-based a
 \clearpage
 
 \hypertarget{perceived-candidate-polarization}{%
-\subsection{Perceived candidate polarization}\label{perceived-candidate-polarization}}
+\subsubsection{Perceived candidate polarization}\label{perceived-candidate-polarization}}
 
-Tables \ref{tab:tab19}-\ref{tab:tab27} show the complete output of issue-based and ideological positioning models presented in Figure 4B of the main text.
+Supplementary Tables \ref{tab:tab19}-\ref{tab:tab27} show the complete output of issue-based and ideological positioning models presented in Figure 4B of the main text.
 
 \begin{landscape}
  \begin{table}[hp] \centering    \caption{\label{tab:tab19}Regression models of the relationship between following a Russian Internet Research Agency (IRA) account and political ideology}    \label{}  \footnotesize  \begin{tabular}{@{\extracolsep{0pt}}lccccccccc}  \\[-1.8ex]\hline \\[-1.8ex]  \\[-1.8ex] & \multicolumn{9}{c}{\textbf{Issue-based scale (political ideology)}} \\  \\[-1.8ex] & (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8) & (9)\\  \hline \\[-1.8ex]  \rowcolor{gray!12!white} log(Exposure $+$ 1) & 0.265 & 0.269 & 0.058 &  &  &  &  &  &  \\  \rowcolor{gray!12!white}  & (0.353) & (0.352) & (0.466) &  &  &  &  &  &  \\  \rowcolor{gray!12!white}  1(Exposure $>$ 0) &  &  &  & 1.160 & 1.162 & 0.202 &  &  &  \\  \rowcolor{gray!12!white}  &  &  &  & (1.762) & (1.761) & (2.311) &  &  &  \\  \rowcolor{gray!12!white}  1(Follow $>$ 0 IRA account) &  &  &  &  &  &  & 4.185 & 4.144 & 3.405 \\  \rowcolor{gray!12!white}  &  &  &  &  &  &  & (3.116) & (3.113) & (3.260) \\    Age & 0.003 & 0.004 & 0.013 & 0.009 & 0.010 & 0.015 & 0.002 & 0.003 & 0.011 \\    & (0.059) & (0.059) & (0.060) & (0.059) & (0.059) & (0.059) & (0.059) & (0.059) & (0.059) \\    Woman & $-$1.737 & $-$1.735 & $-$1.765 & $-$1.765 & $-$1.764 & $-$1.773 & $-$1.755 & $-$1.755 & $-$1.724 \\    & (1.706) & (1.706) & (1.705) & (1.704) & (1.703) & (1.703) & (1.695) & (1.695) & (1.696) \\    College-educated & 2.055 & 2.038 & 2.085 & 2.025 & 2.008 & 2.081 & 2.074 & 2.058 & 2.116 \\    & (1.664) & (1.665) & (1.661) & (1.662) & (1.664) & (1.666) & (1.666) & (1.668) & (1.664) \\    Income & $-$0.318 & $-$0.321 & $-$0.332 & $-$0.334 & $-$0.337 & $-$0.336 & $-$0.343 & $-$0.345 & $-$0.344 \\    & (0.873) & (0.873) & (0.874) & (0.872) & (0.872) & (0.871) & (0.870) & (0.870) & (0.870) \\    People of Color & $-$0.301 &  &  & $-$0.302 &  &  & $-$0.253 &  &  \\    & (2.185) &  &  & (2.184) &  &  & (2.186) &  &  \\    Other/Hispanic &  & 0.429 & 0.471 &  & 0.404 & 0.468 &  & 0.417 & 0.465 \\    &  & (2.668) & (2.665) &  & (2.669) & (2.663) &  & (2.671) & (2.664) \\    Black &  & $-$1.312 & $-$1.243 &  & $-$1.279 & $-$1.234 &  & $-$1.181 & $-$1.168 \\    &  & (3.372) & (3.368) &  & (3.372) & (3.378) &  & (3.382) & (3.382) \\    Region: Northeast & $-$0.034 & $-$0.087 & $-$0.112 & 0.042 & $-$0.010 & $-$0.100 & $-$0.164 & $-$0.213 & $-$0.186 \\    & (2.440) & (2.440) & (2.430) & (2.439) & (2.439) & (2.427) & (2.450) & (2.449) & (2.447) \\    Region: Midwest & $-$1.515 & $-$1.555 & $-$1.641 & $-$1.557 & $-$1.595 & $-$1.652 & $-$1.505 & $-$1.542 & $-$1.605 \\    & (2.092) & (2.086) & (2.097) & (2.094) & (2.088) & (2.092) & (2.093) & (2.087) & (2.094) \\    Region: West & 5.973$^{**}$ & 5.830$^{**}$ & 5.762$^{**}$ & 6.029$^{**}$ & 5.892$^{**}$ & 5.771$^{**}$ & 6.050$^{**}$ & 5.919$^{**}$ & 5.810$^{**}$ \\    & (2.214) & (2.221) & (2.225) & (2.214) & (2.223) & (2.225) & (2.215) & (2.224) & (2.226) \\    Freq. of social media use & $-$0.999 & $-$0.999 & $-$1.025 & $-$1.021 & $-$1.020 & $-$1.029 & $-$0.990 & $-$0.989 & $-$1.039 \\    & (0.698) & (0.698) & (0.697) & (0.700) & (0.700) & (0.702) & (0.689) & (0.689) & (0.695) \\    log(Total Tweets) &  &  & 0.333 &  &  & 0.345 &  &  & 0.309 \\    &  &  & (0.497) &  &  & (0.494) &  &  & (0.389) \\    Party ID & 1.931 & 1.759 & 1.957 & 2.164 & 2.000 & 2.009 & 2.002 & 1.848 & 1.901 \\    & (2.358) & (2.386) & (2.377) & (2.277) & (2.311) & (2.308) & (2.292) & (2.324) & (2.311) \\    Constant & 10.300 & 10.368 & 7.343 & 9.885 & 9.952 & 7.165 & 10.681 & 10.743 & 7.770 \\    & (5.953) & (5.972) & (7.382) & (5.962) & (5.981) & (6.938) & (5.996) & (6.014) & (6.800) \\   \hline \\[-1.8ex]  \multicolumn{10}{l}{$^{*}$p $<$ .05; $^{**}$p $<$ .01; $^{***}$p $<$ .001} \\  \end{tabular}  \end{table} 
@@ -678,93 +684,50 @@ Tables \ref{tab:tab19}-\ref{tab:tab27} show the complete output of issue-based a
 \clearpage
 
 \hypertarget{alternative-coding-of-race-1}{%
-\subsection{Alternative coding of race}\label{alternative-coding-of-race-1}}
+\subsubsection{Alternative coding of race}\label{alternative-coding-of-race-1}}
 
-For ease of comparison in \autoref{fig:Figure-F10} we present a subset of the models from \ref{tab:tab10}-\ref{tab:tab18} and \ref{tab:tab19}-\ref{tab:tab27} above, which is analogous to Figure 4 of the main text, but has an alternative coding of control variable race. Here, rather than treating all respondents of color similarly, we break them further down into Black and Hispanic/Other groups. Consistent with the results in the main manuscript, we find no evidence of a relationship between exposure to Internet Research Agency accounts and changes in issue-based or ideological positioning.
+For ease of comparison in \autoref{fig:Supplementary-Figure-F11} we present a subset of the models from \ref{tab:tab10}-\ref{tab:tab18} and \ref{tab:tab19}-\ref{tab:tab27} above, which is analogous to Figure 4 of the main text, but has an alternative coding of control variable race. Here, rather than treating all respondents of color similarly, we break them further down into Black and Hispanic/Other groups. Consistent with the results in the main manuscript, we find no evidence of a relationship between exposure to Internet Research Agency accounts and changes in issue-based or ideological positioning.
 
 \begin{figure}
 \centering
-\includegraphics{Appendix_files/figure-latex/Figure-F10-1.pdf}
-\caption{\label{fig:Figure-F10}Regression results of exposure to Russian Internet Research Agency accounts and changes in issue-based and ideological positioning with alternative race break-down. Error bars represent 95\% confidence intervals around point estimates of the regression coefficients. \(n = 1,496\) survey respondents}
+\includegraphics{Supplementary_Information_files/figure-latex/Supplementary-Figure-F11-1.pdf}
+\caption{\label{fig:Supplementary-Figure-F11}Regression results of exposure to Russian Internet Research Agency accounts and changes in issue-based and ideological positioning with alternative race break-down. Error bars represent 95\% confidence intervals around point estimates of the regression coefficients. \(n = 1,496\) survey respondents}
 \end{figure}
 
 \clearpage
 
 \hypertarget{alternative-measure-of-overall-twitter-activity-1}{%
-\subsection{Alternative measure of overall Twitter activity}\label{alternative-measure-of-overall-twitter-activity-1}}
+\subsubsection{Alternative measure of overall Twitter activity}\label{alternative-measure-of-overall-twitter-activity-1}}
 
-As another robustness check, rather than relying on self-reported measure of social media activity, that might make respondents less likely to be exposed to tweets from foreign influence campaigns, we control for the total number of tweets posted by their friends. In constructing this measure we rely on our own collected data to estimate the number of potential exposures to other tweets (non-Internet Research Agency) in respondents' timelines. These models are also presented in \ref{tab:tab10}-\ref{tab:tab18} and \ref{tab:tab19}-\ref{tab:tab27} above, but for ease of comparison to Figure 4 of the main manuscript in \autoref{fig:Figure-F11} we present a subset of them that use log(Total Tweets) as one of control variables. Consistent with the results in the main manuscript, we find no evidence of a relationship between exposure to Internet Research Agency accounts and changes in issue-based or ideological positioning.
+As another robustness check, rather than relying on self-reported measure of social media activity, that might make respondents less likely to be exposed to tweets from foreign influence campaigns, we control for the total number of tweets posted by their friends. In constructing this measure we rely on our own collected data to estimate the number of potential exposures to other tweets (non-Internet Research Agency) in respondents' timelines. These models are also presented in \ref{tab:tab10}-\ref{tab:tab18} and \ref{tab:tab19}-\ref{tab:tab27} above, but for ease of comparison to Figure 4 of the main manuscript in \autoref{fig:Supplementary-Figure-F12} we present a subset of them that use log(Total Tweets) as one of control variables. Consistent with the results in the main manuscript, we find no evidence of a relationship between exposure to Internet Research Agency accounts and changes in issue-based or ideological positioning.
 
 \begin{figure}
 \centering
-\includegraphics{Appendix_files/figure-latex/Figure-F11-1.pdf}
-\caption{\label{fig:Figure-F11}Regression results of exposure to Russian Internet Research Agency accounts and changes in issue-based and ideological positioning with alternative measure of overall potential exposures on Twitter. Error bars represent 95\% confidence intervals around point estimates of the regression coefficients. \(n = 1,496\) survey respondents}
+\includegraphics{Supplementary_Information_files/figure-latex/Supplementary-Figure-F12-1.pdf}
+\caption{\label{fig:Supplementary-Figure-F12}Regression results of exposure to Russian Internet Research Agency accounts and changes in issue-based and ideological positioning with alternative measure of overall potential exposures on Twitter. Error bars represent 95\% confidence intervals around point estimates of the regression coefficients. \(n = 1,496\) survey respondents}
 \end{figure}
 
 \clearpage
 
 \hypertarget{adjustment-for-multiple-hypothesis-testing}{%
-\section{Adjustment for multiple hypothesis testing}\label{adjustment-for-multiple-hypothesis-testing}}
+\subsection{Adjustment for multiple hypothesis testing}\label{adjustment-for-multiple-hypothesis-testing}}
 
-\autoref{fig:Figure-G12} presents the results of the OLS models showing the relationship between exposure on issue positions and polarization with Bonferroni corrections applied to address multiple comparisons. \autoref{fig:Figure-G13} shows corresponding results of the OLS models from Figure 5 of the main manuscript after adjusting for multiple comparisons with Bonferroni correction.
+\autoref{fig:Supplementary-Figure-G13} presents the results of the OLS models showing the relationship between exposure on issue positions and polarization with Bonferroni corrections applied to address multiple comparisons. \autoref{fig:Supplementary-Figure-G14} shows corresponding results of the OLS models from Figure 5 of the main manuscript after adjusting for multiple comparisons with Bonferroni correction.
 
 \begin{figure}
 \centering
-\includegraphics{Appendix_files/figure-latex/Figure-G12-1.pdf}
-\caption{\label{fig:Figure-G12}Regression results of exposure to Russian Internet Research Agency accounts and changes in issue-based and ideological positionin. Point estimates from OLS models with 95\% CIs adjusted for multiple comparisons using Bonferroni correction. \(n = 1,496\) survey respondents}
+\includegraphics{Supplementary_Information_files/figure-latex/Supplementary-Figure-G13-1.pdf}
+\caption{\label{fig:Supplementary-Figure-G13}Regression results of exposure to Russian Internet Research Agency accounts and changes in issue-based and ideological positionin. Point estimates from OLS models with 95\% CIs adjusted for multiple comparisons using Bonferroni correction. \(n = 1,496\) survey respondents}
 \end{figure}
 
 \begin{figure}
 \centering
-\includegraphics{Appendix_files/figure-latex/Figure-G13-1.pdf}
-\caption{\label{fig:Figure-G13}Regression results of the relationship between exposure to posts from Russian Internet Research Agency accounts and voting behavior. Point estimates from OLS models with 95\% CIs adjusted for multiple comparisons using Bonferroni correction. \(n = 1,496\) survey respondents}
+\includegraphics{Supplementary_Information_files/figure-latex/Supplementary-Figure-G14-1.pdf}
+\caption{\label{fig:Supplementary-Figure-G14}Regression results of the relationship between exposure to posts from Russian Internet Research Agency accounts and voting behavior. Point estimates from OLS models with 95\% CIs adjusted for multiple comparisons using Bonferroni correction. \(n = 1,496\) survey respondents}
 \end{figure}
 
 \clearpage
 
-\hypertarget{software-statement}{%
-\section{Software statement}\label{software-statement}}
-
-We relied on R \citep{R2020} and Python \citep{VanRossum2009} programming languages, as well as the following R packages in our empirical analysis and write-up:
-
-\texttt{cowplot} \citep{Wilke2020}
-
-\texttt{dplyr} \citep{Wickham2020a}
-
-\texttt{estimatr} \citep{Blair2021}
-
-\texttt{ggplot2} \citep{Wickham2016}
-
-\texttt{haven} \citep{Wickham2020c}
-
-\texttt{kableExtra} \citep{Zhu2020}
-
-\texttt{knitr} \citep{Xie2020}
-
-\texttt{lmtest} \citep{Zeileis2002}
-
-\texttt{lubridate} \citep{Grolemund2011}
-
-\texttt{magrittr} \citep{Bache2014}
-
-\texttt{MASS} \citep{Venables2002}
-
-\texttt{mvtnorm} \citep{Genz2009}
-
-\texttt{readr} \citep{Wickham2018}
-
-\texttt{stargazer} \citep{Hlavac2018}
-
-\texttt{stringi} \citep{Gagolewski2018}
-
-\texttt{stringr} \citep{Wickham2019}
-
-\texttt{tibble} \citep{Muller2018}
-
-\texttt{tidyr} \citep{Wickham2020b}
-
-\clearpage
-\addcontentsline{toc}{section}{Supplementary References}
 \renewcommand\refname{Supplementary References}
   \bibliography{bibliography.bib,software.bib}
 

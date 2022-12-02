@@ -32,16 +32,16 @@ sessionInfo()
 # FIGURE 1 (GENERAL DESCRIPTIVES) -----------------------------------------
 
 G1A <- readr::read_csv("./results/02_match_respondents/G1A.csv")
-G1B <- readr::read_csv("./results/02_match_respondents/G1B.csv")
 G1C <- readr::read_csv("./results/02_match_respondents/G1C.csv")
+G1D <- readr::read_csv("./results/02_match_respondents/G1D.csv")
 
 wb <- openxlsx::createWorkbook()
 openxlsx::addWorksheet(wb, sheetName = "figure_1a", gridLines = FALSE)
 openxlsx::writeDataTable(wb, sheet = "figure_1a", x = G1A)
 openxlsx::addWorksheet(wb, sheetName = "figure_1b", gridLines = FALSE)
-openxlsx::writeDataTable(wb, sheet = "figure_1b", x = G1B[,c("country", "cum_prop_respondents", "cum_prop_exposure")])
+openxlsx::writeDataTable(wb, sheet = "figure_1b", x = G1C[,c("country", "cum_prop_respondents", "cum_prop_exposure")])
 openxlsx::addWorksheet(wb, sheetName = "figure_1c", gridLines = FALSE)
-openxlsx::writeDataTable(wb, sheet = "figure_1c", x = G1C[,c("country", "cum_prop_trolls", "cum_prop_exposure")])
+openxlsx::writeDataTable(wb, sheet = "figure_1c", x = G1D[,c("country", "cum_prop_trolls", "cum_prop_exposure")])
 saveRDS(wb, "./figures_source/Source Data.rds")
 openxlsx::saveWorkbook(wb, "./figures_source/Source Data.xlsx", overwrite = TRUE)
 
@@ -104,10 +104,10 @@ Figure1A <- ggplot(G1A, aes(x = tweet_date, y = num_exposures/figure1_num_respon
 
 # Cumulative Density Plot of Respondents' Exposed (Panel B)
 
-G1B$country <- factor(G1B$country, levels = rev(c("Russia", "Venezuela", "China", "Iran")))
+G1C$country <- factor(G1C$country, levels = rev(c("Russia", "Venezuela", "China", "Iran")))
 
 
-Figure1B <- ggplot(filter(G1B, country != "Other"),
+Figure1B <- ggplot(filter(G1C, country != "Other"),
                    aes(x = cum_prop_respondents, y = cum_prop_exposure,
                        size = country, color = country, alpha = country)) +
   my.theme(base_size = 7,
@@ -133,9 +133,9 @@ Figure1B <- ggplot(filter(G1B, country != "Other"),
 
 # Cumulative Density Plot of Trolls' Responsible (Panel C)
 
-G1C$country <- factor(G1C$country, levels = rev(c("Russia", "Venezuela", "China", "Iran")))
+G1D$country <- factor(G1D$country, levels = rev(c("Russia", "Venezuela", "China", "Iran")))
 
-Figure1C <- ggplot(filter(G1C, country != "Other"),
+Figure1C <- ggplot(filter(G1D, country != "Other"),
                    aes(x = cum_prop_trolls, y = cum_prop_exposure,
                    size = country, color = country, alpha = country)) +
   my.theme(base_size = 7,
@@ -489,7 +489,7 @@ candidate_distance_follow_troll_russia_controls <- readRDS(
 # names(candidate_distance_log_exposure_russia_controls)
 dv_labels <- c("Political ideology\n(left-right scale)",
                "Immigration",
-               "Ban on Muslims",
+               "Ban on Muslim people",
                "Building a wall",
                "Support for Obamacare",
                "Expanding the ACA",
@@ -563,7 +563,7 @@ G4$dv <- factor(G4$dv, levels = c("Immigration",
                                   "Building a wall",
                                   "Support for Obamacare",
                                   "Expanding the ACA",
-                                  "Ban on Muslims",
+                                  "Ban on Muslim people",
                                   "Support for free trade",
                                   "Oppose Chinese tariffs",
                                   "Use of military force",

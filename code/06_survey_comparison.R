@@ -47,8 +47,8 @@ us2016_recoded <- us2016_twitter %>%
     non_college = ifelse(college_grad==0,1,0),
     race = factor(dplyr::case_when(
       race == "White" ~ "White",
-      race %in% c("Black", "Hispanic", "Other") ~ "Non-White"
-    ), levels = c("White", "Non-White")),
+      race %in% c("Black", "Hispanic", "Other") ~ "POC"
+    ), levels = c("White", "POC")),
     region = factor(region, levels = c("South", "Northeast", "Midwest", "West"))
   )
 
@@ -70,7 +70,7 @@ summary_us2016 <- us2016_recoded %>%
     `income_30,000+` = sum(income_3070, income_70120, income_120plus, na.rm = TRUE),
     # Race
     `race_white` = sum(race_white),
-    `race_non-white` = sum(race_black, race_hispanic, race_other)
+    `race_poc` = sum(race_black, race_hispanic, race_other)
   ) %>%
   tidyr::pivot_longer(cols = tidyselect::everything()) %>%
   tidyr::separate(col = "name", into = c("var", "category"), sep = "_") %>%
@@ -103,7 +103,7 @@ summary_acs2016 <- acs2016 %>%
     `income_30,000+` = SE_A14001B_006,
     # Race
     `race_white` = SE_A03001_002,
-    `race_non-white` = sum(SE_A03001_003, SE_A03001_004, SE_A03001_005, SE_A03001_006, SE_A03001_007, SE_A03001_008)
+    `race_poc` = sum(SE_A03001_003, SE_A03001_004, SE_A03001_005, SE_A03001_006, SE_A03001_007, SE_A03001_008)
   ) %>%
   tidyr::pivot_longer(cols = tidyselect::everything()) %>%
   tidyr::separate(col = "name", into = c("var", "category"), sep = "_") %>%

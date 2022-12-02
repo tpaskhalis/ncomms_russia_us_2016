@@ -73,6 +73,8 @@ summary_ideology <- readr::read_csv("../results/06_survey_comparison/summary_ide
 G1 <- readr::read_csv("../results/07_equivalence_tests/G1.csv")
 
 # Data for section C
+G1B <- readr::read_csv("../results/02_match_respondents/G1B.csv")
+
 # Exposure Models
 # Party ID and (log) exposure to posts from Russian trolls
 total_exposure_russia_log <- readRDS(
@@ -218,16 +220,21 @@ candidate_distance_follow_troll_russia_controls_black <- readRDS("../results/05_
 candidate_distance_follow_troll_russia_controls_total_tweets <- readRDS("../results/05_regression_analysis/candidate_distance_follow_troll_russia_controls_total_tweets.rds")
 ```
 
+\renewcommand{\figureautorefname}{Supplementary Figure}
+\renewcommand{\tableautorefname}{Supplementary Table}
+
 \clearpage
-# Data
+# Supplementary Methods
 
-## Twitter Elections Integrity releases
+## Data
 
-In the run-up to the 2018 US midterm elections, Twitter announced a new initiative designed to combat foreign-backed information campaigns.^[[https://blog.twitter.com/en_us/topics/company/2018/2016-election-update.html](https://blog.twitter.com/en_us/topics/company/2018/2016-election-update.html), [https://blog.twitter.com/en_us/topics/company/2018/an-update-on-our-elections-integrity-work.html](https://blog.twitter.com/en_us/topics/company/2018/an-update-on-our-elections-integrity-work.html)] As part of this initiative, the company continuously identified and blocked accounts of suspected foreign influence accounts. Fortunately, Twitter also released data that included the account IDs of those accounts identified as foreign influence accounts and from where they originated.
+### Twitter Elections Integrity releases
+
+In the run-up to the 2018 US midterm elections, Twitter announced a new initiative designed to combat foreign-backed information campaigns.^[[https://blog.twitter.com/en_us/topics/company/2018/2016-election-update.html](https://blog.twitter.com/en_us/topics/company/2018/2016-election-update.html), [https://blog.twitter.com/en_us/topics/company/2018/an-update-on-our-elections-integrity-work.html](https://blog.twitter.com/en_us/topics/company/2018/an-update-on-our-elections-integrity-work.html)] As part of this initiative, the company continuously identified and blocked accounts of suspected foreign influence accounts. In addition to this, Twitter also released data that included the unique IDs of those accounts identified as foreign influence accounts and their country of origin.
 
 To date, Twitter has released 27 Elections Integrity datasets that include the user profiles, tweets, and associated media from accounts that it classified as belonging to state-backed foreign influence campaigns. Overall, these datasets cover a wide range of national, political, and temporal contexts. Of those released to date, 17 of these datasets include at least one tweet from 2016 or earlier. In \autoref{tab:tab28}, we present a summary of these releases covering the time period relevant to our research (2016 and earlier).
 
-In \autoref{fig:Figure-A1}, we also show the daily prevalence of tweets from different campaigns in the Elections Integrity data. Analogous to Panel A of Figure 1 in the main article, \autoref{fig:Figure-A1} demonstrates that the over-representation of tweets from accounts linked to Russia in our respondents' feeds is not a function of higher prevalence of this content in the datasets released by Twitter, but instead likely to result from a coordinated effort to target voters in the US prior to the 2016 election. Furthermore, \autoref{fig:Figure-A2} shows the potential daily outreach of foreign influence accounts' messages by aggregating the number of the original tweets as well as the number of times they were retweeted or quote-tweeted. As can be seen from the figure and table below, the Russian campaign had a noticeably higher virality than the rest of the foreign influence campaigns in that period. Some of the posted tweets received especially high traction, resulting in clear visible spikes in October and November of 2016.
+In \autoref{fig:Supplementary-Figure-A1}, we also show the daily prevalence of tweets from different campaigns in the Elections Integrity data. Analogous to Panel A of Figure 1 in the main article, \autoref{fig:Supplementary-Figure-A1} demonstrates that the over-representation of tweets from accounts linked to Russia in our respondents' feeds is not a function of higher prevalence of this content in the datasets released by Twitter, but instead likely to result from a coordinated effort to target voters in the US prior to the 2016 election. Furthermore, \autoref{fig:Supplementary-Figure-A2} shows the potential daily outreach of foreign influence accounts' messages by aggregating the number of the original tweets as well as the number of times they were retweeted or quote-tweeted. As can be seen from the figure and table below, the Russian campaign had a noticeably higher virality than the rest of the foreign influence campaigns in that period. Some of the posted tweets received especially high traction, resulting in clear visible spikes in October and November of 2016.
 
 The precise process by which Twitter identifies foreign influence accounts is not publicly detailed by Twitter. However, because Twitter has additional internal data about each account's behavior, and has an overall corporate interest in discovering these accounts, we assume that the company's identification is generally robust, unbiased, and of higher accuracy than could be done externally, especially considering that many these accounts are routinely suspended.
 
@@ -244,19 +251,19 @@ figure_1ACD_colors = c("Russia" = "#0D0887", # 404272
 
 # Figure A1
 wb <- readRDS("../figures_source/Source Data.rds")
-openxlsx::addWorksheet(wb, sheetName = "figure_a1", gridLines = FALSE)
-openxlsx::writeDataTable(wb, sheet = "figure_a1", x = daily_rogue_tweets_2016_lite[,c("country", "tweet_date", "n_tweets")])
+openxlsx::addWorksheet(wb, sheetName = "supplementary_figure_a1", gridLines = FALSE)
+openxlsx::writeDataTable(wb, sheet = "supplementary_figure_a1", x = daily_rogue_tweets_2016_lite[,c("country", "tweet_date", "n_tweets")])
 # Figure A2
-openxlsx::addWorksheet(wb, sheetName = "figure_a2", gridLines = FALSE)
-openxlsx::writeDataTable(wb, sheet = "figure_a2", x = daily_rogue_tweets_2016_lite[,c("country", "tweet_date", "total_exposures")])
+openxlsx::addWorksheet(wb, sheetName = "supplementary_figure_a2", gridLines = FALSE)
+openxlsx::writeDataTable(wb, sheet = "supplementary_figure_a2", x = daily_rogue_tweets_2016_lite[,c("country", "tweet_date", "total_exposures")])
 # Table A1
-openxlsx::addWorksheet(wb, sheetName = "table_a1", gridLines = FALSE)
-openxlsx::writeDataTable(wb, sheet = "table_a1", x = summary_rogue_tweets_2016_lite)
+openxlsx::addWorksheet(wb, sheetName = "supplementary_table_a1", gridLines = FALSE)
+openxlsx::writeDataTable(wb, sheet = "supplementary_table_a1", x = summary_rogue_tweets_2016_lite)
 saveRDS(wb, "../figures_source/Source Data.rds")
 openxlsx::saveWorkbook(wb, "../figures_source/Source Data.xlsx", overwrite = TRUE)
 ```
 
-```{r Figure-A1, out.width="100%", out.height="60%", fig.align="center", fig.cap="Prevalence of tweets among surveyed respondents' Twitter feeds for each campaign in the Twitter Elections Integrity dataset (tweets only)"}
+```{r Supplementary-Figure-A1, out.width="100%", out.height="60%", fig.align="center", fig.cap="Prevalence of tweets among surveyed respondents' Twitter feeds for each campaign in the Twitter Elections Integrity dataset (tweets only)"}
 ggplot(daily_rogue_tweets_2016_lite, aes(x = tweet_date, y = n_tweets,
                fill = country, color = country)) +
   my.theme(base_size = 7,
@@ -296,7 +303,7 @@ ggplot(daily_rogue_tweets_2016_lite, aes(x = tweet_date, y = n_tweets,
          color = guide_legend(reverse = TRUE, override.aes = list(size = 1, alpha = 1)))
 ```
 
-```{r Figure-A2, out.width="100%",out.height="65%", fig.align="center", fig.cap="Prevalence of tweets, retweets, and quote tweets among surveyed respondents' Twitter feeds for each campaign in the Twitter Elections Integrity dataset", echo = FALSE}
+```{r Supplementary-Figure-A2, out.width="100%",out.height="65%", fig.align="center", fig.cap="Prevalence of tweets, retweets, and quote tweets among surveyed respondents' Twitter feeds for each campaign in the Twitter Elections Integrity dataset", echo = FALSE}
 ggplot(daily_rogue_tweets_2016_lite, aes(x = tweet_date, y = total_exposures,
                fill = country, color = country)) +
   my.theme(base_size = 7,
@@ -373,7 +380,7 @@ kable(summary_rogue_tweets_2016_lite,
 
 
 \clearpage
-## Survey
+### Survey
 
 The YouGov survey waves took place between April 2016 and November 2016. However, the survey question asking who respondents voted for was obtained in a post-election questionaire that was collected by YouGov separately after the election. The fielding dates of each survey wave were as follows:
 
@@ -387,12 +394,12 @@ In \autoref{tab:tab29}, we provide summary statistics regarding the socio-demogr
 ```{r}
 # Table A2
 wb <- readRDS("../figures_source/Source Data.rds")
-openxlsx::addWorksheet(wb, sheetName = "table_a2", gridLines = FALSE)
-openxlsx::writeDataTable(wb, sheet = "table_a2", x = survey_comparison)
+openxlsx::addWorksheet(wb, sheetName = "supplementary_table_a2", gridLines = FALSE)
+openxlsx::writeDataTable(wb, sheet = "supplementary_table_a2", x = survey_comparison)
 # Table A3
 wb <- readRDS("../figures_source/Source Data.rds")
-openxlsx::addWorksheet(wb, sheetName = "table_a3", gridLines = FALSE)
-openxlsx::writeDataTable(wb, sheet = "table_a3", x = summary_ideology)
+openxlsx::addWorksheet(wb, sheetName = "supplementary_table_a3", gridLines = FALSE)
+openxlsx::writeDataTable(wb, sheet = "supplementary_table_a3", x = summary_ideology)
 saveRDS(wb, "../figures_source/Source Data.rds")
 openxlsx::saveWorkbook(wb, "../figures_source/Source Data.xlsx", overwrite = TRUE)
 ```
@@ -431,7 +438,7 @@ kable(summary_ideology,
 
 
 \clearpage
-## Survey questions
+### Survey questions
 
 In Figure 4 of the main article, we estimate the relationship between exposure to posts from Russian foreign influence accounts and respondents' political ideology and issues positions. Below we present the question wording for each outcome that is presented in Figure 4. We then present the question text for the question that asks respondents how they rank the presidential comparisons, as used in Figure 5.\vspace{6mm}
 
@@ -512,7 +519,7 @@ would be your next favorite choice to be president, and so on.}}\newline
 
 
 \clearpage
-## Twitter data collection for YouGov survey
+### Twitter data collection for YouGov survey
 
 The lists of friends for all YouGov respondents who provided their Twitter profiles were retrieved in April 2016. After the election, in December 2016, we further collected the posts of YouGov respondents and their friends. In total we collected 1,244,124,493 tweets from the timelines of our respondents' friends. These tweets represent the corpus of posts that potentially appeared in respondents' timelines. 
 
@@ -521,15 +528,15 @@ We then matched the posts appearing in the timelines of respondents' friends to 
 Overall, we identified 786,634 posts from foreign influence campaign accounts that had the potential to appear in respondents' timelines. These posts could appear and be viewed by respondents, although given the black-box of the Twitter's timeline algorithm, this cannot be known with certainty for any specific post. As we note in the article, we follow the literature [e.g. @Grinberg2019] in referring to these posts as ``exposures.''
 
 
-## Accounts of politicians and national news media organizations
+### Accounts of politicians and national news media organizations
 
 In the Results section of the main article, we compare the number of exposures from Russian Internet Research Agency accounts to those from politicians and national news media. The list of politicians includes all Members of Congress and political candidates in the 2016 race. National news media include all major national news organizations, including their politics-related specialized accounts (e.g. ABC This Week, CBS 60 Minutes, New York Times The Upshot). Lists of these sets of actors are available on request.
 
 
 \clearpage
-# Equivalence testing for minimal relationships
+## Equivalence testing for minimal relationships
 
-In the article, we present a series of regression results in Figure 4 to examine the relationship between exposure to posts from Russian Internet Research Agency accounts and political attitudes and polarization. In general, we find no meaningful relationship between exposure and these outcomes. Theoretically, this is consistent with the descriptive data, which demonstrates that exposure to posts from Russian foreign influence accounts was dwarfed by posts from politicians and news media, and was heavily concentrated among those who identify as Republican partisans.
+In the article, we present a series of regression results in Figure 4 to examine the relationship between exposure to posts from Russian Internet Research Agency accounts and political attitudes and polarization. In general, we find no meaningful relationship between exposure and these outcomes. Theoretically, this is consistent with the descriptive data, which demonstrates that exposure to posts from Russian foreign influence accounts was overshadowed by posts from politicians and news media, and was heavily concentrated among those who identify as Republican partisans.
 
 However, because the absence of statistically significant results is not necessarily strong evidence of a minimal relationship [@Rainey2014], in this section we examine these results in an equivalence testing framework  [@Rainey2014; @Hartman2018; @Lakens2017]. This framework addresses the problem that the absence of statistically significant differences is not necessarily itself strong evidence of a negligible relationship. If a study is heavily underpowered, meaningful relationships will be difficult to detect---for lack of sufficient data---under the null hypothesis of no difference. We first briefly explain the use of equivalence testing, after which we present the results.
 
@@ -542,11 +549,11 @@ In political science research, defining the values of $\epsilon_L$ and $\epsilon
 ```{r}
 # Figure B3
 wb <- readRDS("../figures_source/Source Data.rds")
-openxlsx::addWorksheet(wb, sheetName = "figure_b3a", gridLines = FALSE)
-openxlsx::writeDataTable(wb, sheet = "figure_b3a", 
+openxlsx::addWorksheet(wb, sheetName = "supplementary_figure_b3a", gridLines = FALSE)
+openxlsx::writeDataTable(wb, sheet = "supplementary_figure_b3a", 
                          x = subset(G1, outcome == "Issues" & treatment == "Treatment"))
-openxlsx::addWorksheet(wb, sheetName = "figure_b3b", gridLines = FALSE)
-openxlsx::writeDataTable(wb, sheet = "figure_b3b", 
+openxlsx::addWorksheet(wb, sheetName = "supplementary_figure_b3b", gridLines = FALSE)
+openxlsx::writeDataTable(wb, sheet = "supplementary_figure_b3b", 
                          x = subset(G1, outcome == "Polarization" & treatment == "Treatment"))
 saveRDS(wb, "../figures_source/Source Data.rds")
 openxlsx::saveWorkbook(wb, "../figures_source/Source Data.xlsx", overwrite = TRUE)
@@ -610,7 +617,7 @@ FigureB3B <- ggplot(subset(G1, outcome == "Polarization" & treatment == "Treatme
         axis.text.y = element_text(family = "", colour = "black", face = "bold", size = 8, hjust = 1, lineheight = 0.9))
 ```
 
-```{r Figure-B3, fig.height=5, fig.cap="Two One-Sided Test (TOST) 95\\% Intervals for the relationship between exposure to tweets from Russian foreign influence accounts and issue positions and polarization. Each point ($\\bullet$) represents the estimated relationships in standardized units; each horizontal line (\\textbf{---}) represents a 95\\% TOST interval: the range of the size of a relationship that cannot be rejected by a Two One-Sided Test. The vertical lines (in red) represent what the literature generally considers minimal relationships: the solid line, that defined by @Hartman2018 ($|\\epsilon| < 0.36$); the dashed line, that defined by @Ho2007 and @Imbens2015 ($|\\epsilon| < 0.25$); and the dotted line, that defined by @Cohen1969 ($|\\epsilon| < 0.2$). $n = 1,496$ survey respondents"}
+```{r Supplementary-Figure-B3, fig.height=5, fig.cap="Two One-Sided Test (TOST) 95\\% Intervals for the relationship between exposure to tweets from Russian foreign influence accounts and issue positions and polarization. Each point ($\\bullet$) represents the estimated relationships in standardized units; each horizontal line (\\textbf{---}) represents a 95\\% TOST interval: the range of the size of a relationship that cannot be rejected by a Two One-Sided Test. The vertical lines (in red) represent what the literature generally considers minimal relationships: the solid line, that defined by @Hartman2018 ($|\\epsilon| < 0.36$); the dashed line, that defined by @Ho2007 and @Imbens2015 ($|\\epsilon| < 0.25$); and the dotted line, that defined by @Cohen1969 ($|\\epsilon| < 0.2$). $n = 1,496$ survey respondents"}
 ggdraw() +
   draw_plot(FigureB3A, x = 0, y = 0.5, width = 1, height = 0.47) +
   draw_plot(FigureB3B, x = 0, y = 0, width = 1, height = 0.47) +
@@ -627,13 +634,13 @@ ggdraw() +
 
 To apply equivalence tests to investigate the strength of the evidence as it relates to negligible relationships, we standardize each of the outcome variables and calculate TOST intervals for the magnitude of the relationship between exposure to social media posts from Russian foreign influence accounts. We do so for each of the outcomes in Figures 4 of the main article, and examine these intervals in relation to values of $\epsilon_L$ and $\epsilon_H$ defined in the literature.
 
-The equivalence test results for estimates of the relationships between exposure to posts from Russian foreign influence accounts and each outcome in Figures 4 in the main article are presented in \autoref{fig:Figure-B3}. The values of $\epsilon_L$ and $\epsilon_H$ that define the range of minimal relationships are shown as defined by @Hartman2018 (solid line), @Ho2007 and @Imbens2015 (dashed line), and @Cohen1969 (dotted line). The first column of Panels A and B of \autoref{fig:Figure-B3} present estimates of the relationship between log(exposure + 1) and each issue position. Estimates appear exceptionally small primarily because exposure is measured on the log scale, thus indicating that the relationship between a one unit change in the (log) count of exposure to social media posts from Russian foreign influence accounts. The second column presents exposure measured as a binary variable, as is typically used in the literature on equivalence testing. By all definitions of minimal relationships (as defined by the vertical lines in each figure), estimates for all issues positions, and all but one measure of polarization are consist with negligible relations. We can also examine this differently, by averaging across all issue position outcomes, in which we find that the magnitude of the estimated relationship between exposure to posts from Russian influence accounts and issues positions is a mere 6\% of a standard deviation, and for polarization, 5\% of a standard deviation.
+The equivalence test results for estimates of the relationships between exposure to posts from Russian foreign influence accounts and each outcome in Figures 4 in the main article are presented in \autoref{fig:Supplementary-Figure-B3}. The values of $\epsilon_L$ and $\epsilon_H$ that define the range of minimal relationships are shown as defined by @Hartman2018 (solid line), @Ho2007 and @Imbens2015 (dashed line), and @Cohen1969 (dotted line). The first column of Panels A and B of \autoref{fig:Supplementary-Figure-B3} present estimates of the relationship between log(exposure + 1) and each issue position. Estimates appear relatively small primarily because exposure is measured on the log scale, thus indicating that the relationship between a one unit change in the (log) count of exposure to social media posts from Russian foreign influence accounts. The second column presents exposure measured as a binary variable, as is typically used in the literature on equivalence testing. By all definitions of minimal relationships (as defined by the vertical lines in each figure), estimates for all issues positions, and all but one measure of polarization are consist with negligible relations. We can also examine this differently, by averaging across all issue position outcomes, in which we find that the magnitude of the estimated relationship between exposure to posts from Russian influence accounts and issues positions is a mere 6\% of a standard deviation, and for polarization, 5\% of a standard deviation.
 
 
 \clearpage
-# Exposure to foreign influence accounts
+## Exposure to foreign influence accounts
 
-## Overall\label{section:exposure}
+### Overall\label{section:exposure}
 
 We calculate exposure to foreign influence accounts by extracting all posts that contain tweets, retweets, and quote tweets from accounts that were identified by Twitter as belonging to state-backed foreign influence campaigns, and were in the collected feeds from respondents' friends.
 
@@ -641,32 +648,70 @@ Overall, 1,042 respondents (64%) were exposed at least once to posts from accoun
 
 In terms of direct exposure to foreign influence accounts (i.e. following the identified accounts themselves), 112 (7% of our sample) respondents followed at least one account associated with a foreign influence campaign from Russia, China, Iran, or Venezuela. Among respondents, 51 (3.4%) followed an account associated with the Russian campaign specifically.
 
-
-\clearpage
-## Back-of-the-envelope calculation of aggregate US exposure to Russian foreign influence accounts on Twitter
-
-As a result of congressional hearings on the role of social media in the 2016 US presidential election, both Twitter and Facebook calculated and released aggregate-level estimates of user exposure to Russian foreign influence accounts on their platforms. However, each company did so differently, with statistics that are not comparable. Facebook, for example, stated that 126 million of its users had the potential to view content from the Russian foreign influence campaign over a two year period [@Stretch2017]. Twitter, however, states that the number of times that content from Russian foreign influence accounts was viewed within a brief two and a half months (September 1, 2016 to November 15, 2016) was 288 million [@Edgett2017],^[This is likely a large underestimate of the number of views, due to the fact that Twitter later added more accounts to its list of Russian foreign influence accounts [@Twitter2018], but without providing an updated number of views.] with 1.4 million direct interactions with that content (e.g. liking, retweeting, replying) [@Twitter2018]. The figure 288 million views, however, is an extreme upper bound on the number of potentially exposed users, because a single user can view multiple tweets from Russian foreign influence accounts. By contrast, 1.4 million interactions is an extreme lower bound on potential exposure, because the vast majority of users do not directly interact with each piece of content on the platform.
-
-Thus, to aid our understanding of the overall potential exposure of US Twitter users, we make a back-of-the-envelope calculation of the number of US users potentially exposed to posts from Russian foreign influence accounts during the 8 months leading up to election day. To do so, we use data on potential exposure to Internet Research Agency posts among users in our dataset, which we combine with data from PEW Research and US census data. PEW Research estimates that in 2016, Twitter penetration in the US was 21% [@Greenwood2016]. The US Census Bureau estimates that the US population in 2016, aged 18 and older, was 244,807,000 [@Census2016]. This puts a rough estimate of the number of American Twitter users at 51 million. Taking the estimate from our social media-linked survey data that 63% of US Twitter users were potentially exposed to at least one post from Russian foreign influence accounts during the 2016 presidential election (see Appendix \ref{section:exposure}), a back-of-the-envelope calculation ($0.63 \times 51$ million) suggests that 32 million Americans were potentially exposed to content from Internet Research Agency accounts.^[Note that this figure is not perfectly analogous to Facebook's to the extent that Facebook's estimate is across 2 years prior the the election.]
-
-
-\clearpage
-## Party ID
-
-In the main article, we examine the relationship between the self-identified party ID of respondents and their exposure of posts from Russian Internet Research Agency accounts. The model presented in Panel B of Figure 3, however, models a linear relationship between party ID and exposure to posts from Russian foreign influence accounts. Thus, although there is a clear and strong relationship between being a self-identified Republican and exposure to Russian foreign influence accounts, it may be the case that this relationship is U-shaped: that exposure was higher both among those who strongly identify as Republicans and Democrats. Theoretically, this might be expected if the goals of the Russian foreign influence campaign was to further alienate those who strongly identify with the Democratic Party (e.g. Bernie Sanders supporters) from their party's establishment nominee. If this were the goal, we might expect high levels of exposure to Russian electoral interference among strongly identifying Democrats. Descriptively, the data in Panel A of Figure 3 suggest that this is not the case. We test this more formally in a regression framework by fitting an equivalent model to that in Panel B of Figure 3, but including a squared party ID term in the model. This term captures the theoretical expectation that both those who strongly identify as Republicans and Democrats were similarly exposed to posts from Russia's foreign influence campaign.
-
 ```{r}
 # Figure C4: Predicted exposure conditional on PID, hold all other variables
 #            at their observed values
 wb <- readRDS("../figures_source/Source Data.rds")
-openxlsx::addWorksheet(wb, sheetName = "figure_c4", gridLines = FALSE)
-openxlsx::writeDataTable(wb, sheet = "figure_c4", 
+openxlsx::addWorksheet(wb, sheetName = "supplementary_figure_c4", gridLines = FALSE)
+openxlsx::writeDataTable(wb, sheet = "supplementary_figure_c4", 
+                         x = subset(G1B, tweet_type == "Retweet" & country == "Russia"))
+saveRDS(wb, "../figures_source/Source Data.rds")
+openxlsx::saveWorkbook(wb, "../figures_source/Source Data.xlsx", overwrite = TRUE)
+```
+
+
+```{r Supplementary-Figure-C4, fig.height=5, fig.cap="Percentage of exposures to retweets from the Russian disinformation campaign"}
+ggplot(filter(G1B, tweet_type == "Retweet" & country == "Russia"),
+                   aes(x = tweet_date, y = prop_exposures,
+                       color = country, size = country, alpha = country)) +
+  my.theme(base_size = 7,
+           borderless = 2, remove.ticks.y = TRUE, remove.ticks.x = TRUE,
+           grid.x_colour = "grey85", grid.y_colour = "grey85") +
+  labs(fill = "", color = "", x = "", y = "% exposures from retweets") +
+  coord_cartesian(xlim = c(min(G1B$tweet_date)-2, max(G1B$tweet_date)+2),
+                  ylim = c(0,1),
+                  expand = FALSE) +
+  scale_x_date(date_breaks = "months",
+               date_labels = "%b '16") +
+  scale_y_continuous(breaks = seq(0, 1, by = 0.25),
+                     labels = c("0%", "25%", "50%", "75%", "100%"),) +
+  geom_line() +
+  geom_hline(yintercept = 0, size = 1.25) +
+  geom_vline(xintercept = lubridate::ymd("2016-11-08") + 0.5,
+             color = "black", linetype = 5, size = 0.25) +
+  geom_label(data = data.frame(x = lubridate::ymd("2016-11-08"), country = "Russia",
+                               y = 0.10, text = "Election day -", tweet_type = "retweet"),
+             aes(x = x, y = y, label = text), color = "black", fill = "white",
+             nudge_x = -0.5, size = 2.75, hjust = 1,
+             label.r = unit(0, "lines"), label.size = NA, label.padding = unit(0.12, "lines")) +
+  scale_color_manual(values = figure_1ACD_colors) +
+  scale_size_manual(values = c("Russia" = 0.5, "Venezuela" = 0.25,
+                               "China" = 0.25, "Iran" = 0.25)) +
+  scale_alpha_manual(values = c("Russia" = 1, "Venezuela" = 0.4,
+                                "China" = 0.4, "Iran" = 0.4)) +
+  theme(legend.position = "none",
+        legend.margin = margin(4, 0, 4, 0)) +
+  guides(fill = guide_legend(reverse = TRUE, override.aes = list(size = 1)),
+         color = guide_legend(reverse = TRUE, override.aes = list(color = "black", size = 0.15)))
+```
+
+\clearpage
+### Party ID
+
+In the main article, we examine the relationship between the self-identified party ID of respondents and their exposure of posts from Russian Internet Research Agency accounts. The model presented in Panel B of Figure 3, however, models a linear relationship between party ID and exposure to posts from Russian foreign influence accounts. Thus, although there is a clear and strong relationship between being a self-identified Republican and exposure to Russian foreign influence accounts, it may be the case that this relationship is U-shaped: that exposure was higher both among those who strongly identify as Republicans and Democrats. Theoretically, this might be expected if the goals of the Russian foreign influence campaign was to further alienate those who strongly identify with the Democratic Party (e.g. Bernie Sanders supporters) from their party's establishment nominee. If this were the goal, we might expect high levels of exposure to Russian electoral interference among strongly identifying Democrats. Descriptively, the data in Panel A of Figure 3 suggest that this is not the case. We test this more formally in a regression framework by fitting an equivalent model to that in Panel B of Figure 3, but including a squared party ID term in the model. This term captures the theoretical expectation that both those who strongly identify as Republicans and Democrats were similarly exposed to posts from Russia's foreign influence campaign.
+
+```{r}
+# Figure C5: Predicted exposure conditional on PID, hold all other variables
+#            at their observed values
+wb <- readRDS("../figures_source/Source Data.rds")
+openxlsx::addWorksheet(wb, sheetName = "supplementary_figure_c5", gridLines = FALSE)
+openxlsx::writeDataTable(wb, sheet = "supplementary_figure_c5", 
                          x = subset(G3C, model %in% c("Linear", "Quadratic")))
 saveRDS(wb, "../figures_source/Source Data.rds")
 openxlsx::saveWorkbook(wb, "../figures_source/Source Data.xlsx", overwrite = TRUE)
 ```
 
-```{r Figure-C4, fig.height=3, fig.cap="Relationship between party ID and exposure to posts from Russian Internet Research Agency (IRA) accounts. Predicted values with 95\\% prediction intervals are shown"}
+```{r Supplementary-Figure-C5, fig.height=3, fig.cap="Relationship between party ID and exposure to posts from Russian Internet Research Agency (IRA) accounts. Predicted values with 95\\% prediction intervals are shown"}
 ggplot(subset(G3C, model %in% c("Linear", "Quadratic")), aes(x = pid7, y = coef)) +
   my.theme(base_size = 7,
            borderless = 2, remove.ticks.y = TRUE, remove.ticks.x = FALSE,
@@ -688,7 +733,7 @@ ggplot(subset(G3C, model %in% c("Linear", "Quadratic")), aes(x = pid7, y = coef)
         panel.spacing = unit(5, "mm"))
 ```
 
-Regression results from both the model in the main manuscript (Panel B of Figure 3), and the model with the squared term for party ID are presented in \autoref{tab:exposure_1}. We test whether the inclusion of the squared term increases model fit by conducting a likelihood ratio test that compares the model with the squared term to the model without it. It does not ($p = 0.09$). We nevertheless graph the predicted relationship between party ID and $log(exposure + 1)$ for both models to examine the shape of the relationship. Results are presented in \autoref{fig:Figure-C4}. As the figure shows, the relationship between party ID and respondents' level of exposure to posts from Russian foreign influence accounts is similarly increasing as one identifies more strongly as a Republican. Importantly, in the second panel of \autoref{fig:Figure-C4}, we do not observe a U-shape relationship to the extent that strongly identifying Democrats were not more likely to be exposed to more posts from the Russian foreign influence campaign than weakly identifying Democrats or independents. To test the sensitivity of these results to modelling assumptions we also fit a quasi-Poisson regression models with the indepedent variables. The results of theses models are shown in \autoref{tab:exposure_2}.
+Regression results from both the model in the main manuscript (Panel B of Figure 3), and the model with the squared term for party ID are presented in \autoref{tab:exposure_1}. We test whether the inclusion of the squared term increases model fit by conducting a likelihood ratio test that compares the model with the squared term to the model without it. It does not ($p = 0.09$). We nevertheless graph the predicted relationship between party ID and $log(exposure + 1)$ for both models to examine the shape of the relationship. Results are presented in \autoref{fig:Supplementary-Figure-C5}. As the figure shows, the relationship between party ID and respondents' level of exposure to posts from Russian foreign influence accounts is similarly increasing as one identifies more strongly as a Republican. Importantly, in the second panel of \autoref{fig:Supplementary-Figure-C5}, we do not observe a U-shape relationship to the extent that strongly identifying Democrats were not more likely to be exposed to more posts from the Russian foreign influence campaign than weakly identifying Democrats or independents. To test the sensitivity of these results to modelling assumptions we also fit a quasi-Poisson regression models with the indepedent variables. The results of theses models are shown in \autoref{tab:exposure_2}.
 
 ```{r}
 # Highlight (in gray) rows in stargazer table defined by 'regex' + 'n_rows' after it  
@@ -787,12 +832,12 @@ cat(total_exposure_2)
 ```
 
 \clearpage
-## Alternative model specification (Poisson)
+### Alternative model specification (Poisson)
 
-In Panel A of Figure 3 in the main article, we present the average of the number of exposures by respondents to Russian foreign influence account tweets throughout the campaign, broken down by the partisanship of the respondent. In Panel B of Figure 3, we present analogous results in a regression framework, including a number of respondent covariates. In Panel B of Figure 3, the regression outcome is defined as $log(exposure + 1)$, where exposure is the count of posts in a respondent's feed. Because the outcome is a count variable, we also model the relationship using a quasi-poisson regression. The results, shown in Figure \autoref{fig:Figure-C5} show similar results to those in Figure 3 of the main article.
+In Panel A of Figure 3 in the main article, we present the average of the number of exposures by respondents to Russian foreign influence account tweets throughout the campaign, broken down by the partisanship of the respondent. In Panel B of Figure 3, we present analogous results in a regression framework, including a number of respondent covariates. In Panel B of Figure 3, the regression outcome is defined as $log(exposure + 1)$, where exposure is the count of posts in a respondent's feed. Because the outcome is a count variable, we also model the relationship using a quasi-poisson regression. The results, shown in Figure \autoref{fig:Supplementary-Figure-C6} show similar results to those in Figure 3 of the main article.
 
 ```{r}
-# Figure C5
+# Figure C6
 G3B <- data.frame(model = c(rep("OLS", length(coef(total_exposure_russia_log))),
                             rep("OLS square", length(coef(total_exposure_russia_log_square))),
                             rep("Poisson", length(coef(total_exposure_russia_poisson))),
@@ -855,16 +900,16 @@ G3B$model_number[G3B$model_number == 3] <- 2.5
 G3B <- subset(G3B, variable != "Constant")
 
 wb <- readRDS("../figures_source/Source Data.rds")
-openxlsx::addWorksheet(wb, sheetName = "figure_c5a", gridLines = FALSE)
-openxlsx::writeDataTable(wb, sheet = "figure_c5a", x = subset(G3B, model == "OLS"))
-openxlsx::addWorksheet(wb, sheetName = "figure_c5b", gridLines = FALSE)
-openxlsx::writeDataTable(wb, sheet = "figure_c5b", x = subset(G3B, model == "Poisson"))
+openxlsx::addWorksheet(wb, sheetName = "supplementary_figure_c6a", gridLines = FALSE)
+openxlsx::writeDataTable(wb, sheet = "supplementary_figure_c6a", x = subset(G3B, model == "OLS"))
+openxlsx::addWorksheet(wb, sheetName = "supplementary_figure_c6b", gridLines = FALSE)
+openxlsx::writeDataTable(wb, sheet = "supplementary_figure_c6b", x = subset(G3B, model == "Poisson"))
 saveRDS(wb, "../figures_source/Source Data.rds")
 openxlsx::saveWorkbook(wb, "../figures_source/Source Data.xlsx", overwrite = TRUE)
 ```
 
 ```{r}
-FigureC5A <- ggplot(subset(G3B, model == "OLS"),
+FigureC6A <- ggplot(subset(G3B, model == "OLS"),
                    aes(x = coef, y = model_number)) +
   my.theme(base_size = 7,
            borderless = 2, remove.ticks.y = TRUE, remove.ticks.x = FALSE,
@@ -885,7 +930,7 @@ FigureC5A <- ggplot(subset(G3B, model == "OLS"),
   labs(y = "Predictor") +
   theme(plot.margin = unit(c(1, 2, 1, -2), "mm"))
 
-FigureC5B <- ggplot(subset(G3B, model == "Poisson"),
+FigureC6B <- ggplot(subset(G3B, model == "Poisson"),
                            aes(x = coef, y = model_number)) +
   my.theme(base_size = 8,
            borderless = 2, remove.ticks.y = TRUE, remove.ticks.x = FALSE,
@@ -905,34 +950,34 @@ FigureC5B <- ggplot(subset(G3B, model == "Poisson"),
   theme(plot.margin = unit(c(1, 2, 1, -2), "mm"))
 ```
 
-```{r Figure-C5, out.width="100%", out.height="60%", fig.align="center", fig.cap="Partisanship and exposure to posts from Russian Internet Research Agency accounts during the 2016 US election campaign (quasi-poisson regression). Error bars represent 95\\% confidence intervals around the point estimate of the regression coefficient. $n = 1,496$ survey respondents"}
+```{r Supplementary-Figure-C6, out.width="100%", out.height="60%", fig.align="center", fig.cap="Partisanship and exposure to posts from Russian Internet Research Agency accounts during the 2016 US election campaign (quasi-poisson regression). Error bars represent 95\\% confidence intervals around the point estimate of the regression coefficient. $n = 1,496$ survey respondents"}
 cowplot::ggdraw() +
-  cowplot::draw_plot(FigureC5A, x = 0.02, y = 0.01, width = 0.48, height = 0.95) +
-  cowplot::draw_plot(FigureC5B, x = 0.52, y = 0.01, width = 0.48, height = 0.95) +
+  cowplot::draw_plot(FigureC6A, x = 0.02, y = 0.01, width = 0.48, height = 0.95) +
+  cowplot::draw_plot(FigureC6B, x = 0.52, y = 0.01, width = 0.48, height = 0.95) +
   cowplot::draw_plot_label(label = c("A. OLS", "B. Poisson"), size = 10,
                            x = c(0.01, 0.52), y = c(0.97, 0.97), hjust = 0, vjust = 0)
 ```
 
 
 \clearpage
-# Exposure to political actors
+## Exposure to political actors
 
-Analogous to Panels B and C in Figure 1 in the main article, we calculate and visualize the empirical cumulative distributions of exposure to tweets by survey respondents from news media organizations (Panel A of \autoref{fig:Figure-D6}) and politicians (Panel C of \autoref{fig:Figure-D6}). Panels B and D present the empirical cumulative distributions of tweets sent by media and politicians' accounts, respectively. As the figure shows, exposure to politicians and news media is less concentrated among small groups of users compared to exposure to tweets from Russian foreign influence accounts. As noted in the article, just 1% of respondents account for 70% of exposures of Russian foreign influence accounts. Among news media organizations and politicians, 1% of respondents account of 24% and 37% of exposures.
+Analogous to Panels B and C in Figure 1 in the main article, we calculate and visualize the empirical cumulative distributions of exposure to tweets by survey respondents from news media organizations (Panel A of \autoref{fig:Supplementary-Figure-D7}) and politicians (Panel C of \autoref{fig:Supplementary-Figure-D7}). Panels B and D present the empirical cumulative distributions of tweets sent by media and politicians' accounts, respectively. As the figure shows, exposure to politicians and news media is less concentrated among small groups of users compared to exposure to tweets from Russian foreign influence accounts. As noted in the article, just 1% of respondents account for 70% of exposures of Russian foreign influence accounts. Among news media organizations and politicians, 1% of respondents account of 24% and 37% of exposures.
 
 ```{r}
-# Figure D6
+# Figure D7
 wb <- readRDS("../figures_source/Source Data.rds")
-openxlsx::addWorksheet(wb, sheetName = "figure_d6a", gridLines = FALSE)
-openxlsx::writeDataTable(wb, sheet = "figure_d6a",
+openxlsx::addWorksheet(wb, sheetName = "supplementary_figure_d7a", gridLines = FALSE)
+openxlsx::writeDataTable(wb, sheet = "supplementary_figure_d7a",
                          x = newsmedia_respondents_concentration[,c("cum_prop_respondents", "cum_prop_exposure")])
-openxlsx::addWorksheet(wb, sheetName = "figure_d6b", gridLines = FALSE)
-openxlsx::writeDataTable(wb, sheet = "figure_d6b",
+openxlsx::addWorksheet(wb, sheetName = "supplementary_figure_d7b", gridLines = FALSE)
+openxlsx::writeDataTable(wb, sheet = "supplementary_figure_d7b",
                          x = newsmedia_concentration[,c("cum_prop_newsmedia", "cum_prop_exposure")])
-openxlsx::addWorksheet(wb, sheetName = "figure_d6c", gridLines = FALSE)
-openxlsx::writeDataTable(wb, sheet = "figure_d6c",
+openxlsx::addWorksheet(wb, sheetName = "supplementary_figure_d7c", gridLines = FALSE)
+openxlsx::writeDataTable(wb, sheet = "supplementary_figure_d7c",
                          x = politicians_respondents_concentration[,c("cum_prop_respondents", "cum_prop_exposure")])
-openxlsx::addWorksheet(wb, sheetName = "figure_d6d", gridLines = FALSE)
-openxlsx::writeDataTable(wb, sheet = "figure_d6d",
+openxlsx::addWorksheet(wb, sheetName = "supplementary_figure_d7d", gridLines = FALSE)
+openxlsx::writeDataTable(wb, sheet = "supplementary_figure_d7d",
                          x = politicians_concentration[,c("cum_prop_politicians", "cum_prop_exposure")])
 saveRDS(wb, "../figures_source/Source Data.rds")
 openxlsx::saveWorkbook(wb, "../figures_source/Source Data.xlsx", overwrite = TRUE)
@@ -1014,7 +1059,7 @@ politicians_concentration_plot <-
   theme()
 ```
 
-```{r Figure-D6, fig.height=5, fig.cap="Partisanship and exposure to posts from news media and politicians accounts during the 2016 US election campaign"}
+```{r Supplementary-Figure-D7, fig.height=5, fig.cap="Partisanship and exposure to posts from news media and politicians accounts during the 2016 US election campaign"}
 cowplot::ggdraw() +
   cowplot::draw_plot(newsmedia_respondents_concentration_plot, x = 0.02, y = 0.49, width = 0.48, height = 0.51) +
   cowplot::draw_plot(newsmedia_concentration_plot, x = 0.02, y = 0, width = 0.48, height = 0.505) +
@@ -1026,9 +1071,9 @@ cowplot::ggdraw() +
 
 
 \clearpage
-# Vote change regression models
+## Vote change regression models
 
-## Details of response variables coding
+### Details of response variables coding
 
 To measure changes in candidate preferences between the first and last waves of the survey, we construct three outcomes that use respondents' rankings of Hillary Clinton and Donald Trump in wave 1 as a baseline: 
 \begin{enumerate}[label=(\arabic*)]
@@ -1055,9 +1100,9 @@ $$Preference^{(3)}_{iw_{3}} = 1(TrumpRank_{iw_{3}} < ClintonRank_{iw_{3}})$$
 where $TrumpVote_{iw_{4}}$ is a post-election measure of voting for Donald Trump, $Non-ClintonVote_{iw_{4}}$ is a post-election measure of voting for Donald Trump, other candidates or abstaining from voting, $ClintonRank_{iw_{3}}$ and $TrumpRank_{iw_{3}}$ are the respondent $i$'s ranks of Hillary Clinton and Donald Trump in the third wave.
 
 \clearpage
-## Regression models using the count of exposures
+### Regression models using the count of exposures
 
-Tables \@ref(tab:tab1), \@ref(tab:tab2) and \@ref(tab:tab3) show the full output for linear models used in the main text of the article.
+Supplementary Tables \@ref(tab:tab1), \@ref(tab:tab2) and \@ref(tab:tab3) show the full output for linear models used in the main text of the article.
 
 ```{r}
 # Specify control variables
@@ -1179,9 +1224,9 @@ cat(vote_stargazer_3)
 
 
 \clearpage
-## Regression models using a binary measure of exposure
+### Regression models using a binary measure of exposure
 
-Tables \@ref(tab:tab4), \@ref(tab:tab5) and \@ref(tab:tab6) show the full output for linear models used in the main text of the article.
+Supplementary Tables \@ref(tab:tab4), \@ref(tab:tab5) and \@ref(tab:tab6) show the full output for linear models used in the main text of the article.
 
 
 ```{r, results='asis'}
@@ -1273,12 +1318,12 @@ cat(vote_stargazer_6)
 
 
 \clearpage
-## Regression models using following Russian Internet Research Agency accounts as a variable of interest
+### Regression models using following Russian Internet Research Agency accounts as a variable of interest
 
-In the article, we present results of models estimating the relationship between exposure to posts from Russian Internet Research Agency accounts and voting preferences and behavior, and similarly, the relationship between exposure to at least one such post on the same outcomes. In this section we also present results from a regression model examining the relationship between following a Russian Internet Research Agency account and these vote-based outcomes. Unlike exposure, which as we discuss in the Results section was primarily incidental, following an Internet Research Agency account is directly chosen by respondents. Nevertheless, it is useful to examine whether there is a relationship between following and voting behavior. Results analogous to those in Figure 5 of the main article for following a Russian Internet Research Agency account are presented in Figure \@ref(fig:Figure-E7). Similar to the results regarding exposure, we find no evidence that following a Russian Internet Research Agency account is associated with changes in any of the measured voting preferences and behavior. Tables \@ref(tab:tab7), \@ref(tab:tab8) and \@ref(tab:tab9) show the full output of these linear models.
+In the article, we present results of models estimating the relationship between exposure to posts from Russian Internet Research Agency accounts and voting preferences and behavior, and similarly, the relationship between exposure to at least one such post on the same outcomes. In this section we also present results from a regression model examining the relationship between following a Russian Internet Research Agency account and these vote-based outcomes. Unlike exposure, which as we discuss in the Results section was primarily incidental, following an Internet Research Agency account is directly chosen by respondents. Nevertheless, it is useful to examine whether there is a relationship between following and voting behavior. Results analogous to those in Figure 5 of the main article for following a Russian Internet Research Agency account are presented in Figure \@ref(fig:Supplementary-Figure-E8). Similar to the results regarding exposure, we find no evidence that following a Russian Internet Research Agency account is associated with changes in any of the measured voting preferences and behavior. Supplementary Tables \@ref(tab:tab7), \@ref(tab:tab8) and \@ref(tab:tab9) show the full output of these linear models.
 
 ```{r}
-# Figure E7
+# Figure E8
 G5 <- rbind(get_coefs(vote_rank_total_russia_follow_lm_controls,
                       dv = "Rank\n(Trump > Clinton)",
                       iv = "1(follow > 0 accounts)"),
@@ -1317,13 +1362,13 @@ breaks_fun <- function(x) {
 }
 
 wb <- readRDS("../figures_source/Source Data.rds")
-openxlsx::addWorksheet(wb, sheetName = "figure_e7", gridLines = FALSE)
-openxlsx::writeDataTable(wb, sheet = "figure_e7", x = subset(G5, treatment == "Treatment"))
+openxlsx::addWorksheet(wb, sheetName = "supplementary_figure_e8", gridLines = FALSE)
+openxlsx::writeDataTable(wb, sheet = "supplementary_figure_e8", x = subset(G5, treatment == "Treatment"))
 saveRDS(wb, "../figures_source/Source Data.rds")
 openxlsx::saveWorkbook(wb, "../figures_source/Source Data.xlsx", overwrite = TRUE)
 ```
 
-```{r Figure-E7, fig.height=3, fig.cap="Regression results of the relationship between following a Russian Internet Research Agency (IRA) account and voting behavior. Error bars represent 95\\% confidence intervals around point estimates of the regression coefficients. $n = 1,496$ survey respondents"}
+```{r Supplementary-Figure-E8, fig.height=3, fig.cap="Regression results of the relationship between following a Russian Internet Research Agency (IRA) account and voting behavior. Error bars represent 95\\% confidence intervals around point estimates of the regression coefficients. $n = 1,496$ survey respondents"}
 ggplot(subset(G5, treatment == "Treatment"),
        aes(x = coef, y = variable)) +
   my.theme(base_size = 8,
@@ -1437,9 +1482,9 @@ cat(vote_stargazer_9)
 ```
 
 \clearpage
-## Alternative coding of race
+### Alternative coding of race
 
-For ease of comparison in \autoref{fig:Figure-E8} we present a subset of the models from \@ref(tab:tab1)-\@ref(tab:tab6) above, which is analogous to Figure 5 of the main text, but has an alternative coding of control variable race. Here, rather than treating all respondents of color similarly, we break them further down into Black and Hispanic/Other groups. Consistent with the results in the main manuscript, we find no evidence of a relationship between exposure and switches in voting preferences.
+For ease of comparison in \autoref{fig:Supplementary-Figure-E9} we present a subset of the models from \@ref(tab:tab1)-\@ref(tab:tab6) above, which is analogous to Figure 5 of the main text, but has an alternative coding of control variable race. Here, rather than treating all respondents of color similarly, we break them further down into Black and Hispanic/Other groups. Consistent with the results in the main manuscript, we find no evidence of a relationship between exposure and switches in voting preferences.
 
 ```{r}
 G5 <- rbind(get_coefs(vote_rank_total_russia_count_lm_controls,
@@ -1536,9 +1581,9 @@ breaks_fun <- function(x) {
 }
 
 wb <- readRDS("../figures_source/Source Data.rds")
-openxlsx::addWorksheet(wb, sheetName = "figure_e8", gridLines = FALSE)
+openxlsx::addWorksheet(wb, sheetName = "supplementary_figure_e9", gridLines = FALSE)
 openxlsx::writeDataTable(
-  wb, sheet = "figure_e8",
+  wb, sheet = "supplementary_figure_e9",
   x = subset(G5_black, treatment == "Treatment" &
                iv %in% c("log(Exposure + 1)", "Exposure (binary)"))
 )
@@ -1546,7 +1591,7 @@ saveRDS(wb, "../figures_source/Source Data.rds")
 openxlsx::saveWorkbook(wb, "../figures_source/Source Data.xlsx", overwrite = TRUE)
 ```
 
-```{r Figure-E8, fig.height=3, fig.cap="Regression results of exposure to Russian Internet Research Agency accounts and changes in issue-based and ideological positioning with alternative race break-down. Error bars represent 95\\% confidence intervals around point estimates of the regression coefficients. $n = 1,496$ survey respondents"}
+```{r Supplementary-Figure-E9, fig.height=3, fig.cap="Regression results of exposure to Russian Internet Research Agency accounts and changes in issue-based and ideological positioning with alternative race break-down. Error bars represent 95\\% confidence intervals around point estimates of the regression coefficients. $n = 1,496$ survey respondents"}
 count <- 0
 ggplot(subset(G5_black, treatment == "Treatment" & iv %in% c("log(Exposure + 1)", "Exposure (binary)")),
        aes(x = coef, y = variable)) +
@@ -1574,9 +1619,9 @@ ggplot(subset(G5_black, treatment == "Treatment" & iv %in% c("log(Exposure + 1)"
 
 
 \clearpage
-## Alternative measure of overall Twitter activity 
+### Alternative measure of overall Twitter activity 
 
-As another robustness check, rather than relying on a self-reported measure of Twitter activity, that might make respondents less likely to be exposed to tweets from Russian foreign influence campaigns, we control for the total number of tweets posted by their friends. In constructing this measure we rely on our own collected data to estimate the number of potential exposures to other tweets (non-Internet Research Agency) in respondents' timelines. These models are also presented in \@ref(tab:tab1)-\@ref(tab:tab6) above, but for ease of comparison to Figure 5 of the main manuscript in \autoref{fig:Figure-E9} we present a subset of them that use log(Total Tweets) as one of control variables. Consistent with the results in the main manuscript, we find no evidence of a relationship between exposure and switches in voting preferences.
+As another robustness check, rather than relying on a self-reported measure of Twitter activity, that might make respondents less likely to be exposed to tweets from Russian foreign influence campaigns, we control for the total number of tweets posted by their friends. In constructing this measure we rely on our own collected data to estimate the number of potential exposures to other tweets (non-Internet Research Agency) in respondents' timelines. These models are also presented in \@ref(tab:tab1)-\@ref(tab:tab6) above, but for ease of comparison to Figure 5 of the main manuscript in \autoref{fig:Supplementary-Figure-E10} we present a subset of them that use log(Total Tweets) as one of control variables. Consistent with the results in the main manuscript, we find no evidence of a relationship between exposure and switches in voting preferences.
 
 ```{r}
 G5_total_tweets <- rbind(get_coefs(vote_rank_total_russia_count_lm_controls_total_tweets,
@@ -1634,9 +1679,9 @@ breaks_fun <- function(x) {
 }
 
 wb <- readRDS("../figures_source/Source Data.rds")
-openxlsx::addWorksheet(wb, sheetName = "figure_e9", gridLines = FALSE)
+openxlsx::addWorksheet(wb, sheetName = "supplementary_figure_e10", gridLines = FALSE)
 openxlsx::writeDataTable(
-  wb, sheet = "figure_e9",
+  wb, sheet = "supplementary_figure_e10",
   x = subset(G5_black, treatment == "Treatment" &
                iv %in% c("log(Exposure + 1)", "Exposure (binary)"))
 )
@@ -1644,7 +1689,7 @@ saveRDS(wb, "../figures_source/Source Data.rds")
 openxlsx::saveWorkbook(wb, "../figures_source/Source Data.xlsx", overwrite = TRUE)
 ```
 
-```{r Figure-E9, fig.height=3, fig.cap="Regression results of exposure to Russian Internet Research Agency accounts and changes in issue-based and ideological positioning with alternative measure of overall potential exposures on Twitter. Error bars represent 95\\% confidence intervals around point estimates of the regression coefficients. $n = 1,496$ survey respondents"}
+```{r Supplementary-Figure-E10, fig.height=3, fig.cap="Regression results of exposure to Russian Internet Research Agency accounts and changes in issue-based and ideological positioning with alternative measure of overall potential exposures on Twitter. Error bars represent 95\\% confidence intervals around point estimates of the regression coefficients. $n = 1,496$ survey respondents"}
 count <- 0
 ggplot(subset(G5_total_tweets, treatment == "Treatment" & iv %in% c("log(Exposure + 1)", "Exposure (binary)")),
        aes(x = coef, y = variable)) +
@@ -1672,7 +1717,7 @@ ggplot(subset(G5_total_tweets, treatment == "Treatment" & iv %in% c("log(Exposur
 
 
 \clearpage
-## Final vote preference as outcome
+### Final vote preference as outcome
 
 In \autoref{tab:vote_rhs}, we provide results for models in which vote choice in the final wave of the survey is the outcome variable, and a respondent's wave 1 preference is used as a control. This differs from the approach in the main manuscript, in which the outcome variable is a change score (change in vote preference from wave 1 to the final wave). However, @Allison1990 shows that controlling for a previous measured outcome rather than using change scores can result in more biased estimates if the previous measured outcome is correlated with the error term.
 
@@ -1750,7 +1795,7 @@ cat(vote_stargazer_rhs)
 
 
 \clearpage
-# Linear models of ideological positioning
+## Linear models of ideological positioning
 
 ```{r}
 issue_covariate_labels <- c(
@@ -1775,7 +1820,7 @@ issue_covariate_labels <- c(
 ```
 
 
-## Details of outcome variable coding
+### Details of outcome variable coding
 
 To measure changes in ideological positioning between the first and final waves of the survey, we create two types of outcome variables: relative issue position and perceived polariztion of the candidates on different policy issues (measured on a 0-100 scale).
 
@@ -1805,9 +1850,9 @@ where $ClintonPosition_{iw_{j}}$ and $TrumpPosition_{iw_{j}}$ are respondent $i$
 
 
 \clearpage
-## Relative self-placement
+### Relative self-placement
 
-Tables \@ref(tab:tab10)-\@ref(tab:tab18) show the complete output of issue-based and ideological positioning models presented in Figure 4A of the main text.
+Supplementary Tables \@ref(tab:tab10)-\@ref(tab:tab18) show the complete output of issue-based and ideological positioning models presented in Figure 4A of the main text.
 
 \begin{landscape}
 ```{r, results='asis'}
@@ -2154,9 +2199,9 @@ cat(issues_stargazer_9)
 \end{landscape}
 
 \clearpage
-## Perceived candidate polarization
+### Perceived candidate polarization
 
-Tables \@ref(tab:tab19)-\@ref(tab:tab27) show the complete output of issue-based and ideological positioning models presented in Figure 4B of the main text.
+Supplementary Tables \@ref(tab:tab19)-\@ref(tab:tab27) show the complete output of issue-based and ideological positioning models presented in Figure 4B of the main text.
 
 \begin{landscape}
 ```{r, results='asis'}
@@ -2503,9 +2548,9 @@ cat(candidate_stargazer_9)
 \end{landscape}
 
 \clearpage
-## Alternative coding of race
+### Alternative coding of race
 
-For ease of comparison in \autoref{fig:Figure-F10} we present a subset of the models from \@ref(tab:tab10)-\@ref(tab:tab18) and \@ref(tab:tab19)-\@ref(tab:tab27) above, which is analogous to Figure 4 of the main text, but has an alternative coding of control variable race. Here, rather than treating all respondents of color similarly, we break them further down into Black and Hispanic/Other groups. Consistent with the results in the main manuscript, we find no evidence of a relationship between exposure to Internet Research Agency accounts and changes in issue-based or ideological positioning.
+For ease of comparison in \autoref{fig:Supplementary-Figure-F11} we present a subset of the models from \@ref(tab:tab10)-\@ref(tab:tab18) and \@ref(tab:tab19)-\@ref(tab:tab27) above, which is analogous to Figure 4 of the main text, but has an alternative coding of control variable race. Here, rather than treating all respondents of color similarly, we break them further down into Black and Hispanic/Other groups. Consistent with the results in the main manuscript, we find no evidence of a relationship between exposure to Internet Research Agency accounts and changes in issue-based or ideological positioning.
 
 ```{r}
 dv_labels <- c("Political ideology\n(left-right scale)",
@@ -2581,15 +2626,15 @@ breaks_fun <- function(x) {
 }
 
 wb <- readRDS("../figures_source/Source Data.rds")
-openxlsx::addWorksheet(wb, sheetName = "figure_f10a", gridLines = FALSE)
+openxlsx::addWorksheet(wb, sheetName = "supplementary_figure_f11a", gridLines = FALSE)
 openxlsx::writeDataTable(
-  wb, sheet = "figure_f10a",
+  wb, sheet = "supplementary_figure_f11a",
   x = subset(G4_black, outcome == "Issues" & treatment == "Treatment" &
                iv %in% c("log(Exposure + 1)", "Exposure (binary)"))
 )
-openxlsx::addWorksheet(wb, sheetName = "figure_f10b", gridLines = FALSE)
+openxlsx::addWorksheet(wb, sheetName = "supplementary_figure_f11b", gridLines = FALSE)
 openxlsx::writeDataTable(
-  wb, sheet = "figure_f10b",
+  wb, sheet = "supplementary_figure_f11b",
   x = subset(G4_black, treatment == "Polarization" &
                iv %in% c("log(Exposure + 1)", "Exposure (binary)"))
 )
@@ -2599,7 +2644,7 @@ openxlsx::saveWorkbook(wb, "../figures_source/Source Data.xlsx", overwrite = TRU
 
 ```{r}
 count <- 0
-FigureF10A <- ggplot(subset(G4_black, outcome == "Issues" & treatment == "Treatment" &
+FigureF11A <- ggplot(subset(G4_black, outcome == "Issues" & treatment == "Treatment" &
                               iv %in% c("log(Exposure + 1)", "Exposure (binary)")),
                     aes(x = coef, y = model_number)) +
   my.theme(base_size = 8,
@@ -2637,7 +2682,7 @@ FigureF10A <- ggplot(subset(G4_black, outcome == "Issues" & treatment == "Treatm
 
 # Polarization graph
 count <- 0
-FigureF10B <- ggplot(subset(G4_black, outcome == "Polarization" & treatment == "Treatment" &
+FigureF11B <- ggplot(subset(G4_black, outcome == "Polarization" & treatment == "Treatment" &
                               iv %in% c("log(Exposure + 1)", "Exposure (binary)")),
                     aes(x = coef, y = model_number)) +
   my.theme(base_size = 8,
@@ -2674,13 +2719,13 @@ FigureF10B <- ggplot(subset(G4_black, outcome == "Polarization" & treatment == "
         axis.title.y = element_text(family = "", colour = "black", face = "bold", size = 10))
 ```
 
-```{r Figure-F10, fig.height=5, fig.cap="Regression results of exposure to Russian Internet Research Agency accounts and changes in issue-based and ideological positioning with alternative race break-down. Error bars represent 95\\% confidence intervals around point estimates of the regression coefficients. $n = 1,496$ survey respondents"}
+```{r Supplementary-Figure-F11, fig.height=5, fig.cap="Regression results of exposure to Russian Internet Research Agency accounts and changes in issue-based and ideological positioning with alternative race break-down. Error bars represent 95\\% confidence intervals around point estimates of the regression coefficients. $n = 1,496$ survey respondents"}
 count <- 0
-FigureF10 <- ggdraw() +
-           draw_plot(FigureF10A, x = 0, y = 0.5, width = 1, height = 0.47)
+FigureF11 <- ggdraw() +
+           draw_plot(FigureF11A, x = 0, y = 0.5, width = 1, height = 0.47)
 count <- 0
-FigureF10 <- FigureF10 +
-           draw_plot(FigureF10B, x = 0, y = 0, width = 1, height = 0.47) +
+FigureF11 <- FigureF11 +
+           draw_plot(FigureF11B, x = 0, y = 0, width = 1, height = 0.47) +
            draw_plot_label(label = c("a", "b"),
                            x = c(0.005, 0.005),
                            y = c(0.97, 0.48),
@@ -2690,14 +2735,14 @@ FigureF10 <- FigureF10 +
                            y = c(0.97, 0.48),
                            size = 12, hjust = 0, vjust = 0,
                            fontface = "plain")
-FigureF10
+FigureF11
 ```
 
 
 \clearpage
-## Alternative measure of overall Twitter activity
+### Alternative measure of overall Twitter activity
 
-As another robustness check, rather than relying on self-reported measure of social media activity, that might make respondents less likely to be exposed to tweets from foreign influence campaigns, we control for the total number of tweets posted by their friends. In constructing this measure we rely on our own collected data to estimate the number of potential exposures to other tweets (non-Internet Research Agency) in respondents' timelines. These models are also presented in \@ref(tab:tab10)-\@ref(tab:tab18) and \@ref(tab:tab19)-\@ref(tab:tab27) above, but for ease of comparison to Figure 4 of the main manuscript in \autoref{fig:Figure-F11} we present a subset of them that use log(Total Tweets) as one of control variables. Consistent with the results in the main manuscript, we find no evidence of a relationship between exposure to Internet Research Agency accounts and changes in issue-based or ideological positioning.
+As another robustness check, rather than relying on self-reported measure of social media activity, that might make respondents less likely to be exposed to tweets from foreign influence campaigns, we control for the total number of tweets posted by their friends. In constructing this measure we rely on our own collected data to estimate the number of potential exposures to other tweets (non-Internet Research Agency) in respondents' timelines. These models are also presented in \@ref(tab:tab10)-\@ref(tab:tab18) and \@ref(tab:tab19)-\@ref(tab:tab27) above, but for ease of comparison to Figure 4 of the main manuscript in \autoref{fig:Supplementary-Figure-F12} we present a subset of them that use log(Total Tweets) as one of control variables. Consistent with the results in the main manuscript, we find no evidence of a relationship between exposure to Internet Research Agency accounts and changes in issue-based or ideological positioning.
 
 ```{r}
 dv_labels <- c("Political ideology\n(left-right scale)",
@@ -2773,15 +2818,15 @@ breaks_fun <- function(x) {
 }
 
 wb <- readRDS("../figures_source/Source Data.rds")
-openxlsx::addWorksheet(wb, sheetName = "figure_f11a", gridLines = FALSE)
+openxlsx::addWorksheet(wb, sheetName = "supplementary_figure_f12a", gridLines = FALSE)
 openxlsx::writeDataTable(
-  wb, sheet = "figure_f11a",
+  wb, sheet = "supplementary_figure_f12a",
   x = subset(G4_total_tweets, outcome == "Issues" & treatment == "Treatment" &
                iv %in% c("log(Exposure + 1)", "Exposure (binary)"))
 )
-openxlsx::addWorksheet(wb, sheetName = "figure_f11b", gridLines = FALSE)
+openxlsx::addWorksheet(wb, sheetName = "supplementary_figure_f12b", gridLines = FALSE)
 openxlsx::writeDataTable(
-  wb, sheet = "figure_f11b",
+  wb, sheet = "supplementary_figure_f12b",
   x = subset(G4_total_tweets, treatment == "Polarization" &
                iv %in% c("log(Exposure + 1)", "Exposure (binary)"))
 )
@@ -2791,7 +2836,7 @@ openxlsx::saveWorkbook(wb, "../figures_source/Source Data.xlsx", overwrite = TRU
 
 ```{r}
 count <- 0
-FigureF11A <- ggplot(subset(G4_total_tweets, outcome == "Issues" & treatment == "Treatment" &
+FigureF12A <- ggplot(subset(G4_total_tweets, outcome == "Issues" & treatment == "Treatment" &
                               iv %in% c("log(Exposure + 1)", "Exposure (binary)")),
                     aes(x = coef, y = model_number)) +
   my.theme(base_size = 8,
@@ -2829,7 +2874,7 @@ FigureF11A <- ggplot(subset(G4_total_tweets, outcome == "Issues" & treatment == 
 
 # Polarization graph
 count <- 0
-FigureF11B <- ggplot(subset(G4_total_tweets, outcome == "Polarization" & treatment == "Treatment" &
+FigureF12B <- ggplot(subset(G4_total_tweets, outcome == "Polarization" & treatment == "Treatment" &
                               iv %in% c("log(Exposure + 1)", "Exposure (binary)")),
                     aes(x = coef, y = model_number)) +
   my.theme(base_size = 8,
@@ -2866,12 +2911,12 @@ FigureF11B <- ggplot(subset(G4_total_tweets, outcome == "Polarization" & treatme
         axis.title.y = element_text(family = "", colour = "black", face = "bold", size = 10))
 ```
 
-```{r Figure-F11, fig.height=5, fig.cap="Regression results of exposure to Russian Internet Research Agency accounts and changes in issue-based and ideological positioning with alternative measure of overall potential exposures on Twitter. Error bars represent 95\\% confidence intervals around point estimates of the regression coefficients. $n = 1,496$ survey respondents"}
+```{r Supplementary-Figure-F12, fig.height=5, fig.cap="Regression results of exposure to Russian Internet Research Agency accounts and changes in issue-based and ideological positioning with alternative measure of overall potential exposures on Twitter. Error bars represent 95\\% confidence intervals around point estimates of the regression coefficients. $n = 1,496$ survey respondents"}
 count <- 0
-FigureF11 <- ggdraw() +
-           draw_plot(FigureF11A, x = 0, y = 0.5, width = 1, height = 0.47)
+FigureF12 <- ggdraw() +
+           draw_plot(FigureF12A, x = 0, y = 0.5, width = 1, height = 0.47)
 count <- 0
-FigureF11 <- FigureF11 +
+FigureF12 <- FigureF12 +
            draw_plot(FigureF11B, x = 0, y = 0, width = 1, height = 0.47) +
            draw_plot_label(label = c("a", "b"),
                            x = c(0.005, 0.005),
@@ -2882,14 +2927,14 @@ FigureF11 <- FigureF11 +
                            y = c(0.97, 0.48),
                            size = 12, hjust = 0, vjust = 0,
                            fontface = "plain")
-FigureF11
+FigureF12
 ```
 
 
 \clearpage
-# Adjustment for multiple hypothesis testing
+## Adjustment for multiple hypothesis testing
 
-\autoref{fig:Figure-G12} presents the results of the OLS models showing the relationship between exposure on issue positions and polarization with Bonferroni corrections applied to address multiple comparisons. \autoref{fig:Figure-G13} shows corresponding results of the OLS models from Figure 5 of the main manuscript after adjusting for multiple comparisons with Bonferroni correction.
+\autoref{fig:Supplementary-Figure-G13} presents the results of the OLS models showing the relationship between exposure on issue positions and polarization with Bonferroni corrections applied to address multiple comparisons. \autoref{fig:Supplementary-Figure-G14} shows corresponding results of the OLS models from Figure 5 of the main manuscript after adjusting for multiple comparisons with Bonferroni correction.
 
 ```{r}
 # Must match up with names(issue_distance_log_exposure_russia_controls) and
@@ -2965,15 +3010,15 @@ breaks_fun <- function(x) {
 }
 
 wb <- readRDS("../figures_source/Source Data.rds")
-openxlsx::addWorksheet(wb, sheetName = "figure_g12a", gridLines = FALSE)
+openxlsx::addWorksheet(wb, sheetName = "supplementary_figure_g13a", gridLines = FALSE)
 openxlsx::writeDataTable(
-  wb, sheet = "figure_g12a",
+  wb, sheet = "supplementary_figure_g13a",
   x = subset(G4, outcome == "Issues" & treatment == "Treatment" &
                iv %in% c("log(Exposure + 1)", "Exposure (binary)"))
 )
-openxlsx::addWorksheet(wb, sheetName = "figure_g12b", gridLines = FALSE)
+openxlsx::addWorksheet(wb, sheetName = "supplementary_figure_g13b", gridLines = FALSE)
 openxlsx::writeDataTable(
-  wb, sheet = "figure_g12b",
+  wb, sheet = "supplementary_figure_g13b",
   x = subset(G4, outcome == "Polarization" & treatment == "Treatment" &
                iv %in% c("log(Exposure + 1)", "Exposure (binary)"))
 )
@@ -2984,7 +3029,7 @@ openxlsx::saveWorkbook(wb, "../figures_source/Source Data.xlsx", overwrite = TRU
 ```{r}
 # Issue-placement graph
 count <- 0
-FigureG12A <- ggplot(subset(G4, outcome == "Issues" & treatment == "Treatment" &
+FigureG13A <- ggplot(subset(G4, outcome == "Issues" & treatment == "Treatment" &
                               iv %in% c("log(Exposure + 1)", "Exposure (binary)")),
                     aes(x = coef, y = model_number)) +
   my.theme(base_size = 8,
@@ -3025,7 +3070,7 @@ FigureG12A <- ggplot(subset(G4, outcome == "Issues" & treatment == "Treatment" &
 
 # Polarization graph
 count <- 0
-FigureG12B <- ggplot(subset(G4, outcome == "Polarization" & treatment == "Treatment" &
+FigureG13B <- ggplot(subset(G4, outcome == "Polarization" & treatment == "Treatment" &
                               iv %in% c("log(Exposure + 1)", "Exposure (binary)")),
                     aes(x = coef, y = model_number)) +
   my.theme(base_size = 8,
@@ -3064,17 +3109,17 @@ FigureG12B <- ggplot(subset(G4, outcome == "Polarization" & treatment == "Treatm
         axis.text.y = element_text(family = "", colour = "black", face = "bold", size = 8, hjust = 1, lineheight = 0.9))
 ```
 
-```{r Figure-G12, fig.height=5, fig.cap="Regression results of exposure to Russian Internet Research Agency accounts and changes in issue-based and ideological positionin. Point estimates from OLS models with 95\\% CIs adjusted for multiple comparisons using Bonferroni correction. $n = 1,496$ survey respondents"}
+```{r Supplementary-Figure-G13, fig.height=5, fig.cap="Regression results of exposure to Russian Internet Research Agency accounts and changes in issue-based and ideological positionin. Point estimates from OLS models with 95\\% CIs adjusted for multiple comparisons using Bonferroni correction. $n = 1,496$ survey respondents"}
 # Count is needed to specify the x-axis labels
 # using the hack break_fun()
 # Thus we graph the top panel first, reset the count to 0 and then add on
 # the second panel
 count <- 0
-FigureG12 <- ggdraw() +
-           draw_plot(FigureG12A, x = 0, y = 0.5, width = 1, height = 0.47)
+FigureG13 <- ggdraw() +
+           draw_plot(FigureG13A, x = 0, y = 0.5, width = 1, height = 0.47)
 count <- 0
-FigureG12 <- FigureG12 +
-           draw_plot(FigureG12B, x = 0, y = 0, width = 1, height = 0.47) +
+FigureG13 <- FigureG13 +
+           draw_plot(FigureG13B, x = 0, y = 0, width = 1, height = 0.47) +
            draw_plot_label(label = c("A.", "B."),
                            x = c(0.005, 0.005),
                            y = c(0.97, 0.48),
@@ -3084,7 +3129,7 @@ FigureG12 <- FigureG12 +
                            y = c(0.97, 0.48),
                            size = 12, hjust = 0, vjust = 0,
                            fontface = "plain")
-FigureG12
+FigureG13
 ```
 
 ```{r}
@@ -3164,9 +3209,9 @@ breaks_fun <- function(x) {
 }
 
 wb <- readRDS("../figures_source/Source Data.rds")
-openxlsx::addWorksheet(wb, sheetName = "figure_g13", gridLines = FALSE)
+openxlsx::addWorksheet(wb, sheetName = "supplementary_figure_g14", gridLines = FALSE)
 openxlsx::writeDataTable(
-  wb, sheet = "figure_g13",
+  wb, sheet = "supplementary_figure_g14",
   x = subset(G5, treatment == "Treatment" &
                iv %in% c("log(Exposure + 1)", "Exposure (binary)"))
 )
@@ -3174,7 +3219,7 @@ saveRDS(wb, "../figures_source/Source Data.rds")
 openxlsx::saveWorkbook(wb, "../figures_source/Source Data.xlsx", overwrite = TRUE)
 ```
 
-```{r Figure-G13,  fig.height=3, fig.cap="Regression results of the relationship between exposure to posts from Russian Internet Research Agency accounts and voting behavior. Point estimates from OLS models with 95\\% CIs adjusted for multiple comparisons using Bonferroni correction. $n = 1,496$ survey respondents"}
+```{r Supplementary-Figure-G14,  fig.height=3, fig.cap="Regression results of the relationship between exposure to posts from Russian Internet Research Agency accounts and voting behavior. Point estimates from OLS models with 95\\% CIs adjusted for multiple comparisons using Bonferroni correction. $n = 1,496$ survey respondents"}
 ggplot(subset(G5, treatment == "Treatment" & iv %in% c("log(Exposure + 1)", "Exposure (binary)")),
        aes(x = coef, y = variable)) +
   my.theme(base_size = 8,
@@ -3198,49 +3243,6 @@ ggplot(subset(G5, treatment == "Treatment" & iv %in% c("log(Exposure + 1)", "Exp
         legend.position = "none",
         axis.text.y = element_text(family = "", colour = "black", face = "bold", size = 8, hjust = 1, lineheight = 0.9))
 ```
-
-
-\clearpage
-# Software statement
-
-We relied on R [@R2020] and Python [@VanRossum2009] programming languages, as well as the following R packages in our empirical analysis and write-up:
-
-`cowplot` [@Wilke2020]
-
-`dplyr` [@Wickham2020a]
-
-`estimatr` [@Blair2021]
-
-`ggplot2` [@Wickham2016]
-
-`haven` [@Wickham2020c]
-
-`kableExtra` [@Zhu2020]
-
-`knitr` [@Xie2020]
-
-`lmtest` [@Zeileis2002]
-
-`lubridate` [@Grolemund2011]
-
-`magrittr` [@Bache2014]
-
-`MASS` [@Venables2002]
-
-`mvtnorm` [@Genz2009]
-
-`readr` [@Wickham2018]
-
-`stargazer` [@Hlavac2018]
-
-`stringi` [@Gagolewski2018]
-
-`stringr` [@Wickham2019]
-
-`tibble` [@Muller2018]
-
-`tidyr` [@Wickham2020b]
-
 
 \clearpage
 # Supplementary References

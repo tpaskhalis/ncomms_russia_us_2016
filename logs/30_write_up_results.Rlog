@@ -132,7 +132,7 @@ date (1): tweet_date
 
 ℹ Use `spec()` to retrieve the full column specification for this data.
 ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-> G1B <- readr::read_csv("./results/02_match_respondents/G1B.csv")
+> G1C <- readr::read_csv("./results/02_match_respondents/G1C.csv")
 Rows: 6468 Columns: 38
 ── Column specification ────────────────────────────────────────────────────────
 Delimiter: ","
@@ -141,7 +141,7 @@ dbl (37): smapp_original_user_id, all_tweet_w1_w2, all_tweet_w2_w3, all_retw...
 
 ℹ Use `spec()` to retrieve the full column specification for this data.
 ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-> G1C <- readr::read_csv("./results/02_match_respondents/G1C.csv")
+> G1D <- readr::read_csv("./results/02_match_respondents/G1D.csv")
 Rows: 22621 Columns: 9
 ── Column specification ────────────────────────────────────────────────────────
 Delimiter: ","
@@ -155,9 +155,9 @@ dbl (7): troll_user_id, amount, total_amount, prop_exposure, cum_prop_exposu...
 > openxlsx::addWorksheet(wb, sheetName = "figure_1a", gridLines = FALSE)
 > openxlsx::writeDataTable(wb, sheet = "figure_1a", x = G1A)
 > openxlsx::addWorksheet(wb, sheetName = "figure_1b", gridLines = FALSE)
-> openxlsx::writeDataTable(wb, sheet = "figure_1b", x = G1B[,c("country", "cum_prop_respondents", "cum_prop_exposure")])
+> openxlsx::writeDataTable(wb, sheet = "figure_1b", x = G1C[,c("country", "cum_prop_respondents", "cum_prop_exposure")])
 > openxlsx::addWorksheet(wb, sheetName = "figure_1c", gridLines = FALSE)
-> openxlsx::writeDataTable(wb, sheet = "figure_1c", x = G1C[,c("country", "cum_prop_trolls", "cum_prop_exposure")])
+> openxlsx::writeDataTable(wb, sheet = "figure_1c", x = G1D[,c("country", "cum_prop_trolls", "cum_prop_exposure")])
 > saveRDS(wb, "./figures_source/Source Data.rds")
 > openxlsx::saveWorkbook(wb, "./figures_source/Source Data.xlsx", overwrite = TRUE)
 > 
@@ -222,10 +222,10 @@ Warning message:
 > 
 > # Cumulative Density Plot of Respondents' Exposed (Panel B)
 > 
-> G1B$country <- factor(G1B$country, levels = rev(c("Russia", "Venezuela", "China", "Iran")))
+> G1C$country <- factor(G1C$country, levels = rev(c("Russia", "Venezuela", "China", "Iran")))
 > 
 > 
-> Figure1B <- ggplot(filter(G1B, country != "Other"),
+> Figure1B <- ggplot(filter(G1C, country != "Other"),
 +                    aes(x = cum_prop_respondents, y = cum_prop_exposure,
 +                        size = country, color = country, alpha = country)) +
 +   my.theme(base_size = 7,
@@ -253,9 +253,9 @@ Warning message:
 > 
 > # Cumulative Density Plot of Trolls' Responsible (Panel C)
 > 
-> G1C$country <- factor(G1C$country, levels = rev(c("Russia", "Venezuela", "China", "Iran")))
+> G1D$country <- factor(G1D$country, levels = rev(c("Russia", "Venezuela", "China", "Iran")))
 > 
-> Figure1C <- ggplot(filter(G1C, country != "Other"),
+> Figure1C <- ggplot(filter(G1D, country != "Other"),
 +                    aes(x = cum_prop_trolls, y = cum_prop_exposure,
 +                    size = country, color = country, alpha = country)) +
 +   my.theme(base_size = 7,
@@ -662,7 +662,7 @@ null device
 > # names(candidate_distance_log_exposure_russia_controls)
 > dv_labels <- c("Political ideology\n(left-right scale)",
 +                "Immigration",
-+                "Ban on Muslims",
++                "Ban on Muslim people",
 +                "Building a wall",
 +                "Support for Obamacare",
 +                "Expanding the ACA",
@@ -736,7 +736,7 @@ null device
 +                                   "Building a wall",
 +                                   "Support for Obamacare",
 +                                   "Expanding the ACA",
-+                                   "Ban on Muslims",
++                                   "Ban on Muslim people",
 +                                   "Support for free trade",
 +                                   "Oppose Chinese tariffs",
 +                                   "Use of military force",
@@ -1128,4 +1128,4 @@ null device
 > 
 > proc.time()
    user  system elapsed 
- 11.608   0.255  12.550 
+ 10.704   0.308  11.929 
