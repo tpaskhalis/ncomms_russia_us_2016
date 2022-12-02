@@ -11,6 +11,7 @@ output:
     toc: true
 fontsize: 12pt
 linkcolor: blue
+toccolor: blue
 urlcolor: blue
 natbiboptions: "square, sort, comma, numbers"
 bibliography: [bibliography.bib, software.bib]
@@ -224,7 +225,7 @@ candidate_distance_follow_troll_russia_controls_total_tweets <- readRDS("../resu
 \renewcommand{\tableautorefname}{Supplementary Table}
 
 \clearpage
-# Supplementary Methods
+# Supplementary Methods {-}
 
 ## Data
 

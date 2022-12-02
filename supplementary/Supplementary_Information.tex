@@ -72,10 +72,10 @@
 \usepackage[nottoc]{tocbibind}
 \renewcommand{\figurename}{Supplementary Figure}
 \renewcommand{\tablename}{Supplementary Table}
-\renewcommand{\thefigure}{\thesection\arabic{figure}}
-\renewcommand{\thetable}{\thesection\arabic{table}}
-\renewcommand{\thesection}{\Alph{section}}
-\renewcommand{\thesubsection}{\Alph{section}\arabic{subsection}}
+\renewcommand{\thefigure}{\thesubsection\arabic{figure}}
+\renewcommand{\thetable}{\thesubsection\arabic{table}}
+\renewcommand{\thesubsection}{\Alph{subsection}}
+\renewcommand{\thesubsubsection}{\Alph{subsection}\arabic{subsubsection}}
 \usepackage{booktabs}
 \usepackage{longtable}
 \usepackage{array}
@@ -121,6 +121,7 @@
 \maketitle
 
 {
+\hypersetup{linkcolor=blue}
 \setcounter{tocdepth}{2}
 \tableofcontents
 }
@@ -130,7 +131,8 @@
 \clearpage
 
 \hypertarget{supplementary-methods}{%
-\section{Supplementary Methods}\label{supplementary-methods}}
+\section*{Supplementary Methods}\label{supplementary-methods}}
+\addcontentsline{toc}{section}{Supplementary Methods}
 
 \hypertarget{data}{%
 \subsection{Data}\label{data}}
@@ -261,7 +263,7 @@ Variable & Category & YouGov (2016) & Pew Twitter Survey (2018) & US Population 
 \hline
  & white & 77.4 & 60 & 72.6\\
 
-\multirow{-2}{*}{\centering\arraybackslash race} & poc & 22.6 & NA & 27.4\\
+\multirow{-2}{*}{\centering\arraybackslash race} & poc & 22.6 & 28 & 27.4\\
 \hline
 \end{tabular}
 \end{table}

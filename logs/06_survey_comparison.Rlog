@@ -248,4 +248,4 @@ dbl (1): percentage
 > 
 > proc.time()
    user  system elapsed 
-  2.179   0.679   2.771 
+  2.271   0.671   2.803 
