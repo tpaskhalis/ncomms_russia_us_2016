@@ -2,7 +2,7 @@
 
 [![DOI](https://zenodo.org/badge/536623330.svg)](https://zenodo.org/badge/latestdoi/536623330)
 
-Replication materials for the paper **Exposure to the Russian foreign influence campaign on Twitter in the 2016 US Election and its relationship to attitudes and voting behavior**
+Replication materials for the paper **Exposure to the Russian Internet Research Agency foreign influence campaign on Twitter in the 2016 US Election and its relationship to attitudes and voting behavior**
 
 ## Abstract
 
