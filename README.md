@@ -2,7 +2,7 @@
 
 [![DOI](https://zenodo.org/badge/536623330.svg)](https://zenodo.org/badge/latestdoi/536623330)
 
-Replication materials for the paper **Exposure to the Russian Internet Research Agency foreign influence campaign on Twitter in the 2016 US Election and its relationship to attitudes and voting behavior**
+Replication materials for the paper [**Exposure to the Russian Internet Research Agency foreign influence campaign on Twitter in the 2016 US Election and its relationship to attitudes and voting behavior**](https://doi.org/10.1038/s41467-022-35576-9)
 
 ## Abstract
 
@@ -34,6 +34,23 @@ Log files are produced by running `R CMD BATCH` on scripts located in `code` fol
 
     R CMD BATCH code/05_regression_analysis.R logs/05_regression_analysis.Rlog
     R CMD BATCH code/30_write_up_results.R logs/30_write_up_results.Rlog
+
+## Citation
+
+```
+@Article{doi:10.1038/s41467-022-35576-9,
+    author   = {Eady, Gregory and Paskhalis, Tom and Zilinsky, Jan and Bonneau, Richard and Nagler, Jonathan and Tucker, Joshua A.},
+    title    = "{Exposure to the Russian Internet Research Agency foreign influence campaign on Twitter in the 2016 US election and its relationship to attitudes and voting behavior}",
+    journal  = {Nature Communications},
+    year     = {2023},
+    volume   = {14},
+    number   = {1},
+    pages    = {62},
+    doi      = {10.1038/s41467-022-35576-9},
+    url      = {https://doi.org/10.1038/s41467-022-35576-9},
+}
+
+```
 
 ------------------------------------------------------------------------
 
