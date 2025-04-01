@@ -1,0 +1,37 @@
+week,type,average,value
+2016-09-28,IRA accounts,Mean,19.07111935683364
+2016-09-28,IRA accounts,Median,0
+2016-10-05,IRA accounts,Mean,21.833642547928264
+2016-10-05,IRA accounts,Median,0
+2016-10-12,IRA accounts,Mean,26.123685837971554
+2016-10-12,IRA accounts,Median,0
+2016-10-19,IRA accounts,Mean,29.178107606679035
+2016-10-19,IRA accounts,Median,0
+2016-10-26,IRA accounts,Mean,28.538033395176253
+2016-10-26,IRA accounts,Median,0
+2016-11-02,IRA accounts,Mean,43.71243042671614
+2016-11-02,IRA accounts,Median,0
+2016-09-28,Politicians,Mean,163.02968460111316
+2016-09-28,Politicians,Median,13
+2016-10-05,Politicians,Mean,281.59183673469386
+2016-10-05,Politicians,Median,24
+2016-10-12,Politicians,Mean,196.8330241187384
+2016-10-12,Politicians,Median,14
+2016-10-19,Politicians,Mean,257.2547928262214
+2016-10-19,Politicians,Median,15
+2016-10-26,Politicians,Mean,225.64378478664193
+2016-10-26,Politicians,Median,11
+2016-11-02,Politicians,Mean,305.7829313543599
+2016-11-02,Politicians,Median,23
+2016-09-28,News media,Mean,436.64316635745206
+2016-09-28,News media,Median,41
+2016-10-05,News media,Mean,693.5602968460112
+2016-10-05,News media,Median,84
+2016-10-12,News media,Mean,605.634508348794
+2016-10-12,News media,Median,66
+2016-10-19,News media,Mean,710.9022881880024
+2016-10-19,News media,Median,79
+2016-10-26,News media,Mean,808.3623995052567
+2016-10-26,News media,Median,73
+2016-11-02,News media,Mean,1097.6122448979593
+2016-11-02,News media,Median,110

@@ -1,0 +1,235 @@
+date,type,average,value
+2016-10-01,Russian trolls,Mean,2.507111935683364
+2016-10-01,Russian trolls,Median,0
+2016-10-02,Russian trolls,Mean,4.121830550401979
+2016-10-02,Russian trolls,Median,0
+2016-10-03,Russian trolls,Mean,1.91713048855906
+2016-10-03,Russian trolls,Median,0
+2016-10-04,Russian trolls,Mean,2.3327149041434754
+2016-10-04,Russian trolls,Median,0
+2016-10-05,Russian trolls,Mean,2.728509585652443
+2016-10-05,Russian trolls,Median,0
+2016-10-06,Russian trolls,Mean,2.549165120593692
+2016-10-06,Russian trolls,Median,0
+2016-10-07,Russian trolls,Mean,2.147804576376005
+2016-10-07,Russian trolls,Median,0
+2016-10-08,Russian trolls,Mean,1.4087816944959801
+2016-10-08,Russian trolls,Median,0
+2016-10-09,Russian trolls,Mean,2.7544836116264686
+2016-10-09,Russian trolls,Median,0
+2016-10-10,Russian trolls,Mean,5.802721088435374
+2016-10-10,Russian trolls,Median,0
+2016-10-11,Russian trolls,Mean,4.442176870748299
+2016-10-11,Russian trolls,Median,0
+2016-10-12,Russian trolls,Mean,2.873222016079159
+2016-10-12,Russian trolls,Median,0
+2016-10-13,Russian trolls,Mean,3.5769944341372915
+2016-10-13,Russian trolls,Median,0
+2016-10-14,Russian trolls,Mean,3.6066790352504636
+2016-10-14,Russian trolls,Median,0
+2016-10-15,Russian trolls,Mean,2.9647495361781075
+2016-10-15,Russian trolls,Median,0
+2016-10-16,Russian trolls,Mean,3.3642547928262214
+2016-10-16,Russian trolls,Median,0
+2016-10-17,Russian trolls,Mean,4.374768089053803
+2016-10-17,Russian trolls,Median,0
+2016-10-18,Russian trolls,Mean,5.362399505256648
+2016-10-18,Russian trolls,Median,0
+2016-10-19,Russian trolls,Mean,5.895485466914038
+2016-10-19,Russian trolls,Median,0
+2016-10-20,Russian trolls,Mean,5.393939393939394
+2016-10-20,Russian trolls,Median,0
+2016-10-21,Russian trolls,Mean,2.661719233147805
+2016-10-21,Russian trolls,Median,0
+2016-10-22,Russian trolls,Mean,4.769325912183055
+2016-10-22,Russian trolls,Median,0
+2016-10-23,Russian trolls,Mean,4.025974025974026
+2016-10-23,Russian trolls,Median,0
+2016-10-24,Russian trolls,Mean,2.7186147186147185
+2016-10-24,Russian trolls,Median,0
+2016-10-25,Russian trolls,Mean,3.7130488559059986
+2016-10-25,Russian trolls,Median,0
+2016-10-26,Russian trolls,Mean,4.800865800865801
+2016-10-26,Russian trolls,Median,0
+2016-10-27,Russian trolls,Mean,4.615337043908473
+2016-10-27,Russian trolls,Median,0
+2016-10-28,Russian trolls,Mean,3.0482374768089056
+2016-10-28,Russian trolls,Median,0
+2016-10-29,Russian trolls,Mean,3.4366110080395793
+2016-10-29,Russian trolls,Median,0
+2016-10-30,Russian trolls,Mean,4.468150896722325
+2016-10-30,Russian trolls,Median,0
+2016-10-31,Russian trolls,Mean,4.330241187384044
+2016-10-31,Russian trolls,Median,0
+2016-11-01,Russian trolls,Mean,3.837353123067409
+2016-11-01,Russian trolls,Median,0
+2016-11-02,Russian trolls,Mean,5.27891156462585
+2016-11-02,Russian trolls,Median,0
+2016-11-03,Russian trolls,Mean,5.511440940012369
+2016-11-03,Russian trolls,Median,0
+2016-11-04,Russian trolls,Mean,3.9622758194186765
+2016-11-04,Russian trolls,Median,0
+2016-11-05,Russian trolls,Mean,3.598021026592455
+2016-11-05,Russian trolls,Median,0
+2016-11-06,Russian trolls,Mean,7.183055040197897
+2016-11-06,Russian trolls,Median,0
+2016-11-07,Russian trolls,Mean,5.217687074829932
+2016-11-07,Russian trolls,Median,0
+2016-11-08,Russian trolls,Mean,12.960420531849103
+2016-11-08,Russian trolls,Median,0
+2016-10-01,Politicians,Mean,19.571428571428573
+2016-10-01,Politicians,Median,2
+2016-10-02,Politicians,Mean,19.779839208410635
+2016-10-02,Politicians,Median,1
+2016-10-03,Politicians,Mean,21.350030921459492
+2016-10-03,Politicians,Median,1
+2016-10-04,Politicians,Mean,21.678416821273963
+2016-10-04,Politicians,Median,1
+2016-10-05,Politicians,Mean,64.22758194186765
+2016-10-05,Politicians,Median,4
+2016-10-06,Politicians,Mean,21.95052566481138
+2016-10-06,Politicians,Median,1
+2016-10-07,Politicians,Mean,20.22881880024737
+2016-10-07,Politicians,Median,2
+2016-10-08,Politicians,Mean,36.66604823747681
+2016-10-08,Politicians,Median,4
+2016-10-09,Politicians,Mean,26.37291280148423
+2016-10-09,Politicians,Median,2
+2016-10-10,Politicians,Mean,70.39703153988869
+2016-10-10,Politicians,Median,6
+2016-10-11,Politicians,Mean,41.73593073593074
+2016-10-11,Politicians,Median,3
+2016-10-12,Politicians,Mean,26.16573902288188
+2016-10-12,Politicians,Median,2
+2016-10-13,Politicians,Mean,28.536796536796537
+2016-10-13,Politicians,Median,2
+2016-10-14,Politicians,Mean,21.28509585652443
+2016-10-14,Politicians,Median,1
+2016-10-15,Politicians,Mean,22.38466295609153
+2016-10-15,Politicians,Median,1
+2016-10-16,Politicians,Mean,31.583178726035868
+2016-10-16,Politicians,Median,3
+2016-10-17,Politicians,Mean,38.80395794681509
+2016-10-17,Politicians,Median,2
+2016-10-18,Politicians,Mean,28.068645640074212
+2016-10-18,Politicians,Median,1
+2016-10-19,Politicians,Mean,31.720470006184293
+2016-10-19,Politicians,Median,1
+2016-10-20,Politicians,Mean,85.5139146567718
+2016-10-20,Politicians,Median,6
+2016-10-21,Politicians,Mean,29.004329004329005
+2016-10-21,Politicians,Median,2
+2016-10-22,Politicians,Mean,25.23747680890538
+2016-10-22,Politicians,Median,1
+2016-10-23,Politicians,Mean,21.002473716759432
+2016-10-23,Politicians,Median,1
+2016-10-24,Politicians,Mean,32.150278293135436
+2016-10-24,Politicians,Median,1
+2016-10-25,Politicians,Mean,32.60296846011132
+2016-10-25,Politicians,Median,1
+2016-10-26,Politicians,Mean,32.09647495361781
+2016-10-26,Politicians,Median,2
+2016-10-27,Politicians,Mean,38.08719851576994
+2016-10-27,Politicians,Median,2
+2016-10-28,Politicians,Mean,36.691403834260974
+2016-10-28,Politicians,Median,1
+2016-10-29,Politicians,Mean,23.74644403215832
+2016-10-29,Politicians,Median,1
+2016-10-30,Politicians,Mean,25.07730364873222
+2016-10-30,Politicians,Median,1
+2016-10-31,Politicians,Mean,31.499072356215212
+2016-10-31,Politicians,Median,1
+2016-11-01,Politicians,Mean,38.43846629560915
+2016-11-01,Politicians,Median,1
+2016-11-02,Politicians,Mean,37.62152133580705
+2016-11-02,Politicians,Median,2
+2016-11-03,Politicians,Mean,41.67408781694496
+2016-11-03,Politicians,Median,2
+2016-11-04,Politicians,Mean,37.788497217068645
+2016-11-04,Politicians,Median,3
+2016-11-05,Politicians,Mean,33.20655534941249
+2016-11-05,Politicians,Median,3
+2016-11-06,Politicians,Mean,38.92022263450835
+2016-11-06,Politicians,Median,3
+2016-11-07,Politicians,Mean,45.11626468769326
+2016-11-07,Politicians,Median,3
+2016-11-08,Politicians,Mean,71.42486085343228
+2016-11-08,Politicians,Median,6
+2016-10-01,News media,Mean,42.936920222634505
+2016-10-01,News media,Median,4
+2016-10-02,News media,Mean,42.52442795299938
+2016-10-02,News media,Median,4
+2016-10-03,News media,Mean,65.16017316017316
+2016-10-03,News media,Median,6
+2016-10-04,News media,Mean,72.92517006802721
+2016-10-04,News media,Median,7
+2016-10-05,News media,Mean,128.51700680272108
+2016-10-05,News media,Median,11
+2016-10-06,News media,Mean,78.9412492269635
+2016-10-06,News media,Median,8
+2016-10-07,News media,Mean,75.69882498453927
+2016-10-07,News media,Median,9
+2016-10-08,News media,Mean,77.75510204081633
+2016-10-08,News media,Median,9
+2016-10-09,News media,Mean,64.65244279529993
+2016-10-09,News media,Median,7
+2016-10-10,News media,Mean,178.0760667903525
+2016-10-10,News media,Median,24
+2016-10-11,News media,Mean,89.91156462585035
+2016-10-11,News media,Median,10
+2016-10-12,News media,Mean,89.84168212739641
+2016-10-12,News media,Median,9
+2016-10-13,News media,Mean,107.25355596784168
+2016-10-13,News media,Median,12
+2016-10-14,News media,Mean,95.20408163265306
+2016-10-14,News media,Median,10
+2016-10-15,News media,Mean,66.1830550401979
+2016-10-15,News media,Median,6
+2016-10-16,News media,Mean,57.30674087816945
+2016-10-16,News media,Median,6
+2016-10-17,News media,Mean,87.2065553494125
+2016-10-17,News media,Median,8
+2016-10-18,News media,Mean,102.63574520717378
+2016-10-18,News media,Median,9
+2016-10-19,News media,Mean,102.12615955473099
+2016-10-19,News media,Median,8
+2016-10-20,News media,Mean,188.87012987012986
+2016-10-20,News media,Median,23
+2016-10-21,News media,Mean,88.24118738404452
+2016-10-21,News media,Median,9
+2016-10-22,News media,Mean,75.85281385281385
+2016-10-22,News media,Median,7
+2016-10-23,News media,Mean,61.37909709338281
+2016-10-23,News media,Median,6
+2016-10-24,News media,Mean,90.17934446505875
+2016-10-24,News media,Median,8
+2016-10-25,News media,Mean,104.24922696351268
+2016-10-25,News media,Median,10
+2016-10-26,News media,Mean,118.33580705009277
+2016-10-26,News media,Median,11
+2016-10-27,News media,Mean,119.96351267779839
+2016-10-27,News media,Median,13
+2016-10-28,News media,Mean,143.7526283240569
+2016-10-28,News media,Median,16
+2016-10-29,News media,Mean,86.78045763760049
+2016-10-29,News media,Median,6
+2016-10-30,News media,Mean,77.85776128633272
+2016-10-30,News media,Median,6
+2016-10-31,News media,Mean,123.62399505256649
+2016-10-31,News media,Median,11
+2016-11-01,News media,Mean,138.04329004329006
+2016-11-01,News media,Median,10
+2016-11-02,News media,Mean,155.30364873222015
+2016-11-02,News media,Median,16
+2016-11-03,News media,Mean,153.78602350030923
+2016-11-03,News media,Median,14
+2016-11-04,News media,Mean,163.2430426716141
+2016-11-04,News media,Median,15
+2016-11-05,News media,Mean,124.53927025355597
+2016-11-05,News media,Median,10
+2016-11-06,News media,Mean,120.01236858379715
+2016-11-06,News media,Median,10
+2016-11-07,News media,Mean,162.69944341372914
+2016-11-07,News media,Median,14
+2016-11-08,News media,Mean,218.01793444650588
+2016-11-08,News media,Median,23
